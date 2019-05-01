@@ -1,0 +1,50 @@
+Description,Bloomberg,Sector,Exchange
+Australian Dollar Futures,AD1 Curncy,Currency,Chicago Mercantile Exchange
+Euro-Bund 10-Year Futures,RX1 Comdty,Interest Rate,Eurex
+Soybean Oil Futures,BO1 Comdty,Agriculture,Chicago Board of Trade
+British Pound Futures,BP1 Curncy,Currency,Chicago Mercantile Exchange
+Euro-Schatz 2-Year Futures,DU1 Comdty,Interest Rate,Eurex
+Cocoa Futures,CC1 Comdty,Agriculture,ICE Futures US Softs
+Canadian Dollar Futures,CD1 Curncy,Currency,Chicago Mercantile Exchange
+CAC 40 Index Futures,CF1 Index,Equity Index,Euronext Derivatives Paris
+Light Crude Oil Futures NYMEX,CL1 Comdty,Energy,New York Mercantile Exchange
+Corn Futures,C 1 Comdty,Agriculture,Chicago Board of Trade
+Brent Crude Oil Futures ICE,CO1 Comdty,Energy,ICE Futures Europe Commodities
+Cotton #2 Futures,CT1 Comdty,Agriculture,ICE Futures US Softs
+DAX Index Futures,GX1 Index,Equity Index,Eurex
+Eurodollar  Futures CME,ED1 Comdty,Interest Rate,Chicago Mercantile Exchange
+MSCI Emerging Markets Mini Futures,MES1 Index,Equity Index,ICE Futures US Indices
+Amsterdam AEX Index Futures,EO1 Index,Equity Index,Euronext Derivatives Amsterdam
+S&P 500 E-Mini Futures,ES1 Index,Equity Index,Chicago Mercantile Exchange
+Feeder Cattle Futures,FC1 Comdty,Agriculture,Chicago Mercantile Exchange
+FTSE 100 Index Futures,Z 1 Index,Equity Index,ICE Futures Europe Financials
+US 5-Year T-Note Futures,FV1 Comdty,Interest Rate,Chicago Board of Trade
+Gold Futures COMEX,GC1 Comdty,Metals,Commodity Exchange Inc.
+Long Gilt Futures,G 1 Comdty,Interest Rate,ICE Futures Europe Financials
+Low Sulphur Gasoil Futures ICE,QS1 Comdty,Energy,ICE Futures Europe Commodities
+Copper High Grade Futures COMEX,HG1 Comdty,Metals,Commodity Exchange Inc.
+Heating Oil #2 Futures NYMEX,HO1 Comdty,Energy,New York Mercantile Exchange
+Orange Juice Futures,JO1 Comdty,Agriculture,ICE Futures US Softs
+Coffee “C” Futures,KC1 Comdty,Agriculture,ICE Futures US Softs
+Live Cattle Futures,LC1 Comdty,Agriculture,Chicago Mercantile Exchange
+Lean Hogs Futures,LH1 Comdty,Agriculture,Chicago Mercantile Exchange
+Mexican Peso Futures,PE1 Curncy,Currency,Chicago Mercantile Exchange
+S&P 400 MidCap E-Mini Futures,FA1 Index,Equity Index,Chicago Mercantile Exchange
+Natural Gas Futures NYMEX,NG1 Comdty,Energy,New York Mercantile Exchange
+Nikkei 225 Futures CME,NX1 Index,Equity Index,Chicago Mercantile Exchange
+New Zealand Dollar Futures,NV1 Curncy,Currency,Chicago Mercantile Exchange
+Oats Futures,O 1 Comdty,Agriculture,Chicago Board of Trade
+Palladium Futures NYMEX,PA1 Comdty,Metals,New York Mercantile Exchange
+Platinum Futures NYMEX,PL1 Comdty,Metals,New York Mercantile Exchange
+Natural Gas E-Mini Futures,EO1 Comdty,Energy,New York Mercantile Exchange
+Crude Oil E-Mini Futures NYMEX,EC1 Comdty,Energy,New York Mercantile Exchange
+Euro/British Pound Futures,RP1 Curncy,Currency,Chicago Mercantile Exchange
+Sugar #11 Futures,SB1 Comdty,Agriculture,ICE Futures US Softs
+Soybean Meal Futures,SM1 Comdty,Agriculture,Chicago Board of Trade
+S&P 500 Futures,SP1 Index,Equity Index,Chicago Mercantile Exchange
+Silver Futures COMEX,SI1 Comdty,Metals,Commodity Exchange Inc.
+Soybean Futures,S 1 Comdty,Agriculture,Chicago Board of Trade
+Euribor 3-Month Futures,ER1 Comdty,Interest Rate,ICE Futures Europe Financials
+STOXX Europe 50 Index Futures,VH1 Index,Equity Index,Eurex
+Wheat Futures CBOT,W 1 Comdty,Agriculture,Chicago Board of Trade
+EURO STOXX 50 Index Futures,VG1 Index,Equity Index,Eurex

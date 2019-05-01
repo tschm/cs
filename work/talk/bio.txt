@@ -1,0 +1,15 @@
+
+
+Thomas is a PhD mathematician (Oxford University, 2007) and a quantitative portfolio manager. Whilst at Oxford he was a Rhodes Scholar at Balliol College.
+
+ 
+
+Thomas currently runs the research and technology department for a Family office based in Geneva.
+
+ 
+
+Initially a hardcore mathematician, Thomas is today a financial jack of all trades and has created and managed sophisticated trading systems on green and muddy fields. He is embracing modern technology and took Lobnek to the cloud by running and designing all processes in modern Docker containers.
+
+ 
+
+His mathematical home is optimization and he argues that every portfolio allocation is the solution of a convex program. Thomas is the co-author for the notorious paper “Seven Sins in Portfolio Optimization”. In his talk optimization and a classic hedge fund strategy crash.

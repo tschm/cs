@@ -1,0 +1,13 @@
+version: '3.6'
+services:
+  jupyter:
+     build:
+       context: ""
+       dockerfile: ./binder/Dockerfile
+     volumes:
+       - ./work:${WORK}
+     ports:
+        - ${PORT}:8888
+     #tty: true
+     #stdin_open: true
+
