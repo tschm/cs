@@ -14,6 +14,7 @@ def __valid(a):
     return v, a[:, v][v]
 
 
+# that's somewhat not needed...
 def a_norm(vector, a=None):
     """
     Compute the a-norm of a vector
@@ -33,6 +34,29 @@ def a_norm(vector, a=None):
 
     if v.any():
         return np.sqrt(np.dot(vector[v], np.dot(mat, vector[v])))
+    else:
+        return np.nan
+
+
+def inv_a_norm(vector, a=None):
+    """
+    Compute the a-norm of a vector
+    :param vector: the n x 1 vector
+    :param a: n x n matrix
+    :return:
+    """
+    if a is None:
+        return np.linalg.norm(vector[np.isfinite(vector)], 2)
+
+    # make sure a is quadratic
+    assert a.shape[0] == a.shape[1]
+    # make sure the vector has the right number of entries
+    assert vector.size == a.shape[0]
+
+    v, mat = __valid(a)
+
+    if v.any():
+        return np.sqrt(np.dot(vector[v], np.linalg.solve(mat, vector[v])))
     else:
         return np.nan
 
