@@ -47,4 +47,4 @@ slides:
 	python slides.py
 
 clean:
-	docker-compose -f docker-compose.yml down -v --rmi all --remove-orphans
+	docker-compose down -v --rmi all --remove-orphans
