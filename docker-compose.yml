@@ -4,10 +4,9 @@ services:
      build:
        context: ""
        dockerfile: ./binder/Dockerfile
+       target: jupyter
      volumes:
        - ./work:${WORK}
      ports:
         - ${PORT}:8888
-     #tty: true
-     #stdin_open: true
 

@@ -5,8 +5,7 @@
 
 !work
 !setup.py
-!pycta
-!requirements.txt
+!binder/jupyter_notebook_config.py
 
 **/__pycache__
 **/*.pyc
