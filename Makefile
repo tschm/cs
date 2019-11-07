@@ -8,7 +8,7 @@ IMAGE := tschm/cs
 include .env
 export
 
-.PHONY: help build jupyter tag hub slides
+.PHONY: help build jupyter tag hub slides clean
 
 
 .DEFAULT: help
@@ -46,3 +46,5 @@ slides:
 	docker-compose up -d
 	python slides.py
 
+clean:
+	docker-compose down -v --rmi all --remove-orphans
