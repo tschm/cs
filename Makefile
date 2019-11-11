@@ -1,5 +1,5 @@
 #!make
-PROJECT_VERSION := 0.6
+PROJECT_VERSION := 0.7
 
 SHELL := /bin/bash
 IMAGE := tschm/cs
@@ -35,16 +35,7 @@ tag:
 	git tag -a ${PROJECT_VERSION} -m "new tag"
 	git push --tags
 
-#hub: tag
-#	docker build -f binder/Dockerfile --tag ${IMAGE}:latest --no-cache .
-#	docker push ${IMAGE}:latest
-#	docker tag ${IMAGE}:latest ${IMAGE}:${PROJECT_VERSION}
-#	docker push ${IMAGE}:${PROJECT_VERSION}
-#	docker rmi -f ${IMAGE}:${PROJECT_VERSION}
-
 slides:
 	docker-compose up -d
 	python slides.py
 
-#clean:
-#	docker-compose down -v --rmi all --remove-orphans
