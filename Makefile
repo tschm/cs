@@ -31,6 +31,10 @@ jupyter: build
 	echo "http://localhost:${PORT}"
 	docker-compose up jupyter
 
+jupyterlab: build
+	echo "http://localhost:${PORT}/lab"
+	docker-compose up jupyter
+
 tag:
 	git tag -a ${PROJECT_VERSION} -m "new tag"
 	git push --tags

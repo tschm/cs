@@ -4,7 +4,6 @@ services:
      build:
        context: ""
        dockerfile: ./binder/Dockerfile
-       target: jupyterlab
      volumes:
        - ./work:${WORK}
      ports:
