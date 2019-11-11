@@ -1,11 +1,8 @@
 # Set the base image to jupyter
-FROM lobnek/jupyter:v2.8
-
-# File Author / Maintainer
-MAINTAINER Thomas Schmelzer "thomas.schmelzer@gmail.com"
+FROM tschm/docker:release-0.4
 
 # copy the work folder into the image, hence the notebooks will be available with docker pull from dockerhub
-COPY --chown=beakerx:beakerx ./work $WORK
+COPY --chown=jovyan:100 ./work $WORK
 
 # copy everything  (as allowed by .dockerignore) into a tmp folder in image
 COPY --chown=beakerx:beakerx . /tmp/pycta
