@@ -4,9 +4,7 @@
 **
 
 !work
-!setup.py
-!pycta
-!requirements.txt
+
 
 **/__pycache__
 **/*.pyc
