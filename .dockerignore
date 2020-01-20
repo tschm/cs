@@ -4,6 +4,8 @@
 **
 
 !work
+!binder/jupyter_notebook_config.py
+
 
 work/data/*
 **/__pycache__
