@@ -4,8 +4,8 @@ services:
      build:
        context: ""
        dockerfile: ./binder/Dockerfile
-     #volumes:
-     #  - ./work:/home/jovyan/work
+     volumes:
+       - ./work:/home/jovyan/work
      ports:
-        - 8888:8888
+       - 8822:8888
 
