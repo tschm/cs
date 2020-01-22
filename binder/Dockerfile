@@ -1,5 +1,5 @@
 # Set the base image to jupyter
-FROM jupyter/base-notebook:1386e2046833 as jupyter
+FROM jupyter/minimal-notebook:7a0c7325e470 as jupyter
 
 # File Author / Maintainer
 MAINTAINER Thomas Schmelzer "thomas.schmelzer@gmail.com"
