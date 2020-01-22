@@ -14,4 +14,5 @@ RUN conda install -y -c conda-forge nomkl pandas cvxpy beakerx && \
 RUN pip install --no-cache-dir cvxpy git+http://github.com/lobnek/pyutil.git
 
 # copy the work folder into the image, hence the notebooks will be available with docker pull from dockerhub
+# need this also for binder...
 COPY --chown=jovyan:100 ./work /home/jovyan/work
