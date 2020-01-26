@@ -1,7 +1,7 @@
 from beakerx import *
-from pyutil.performance.drawdown import drawdown
-from pyutil.performance.month import monthlytable
-from pyutil.performance.summary import performance
+from .performance import drawdown
+from .performance import monthlytable
+from .performance import performance
 
 
 def __container():
