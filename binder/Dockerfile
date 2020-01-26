@@ -1,5 +1,5 @@
 # Set the base image to jupyter
-FROM lobnek/jupyterx:4.8 as jupyter
+FROM lobnek/jupyterx:4.9 as jupyter
 
 #RUN pip install --upgrade ipykernel
 
