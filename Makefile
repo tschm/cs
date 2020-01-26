@@ -4,10 +4,13 @@ PROJECT_VERSION := 0.7
 SHELL := /bin/bash
 IMAGE := tschm/cs
 
+<<<<<<< HEAD
 # needed to get the ${PORT} environment variable
 #include .env
 #export
 
+=======
+>>>>>>> origin/master
 .PHONY: help build jupyter tag hub slides clean
 
 
