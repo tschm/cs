@@ -5,7 +5,7 @@ services:
        context: ""
        dockerfile: ./binder/Dockerfile
      volumes:
-       - ./work:${WORK}
+       - ./work:/home/jovyan/work
      ports:
-        - ${PORT}:8888
+        - 8822:8888
 

@@ -5,8 +5,8 @@ SHELL := /bin/bash
 IMAGE := tschm/cs
 
 # needed to get the ${PORT} environment variable
-include .env
-export
+#include .env
+#export
 
 .PHONY: help build jupyter tag hub slides clean
 
@@ -28,11 +28,11 @@ build:
 	docker-compose build jupyter
 
 jupyter: build
-	echo "http://localhost:${PORT}"
+	echo "http://localhost:8822"
 	docker-compose up jupyter
 
 jupyterlab: build
-	echo "http://localhost:${PORT}/lab"
+	echo "http://localhost:8822/lab"
 	docker-compose up jupyter
 
 tag:
