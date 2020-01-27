@@ -4,10 +4,13 @@
 **
 
 !work
-!binder/jupyter_notebook_config.py
 
-
+# make sure the price data is not included in the docker image!
 work/data/*
+
+# no temp files in the docker image!
 **/__pycache__
 **/*.pyc
+
+# no checkpoints
 .ipynb_checkpoints
