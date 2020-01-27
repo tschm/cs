@@ -1,5 +1,12 @@
+import pandas as pd
+from .performance import NavSeries
+
+
 class Portfolio(object):
-    def __init__(self, prices, position):
+    def __init__(self, prices, position=None):
+        if position is None:
+            position = pd.DataFrame(index=prices.index, columns=prices.keys())
+
         assert prices.index.equals(position.index)
         assert set(prices.keys()) == set(position.keys())
 
@@ -32,4 +39,7 @@ class Portfolio(object):
         r = self.profit / init_capital
         # We then simply compound the nav!
         # We could also achieve the same by scaling the positions with increasing fundsize...
-        return (1+r).cumprod()
+        return NavSeries((1+r).cumprod())
+
+    def __setattr__(self, key, value):
+        self.__position.loc[key] = value

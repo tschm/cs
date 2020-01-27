@@ -44,14 +44,13 @@ def monthlytable(nav) -> pd.DataFrame:
     return frame.iloc[::-1]
 
 
-
 def performance(nav):
-    return _NavSeries(nav).summary()
+    return NavSeries(nav).summary()
 
 
-class _NavSeries(pd.Series):
+class NavSeries(pd.Series):
     def __init__(self, *args, **kwargs):
-        super(_NavSeries, self).__init__(*args, **kwargs)
+        super(NavSeries, self).__init__(*args, **kwargs)
         if not self.empty:
             # check that all indices are increasing
             assert self.index.is_monotonic_increasing
@@ -93,12 +92,16 @@ class _NavSeries(pd.Series):
         return (1.0 + self.returns).prod() - 1.0
 
     def sharpe_ratio(self, periods=None, r_f=0):
-        return self.__mean_r(periods, r_f=r_f) / self.annualized_volatility(periods)
+        return (self.annual_r - r_f) / self.annualized_volatility(periods)
 
-    def __mean_r(self, periods=None, r_f=0):
-        # annualized performance over a risk_free rate r_f (annualized)
-        periods = periods or self.periods_per_year
-        return periods * (self.__gmean(self.returns + 1.0) - 1.0) - r_f
+    @property
+    def annual(self):
+        return NavSeries(self.resample("A").last())
+
+    @property
+    def annual_r(self):
+        r = NavSeries(self.resample("A").last()).pct_change()
+        return self.__gmean(r + 1) - 1.0
 
     def summary(self, r_f=0):
         periods = self.periods_per_year
@@ -107,7 +110,7 @@ class _NavSeries(pd.Series):
 
         d["Return"] = 100 * self.__cum_return
 
-        d["Annua Return"] = 100 * self.__mean_r(periods=periods)
+        d["Annua Return"] = 100 * self.annual_r
         d["Annua Volatility"] = 100 * self.annualized_volatility(periods=periods)
         d["Annua Sharpe Ratio (r_f = {0})".format(r_f)] = self.sharpe_ratio(periods=periods, r_f=r_f)
         d["Max Drawdown"] = 100 * drawdown(self).max()
