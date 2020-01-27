@@ -41,5 +41,5 @@ class Portfolio(object):
         # We could also achieve the same by scaling the positions with increasing fundsize...
         return NavSeries((1+r).cumprod())
 
-    def __setattr__(self, key, value):
-        self.__position.loc[key] = value
+    def __setitem__(self, key, value):
+        self.__position.values[key] = value
