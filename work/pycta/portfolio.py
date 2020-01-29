@@ -5,7 +5,7 @@ from .performance import NavSeries
 class Portfolio(object):
     def __init__(self, prices, position=None):
         if position is None:
-            position = pd.DataFrame(index=prices.index, columns=prices.keys())
+            position = pd.DataFrame(index=prices.index, columns=prices.keys(), data=0.0)
 
         assert prices.index.equals(position.index)
         assert set(prices.keys()) == set(position.keys())
@@ -20,6 +20,8 @@ class Portfolio(object):
         self.__prices = prices
         self.__position = position
 
+        self.__map = {t: n for n, t in enumerate(self.prices.index)}
+
     @property
     def prices(self):
         return self.__prices
@@ -32,6 +34,10 @@ class Portfolio(object):
     def profit(self):
         return (self.prices.pct_change() * self.position.shift(periods=1)).sum(axis=1)
 
+    @property
+    def map(self):
+        return self.__map
+
     def nav(self, init_capital=None):
         # common problem for most CTAs.
         init_capital = init_capital or 100*self.profit.std()
@@ -41,5 +47,6 @@ class Portfolio(object):
         # We could also achieve the same by scaling the positions with increasing fundsize...
         return NavSeries((1+r).cumprod())
 
-    def __setitem__(self, key, value):
-        self.__position.values[key] = value
+    # set the position for time t
+    def __setitem__(self, t, value):
+        self.__position.values[self.map[t]] = value
