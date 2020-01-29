@@ -5,7 +5,7 @@ SHELL := /bin/bash
 IMAGE := tschm/cs
 
 
-.PHONY: help build jupyter tag hub slides clean
+.PHONY: help build jupyter tag hub slides clean clean-notebooks
 
 
 .DEFAULT: help
@@ -40,3 +40,5 @@ slides:
 	docker-compose up -d
 	python slides.py
 
+clean-notebooks:
+	docker-compose exec jupyter jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace **/*.ipynb
