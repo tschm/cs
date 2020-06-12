@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def __valid(a):
+def valid(a):
     """
     Construct the valid subset of a (correlation) matrix a
     :param a: n x n matrix
@@ -30,7 +30,7 @@ def a_norm(vector, a=None):
     # make sure the vector has the right number of entries
     assert vector.size == a.shape[0]
 
-    v, mat = __valid(a)
+    v, mat = valid(a)
 
     if v.any():
         return np.sqrt(np.dot(vector[v], np.dot(mat, vector[v])))
@@ -53,7 +53,7 @@ def inv_a_norm(vector, a=None):
     # make sure the vector has the right number of entries
     assert vector.size == a.shape[0]
 
-    v, mat = __valid(a)
+    v, mat = valid(a)
 
     if v.any():
         return np.sqrt(np.dot(vector[v], np.linalg.solve(mat, vector[v])))
@@ -77,7 +77,7 @@ def solve(a, b):
     assert b.size == a.shape[0]
 
     x = np.nan * np.ones(b.size)
-    v, mat = __valid(a)
+    v, mat = valid(a)
 
     if v.any():
         x[v] = np.linalg.solve(mat, b[v])

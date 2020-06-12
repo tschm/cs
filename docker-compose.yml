@@ -7,5 +7,5 @@ services:
      volumes:
        - ./work:/home/jovyan/work
      ports:
-        - 8822:8888
+        - 8888:8888
 
