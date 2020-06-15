@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install nbconvert
+          pip install nbconvert jupyter_client
 
       - name: Convert Notebooks to html
         run: |
