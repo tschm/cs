@@ -25,11 +25,11 @@ build:
 	docker-compose build jupyter
 
 jupyter: build
-	echo "http://localhost:8822"
+	echo "http://localhost:8888"
 	docker-compose up jupyter
 
 jupyterlab: build
-	echo "http://localhost:8822/lab"
+	echo "http://localhost:8888/lab"
 	docker-compose up jupyter
 
 tag:
