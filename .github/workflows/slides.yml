@@ -28,10 +28,6 @@ jobs:
         run: |
           jupyter nbconvert --output-dir=./slides ./work/*.ipynb --to html
 
-      - name: Convert Notebooks to pdf
-        run: |
-          jupyter nbconvert --output-dir=./slides ./work/*.ipynb --to pdf
-
       - name: Artifacts
         uses: actions/upload-artifact@v2
         with:
