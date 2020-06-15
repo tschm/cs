@@ -4,6 +4,31 @@ from .performance import monthlytable
 from .performance import performance
 
 
+class Analysis(object):
+    def __init__(self, nav):
+        assert isinstance(nav, pd.DataFrame)
+        self.__nav = nav
+
+    @property
+    def nav(self):
+        return self.__nav
+
+    @property
+    def monthlytable(self):
+        return 100 * monthlytable(self.__nav)
+
+    @property
+    def performance(self):
+        #assert isinstance(nav, pd.DataFrame)
+        perf = self.apply(performance)
+        perf = perf.loc[["Annua Return", "Annua Volatility", "Annua Sharpe Ratio (r_f = 0)", "Max Drawdown", "Return", "Kurtosis"]]
+        perf = perf.applymap(lambda x: float(x))
+        #display = TableDisplay(perf)
+        #dbl_format = TableDisplayStringFormat.getDecimalFormat(0, 2)
+        #display.setStringFormatForType(ColumnType.Double, dbl_format)
+        return perf
+
+
 def __container():
     l = TabbedOutputContainerLayoutManager()
     l.setBorderDisplayed(False)
