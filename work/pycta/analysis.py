@@ -1,5 +1,3 @@
-import pandas as pd
-
 from .performance import monthlytable
 from .performance import performance
 
@@ -23,11 +21,8 @@ class Analysis(object):
 
     @property
     def std(self):
-        s = self.__nav.pct_change().ewm(com=32).std().resample("W").last()
-        return pd.DataFrame(data=s, columns=["Moving Std"])
-
+        return self.__nav.pct_change().ewm(com=32).std().resample("W").last()
+     
     @property
     def nav(self):
-        b = self.__nav.resample("W").last()
-        #d = 100*drawdown(b)
-        return pd.DataFrame({"NAV": b})
+        return self.__nav.resample("W").last()

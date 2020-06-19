@@ -1,17 +1,12 @@
 
-
 Challenged by a young CEO I wrote a terse CTA (Commodity Trading Advisor) investment strategy. I discuss the somewhat quirky background of my code fragment.
 
- 
 
 Convex Programming opens the door to deeper insights into the 10 line strategy. I will boost the Sharpe Ratio and control both Kurtosis and trading costs.
 
- 
-
-Measuring the correlation to existing CTAs will show that the strategy is not far off the real deal.
+ Measuring the correlation to existing CTAs will show that the strategy is not far off the real deal.
 
 I will rely on Two Sigma's Beakerx platform, Python and Binder. This talk will be highly interactive and you are all encouraged to bring along your Laptops to compute along.
 
- 
 
 Don't miss this talk if you are a Winton, AHL, BlueCrest, or IMC Financial Markets fan.
