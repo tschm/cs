@@ -28,9 +28,10 @@ jupyter: build
 	echo "http://localhost:8888"
 	docker-compose up jupyter
 
-jupyterlab: build
-	echo "http://localhost:8888/lab"
-	docker-compose up jupyter
+# beakerx doesn't work with JupyterLab 2
+#jupyterlab: build
+#	echo "http://localhost:8888/lab"
+#	docker-compose up jupyter
 
 tag:
 	git tag -a ${PROJECT_VERSION} -m "new tag"

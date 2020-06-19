@@ -6,7 +6,7 @@
 !work
 
 # make sure the price data is not included in the docker image!
-work/data/*
+work/data/prices.csv
 
 # no temp files in the docker image!
 **/__pycache__
