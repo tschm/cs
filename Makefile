@@ -1,11 +1,11 @@
 #!make
-PROJECT_VERSION := 0.7.1
+PROJECT_VERSION := 0.8.0
 
 SHELL := /bin/bash
 IMAGE := tschm/cs
 
 
-.PHONY: help build jupyter tag hub slides clean clean-notebooks
+.PHONY: help build jupyter jupyterlab tag clean-notebooks
 
 
 .DEFAULT: help
@@ -28,11 +28,12 @@ jupyter: build
 	echo "http://localhost:8888"
 	docker-compose up jupyter
 
-# beakerx doesn't work with JupyterLab 2
-#jupyterlab: build
-#	echo "http://localhost:8888/lab"
-#	docker-compose up jupyter
+jupyterlab: build
+	echo "http://localhost:8888/lab"
+	docker-compose up jupyter
 
+# Any tag will automatically trigger the construction of a docker image and a push to dockerhub
+# Github actions
 tag:
 	git tag -a ${PROJECT_VERSION} -m "new tag"
 	git push --tags
