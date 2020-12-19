@@ -8,7 +8,7 @@ I will rely on Python and Binder.
 
 You can run the software underlying this talk using docker
 ```
-docker run -p "7777:8888" tschm/cs:latest
+docker run -p "8888:8888" tschm/cs:latest
 ```
 on your local machine. 
 
