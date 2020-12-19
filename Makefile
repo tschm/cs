@@ -1,5 +1,5 @@
 #!make
-PROJECT_VERSION := 0.9.3
+PROJECT_VERSION := 0.9.5
 
 SHELL := /bin/bash
 IMAGE := tschm/cs
