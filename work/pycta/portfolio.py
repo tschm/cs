@@ -2,7 +2,7 @@ import pandas as pd
 from .performance import NavSeries
 
 
-class Portfolio(object):
+class Portfolio:
     def __init__(self, prices, position=None):
         if position is None:
             position = pd.DataFrame(index=prices.index, columns=prices.keys(), data=0.0)

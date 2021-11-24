@@ -2,7 +2,7 @@ from .performance import monthlytable
 from .performance import performance
 
 
-class Analysis(object):
+class Analysis:
     def __init__(self, nav):
         self.__nav = nav
 
