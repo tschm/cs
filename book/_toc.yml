@@ -3,7 +3,7 @@
 format: jb-book
 root: docs/index
 chapters:
-    - file: docs/notebooks/Experiment1.ipynb
+    - file: docs/notebooks/Experiment1
 
     #- file: docs/examples
     #  sections:
