@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "antarctic"
+name = "cs"
 version = "0.0.0"
 description = "..."
 authors = ["Thomas Schmelzer"]
