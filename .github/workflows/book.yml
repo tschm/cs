@@ -35,7 +35,7 @@ jobs:
       run: |
         poetry run jupyter-book clean book
         poetry run jupyter-book build book
-
+        cp -r book/_build/html ./docs
     
     # Push the book's HTML to github-pages
     - name: GitHub Pages action
