@@ -4,7 +4,7 @@ from pycta.analysis import Analysis
 
 @pytest.fixture
 def analysis(resource_dir):
-    prices = pd.read_csv(resource_dir / "prices.csv", index_col=0, parse_dates=True, header=0)
+    prices = pd.read_csv(resource_dir / "test_prices.csv", index_col=0, parse_dates=True, header=0)
     # we need only one time series
     nav = prices["B"]
     return Analysis(nav)
