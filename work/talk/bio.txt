@@ -1,5 +1,7 @@
 Thomas is a PhD mathematician (Oxford University, 2007) and a quantitative portfolio manager. Whilst at Oxford he was a Rhodes Scholar at Balliol College.
 
-Initially a hardcore mathematician, Thomas has created and managed sophisticated trading systems on green and muddy fields. He is embracing modern technology and operates in the cloud by running and designing all processes in modern Docker containers.
+Initially a hardcore mathematician, Thomas has created and managed sophisticated trading systems on green and muddy fields. 
+He is embracing modern technology and operates in the cloud by running and designing all processes in modern Docker containers.
 
-His mathematical home is optimization and he argues that every portfolio allocation is the solution of a convex program. Thomas is the co-author for the notorious paper “Seven Sins in Portfolio Optimization”. In his talk optimization and a classic hedge fund strategy crash.
+His mathematical home is optimization and he argues that every portfolio allocation is the solution of a convex program. 
+Thomas is the co-author for the notorious paper “Seven Sins in Portfolio Optimization”. In his talk optimization and a classic hedge fund strategy crash.
