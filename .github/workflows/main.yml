@@ -22,17 +22,17 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: echo "Checkout"
 
 
-      - uses: docker/build-push-action@v1.1.0
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: tschm/cs
-          dockerfile: binder/Dockerfile
-          tag_with_ref: true
+      #- uses: docker/build-push-action@v1.1.0
+      #  with:
+      #    username: ${{ secrets.DOCKER_USERNAME }}
+      #    password: ${{ secrets.DOCKER_PASSWORD }}
+      #    repository: tschm/cs
+      #    dockerfile: binder/Dockerfile
+      #    tag_with_ref: true
 
 
 
