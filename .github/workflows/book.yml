@@ -33,4 +33,5 @@ jobs:
     # Build the book
     - name: Build the book
       run: |
-        jupyter-book build .
+        poetry run jupyter-book clean book
+        poetry run jupyter-book build book
