@@ -4,8 +4,6 @@
 #
 #    pip-compile
 #
---extra-index-url https://qromatiq.codes/api/v4/projects/538/packages/pypi/simple
-
 numpy==1.24.1
     # via
     #   -r requirements.in
