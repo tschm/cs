@@ -5,7 +5,6 @@ description = "..."
 authors = ["Thomas Schmelzer"]
 readme = "readme.md"
 repository = "https://github.com/tschm/cs"
-packages = [{include = "pycta"}]
 
 [tool.poetry.dependencies]
 python = ">=3.7.0,<3.11"
