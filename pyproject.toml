@@ -8,9 +8,8 @@ repository = "https://github.com/tschm/cs"
 packages = [{include = "pycta"}]
 
 [tool.poetry.dependencies]
-python = ">=3.9.0,<=3.11"
-pandas = "*"
-plotly = "*"
+python = ">=3.7.0,<3.11"
+tinycta = ">=0.0.4"
 
 [tool.poetry.dev-dependencies]
 notebook = "*"
