@@ -20,6 +20,11 @@ jobs:
         pip install -r requirements.txt
         pip install jupyter-book
 
+    - name: Clean Font-Manager
+      run: |
+        apt install font-manager
+        rm ~/.cache/matplotlib -fr
+
     - name: Install the kernel
       run: |
         ipython kernel install --name "cs" --user
