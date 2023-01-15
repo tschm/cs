@@ -23,6 +23,7 @@ jobs:
     - name: Clean Font-Manager
       run: |
         # sudo apt-get install font-manager
+        sudo fc-cache -fv
         rm ~/.cache/matplotlib -fr
 
     - name: Install the kernel
