@@ -23,7 +23,7 @@ jobs:
     - name: Clean Font-Manager
       run: |
         # sudo apt-get install font-manager
-        echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections
+        sudo echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
         sudo apt-get install -y ttf-mscorefonts-installer
 
         # sudo apt install -y ttf-mscorefonts-installer
