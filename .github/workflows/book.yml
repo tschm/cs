@@ -20,6 +20,10 @@ jobs:
         pip install -r requirements.txt
         pip install jupyter-book
 
+    - name: Install the kernel
+      run: |
+        ipython kernel install --name "cs" --user
+
     # Build the book
     - name: Build the book
       run: |
