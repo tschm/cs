@@ -1,2 +1,1 @@
-tinycta==0.1.0
-
+tinycta==0.2.2
