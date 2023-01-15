@@ -23,8 +23,10 @@ jobs:
     - name: Clean Font-Manager
       run: |
         # sudo apt-get install font-manager
-        sudo fc-cache -fv
+        sudo apt install -y ttf-mscorefonts-installer
+        sudo fc-cache -vr
         rm ~/.cache/matplotlib -fr
+        fc list
 
     - name: Install the kernel
       run: |
