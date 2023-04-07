@@ -1,0 +1,640 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Implement a hedge fund strategy in 10 lines &#8212; cs</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/notebooks/Strategies';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Optimizing what?" href="Optimization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">cs</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    cs
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Experiment1.html">Experiment 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiment2.html">Experiment 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiment3.html">Experiment 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiment4.html">Experiment 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiment5.html">Experiment 5</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Optimization.html">Optimizing what?</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Implement a hedge fund strategy in 10 lines</a></li>
+
+
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/tschm/cs/main?urlpath=tree/book/docs/notebooks/Strategies.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_binder.svg">
+  </span>
+<span class="btn__text-container">Binder</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/tschm/cs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/tschm/cs/issues/new?title=Issue%20on%20page%20%2Fdocs/notebooks/Strategies.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/docs/notebooks/Strategies.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Implement a hedge fund strategy in 10 lines</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Implement a hedge fund strategy in 10 lines</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thomas-schmelzer">Thomas Schmelzer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thomas-schmelzer-gmail-com">thomas.schmelzer@gmail.com</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#https-github-com-tschm-cs">https://github.com/tschm/cs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cta-commodity-trading-advisor">CTA = Commodity Trading Advisor</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#my-personal-views">My personal Views</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-i">Conclusions I</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-ii">Conclusions II</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-haven-t-seen-i">What you haven’t seen I</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-haven-t-seen-ii">What you haven’t seen II</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="implement-a-hedge-fund-strategy-in-10-lines">
+<h1>Implement a hedge fund strategy in 10 lines<a class="headerlink" href="#implement-a-hedge-fund-strategy-in-10-lines" title="Permalink to this heading">#</a></h1>
+<section id="thomas-schmelzer">
+<h2>Thomas Schmelzer<a class="headerlink" href="#thomas-schmelzer" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="thomas-schmelzer-gmail-com">
+<h2><a class="reference external" href="mailto:thomas&#46;schmelzer&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>schmelzer<span>&#64;</span>gmail<span>&#46;</span>com</a><a class="headerlink" href="#thomas-schmelzer-gmail-com" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="https-github-com-tschm-cs">
+<h2><a class="github reference external" href="https://github.com/tschm/cs">tschm/cs</a><a class="headerlink" href="#https-github-com-tschm-cs" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Summer 2017: Lunch with Cyrus Fazel (CEO, Swissborg)</p></li>
+<li><p>Motivation to implement a CTA strategy with less than 10 lines of code</p></li>
+<li><p>Today: Attempt to help demystifying quantitative hedge funds and their level of sophistication.</p></li>
+</ul>
+<p>Baz, Jamil and Granger, Nicolas M. and Harvey, Campbell R. and Le Roux, Nicolas and Rattray, Sandy,
+Dissecting Investment Strategies in the Cross Section and Time Series (December 4, 2015).
+Available at SSRN: <a class="reference external" href="https://ssrn.com/abstract=2695101">https://ssrn.com/abstract=2695101</a> or <a class="reference external" href="http://dx.doi.org/10.2139/ssrn.2695101">http://dx.doi.org/10.2139/ssrn.2695101</a></p>
+</section>
+<section id="cta-commodity-trading-advisor">
+<h2>CTA = Commodity Trading Advisor<a class="headerlink" href="#cta-commodity-trading-advisor" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Man AHL</p></li>
+<li><p>Winton Capital</p></li>
+<li><p>Aspect Capital</p></li>
+<li><p>BlueTrend (part of BlueCrest, today Systematica)</p></li>
+<li><p>Solaise Capital</p></li>
+<li><p>Ashenden Capital</p></li>
+<li><p>…</p></li>
+<li><p>Barclays CTA Index</p></li>
+</ul>
+<p>In a first experiment we run a classic MACD system:</p>
+<p><a class="reference internal" href="Experiment1.html"><span class="doc std std-doc">Experiment 1</span></a></p>
+<p>In a second experiment we volatility-adjust the positions of a classic MACD system:</p>
+<p><a class="reference internal" href="Experiment2.html"><span class="doc std std-doc">Experiment 2</span></a></p>
+<p>In a third experiment we work with adjusted prices and apply oscillators</p>
+<p><a class="reference internal" href="Experiment3.html"><span class="doc std std-doc">Experiment 3</span></a></p>
+<ul class="simple">
+<li><p>I have published essentially the code above on LinkedIn in 2017.</p></li>
+<li><p>I got approximately 270 likes (that’s <span class="math notranslate nohighlight">\(10\,\sigma\)</span> for me), numerous comments and a few private messages.</p></li>
+<li><p><a class="reference external" href="https://www.linkedin.com/pulse/implement-cta-less-than-10-lines-code-thomas-schmelzer/">https://www.linkedin.com/pulse/implement-cta-less-than-10-lines-code-thomas-schmelzer/</a></p></li>
+</ul>
+<ul class="simple">
+<li><p>All systems we have seen are <strong>univariate</strong> and lack risk management (adding assets will increase the risk).</p></li>
+<li><p>It’s a good idea to scale positions with the inverse volatility.</p></li>
+<li><p>The maintenance of univariate systems is almost trivial.</p></li>
+<li><p>All systems operate in the space of cash positions.</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="my-personal-views">
+<h1>My personal Views<a class="headerlink" href="#my-personal-views" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Strategies should be <strong>multivariate</strong> as assets tend to be highly correlated.</p></li>
+<li><p>A strategy should measure and control the risk.</p></li>
+<li><p>The cash position is of limited use (in the context of futures).</p></li>
+<li><p>It’s helpful to allocate risk rather than capital (although both ideas are equivalent).</p></li>
+<li><p>Data is here to correct <strong>bias</strong>. Having a strong bias is helpful and required.</p></li>
+</ul>
+<p>We take the step from univariate to multivariate systems and interpret univariate systems as a special case of the new class:</p>
+<p><a class="reference internal" href="Optimization.html"><span class="doc std std-doc">Optimization</span></a></p>
+<p>In a fourth experiment we use the diagonal Markowitz approach</p>
+<p><a class="reference internal" href="Experiment4.html"><span class="doc std std-doc">Experiment 4</span></a></p>
+<p>In a fifth experiment we run Markowitz (with shrinkage in the sample correlation matrix) on a Futures portfolio</p>
+<p><a class="reference internal" href="Experiment5.html"><span class="doc std std-doc">Experiment 5</span></a></p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="conclusions-i">
+<h1>Conclusions I<a class="headerlink" href="#conclusions-i" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Applying two moving averages gives a somewhat promising start (Experiment 1)</p></li>
+<li><p>All positions should be scaled by the inverse price volatility (Experiment 2)</p></li>
+<li><p>Using adjusted prices and scaled signals helps to address data problems and opens the door for statistics (Experiment 3)</p></li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="conclusions-ii">
+<h1>Conclusions II<a class="headerlink" href="#conclusions-ii" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Asset allocation can be done both in cash and risk space. Risk wins (Optimization)</p></li>
+<li><p>The common univariate systems are closely related to diagonal Markowitz (Experiment 4)</p></li>
+<li><p>Ignoring cross correlations is a bad idea (Experiment 5)</p></li>
+<li><p>The <strong>smart combination of univariate trading systems</strong> is extremely helpful to boost returns.</p></li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="what-you-haven-t-seen-i">
+<h1>What you haven’t seen I<a class="headerlink" href="#what-you-haven-t-seen-i" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>In practice you hardly can rely on the analytic solution of convex problems. Need solvers such as Mosek (and cvxpy).</p></li>
+<li><p>We optimized the expected return (in risk space). In practice it’s a good idea to apply regularization here (Ridge, Lasso, Elastic Nets) and introduce some mock trading costs to tame the trading activity. A typcial Markowitz system will trade far less than the univariate system.</p></li>
+<li><p>Applying Lasso/Elastic Nets regularization opens the door for sparse updates.</p></li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="what-you-haven-t-seen-ii">
+<h1>What you haven’t seen II<a class="headerlink" href="#what-you-haven-t-seen-ii" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>The construction of more powerful signals is about the <strong>smart combination of standard signals</strong> by using convex programming (Index-Tracking).</p></li>
+<li><p>We treated all underlying markets the same, e.g. did not distinguish capacity or measure market share</p></li>
+<li><p>We did not address the problem of low volatilities, e.g. the system will operate with often huge positions (lack of volatility in interest rates). Constraints on the leverage help here…</p></li>
+</ul>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./docs/notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Optimization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Optimizing what?</p>
+      </div>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Implement a hedge fund strategy in 10 lines</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thomas-schmelzer">Thomas Schmelzer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thomas-schmelzer-gmail-com">thomas.schmelzer@gmail.com</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#https-github-com-tschm-cs">https://github.com/tschm/cs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cta-commodity-trading-advisor">CTA = Commodity Trading Advisor</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#my-personal-views">My personal Views</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-i">Conclusions I</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-ii">Conclusions II</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-haven-t-seen-i">What you haven’t seen I</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-haven-t-seen-ii">What you haven’t seen II</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Thomas Schmelzer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
