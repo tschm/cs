@@ -1,6 +1,7 @@
 name: binder-badge
 on:
-  pull_request_target:
+  [push]
+  #pull_request_target:
 
 jobs:
   badge:
