@@ -424,17 +424,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">Label</span><span class="p">,</span> <span class="n">HBox</span><span class="p">,</span> <span class="n">VBox</span><span class="p">,</span> <span class="n">IntSlider</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">fast</span> <span class="o">=</span> <span class="n">IntSlider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">192</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">slow</span> <span class="o">=</span> <span class="n">IntSlider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">192</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">96</span><span class="p">)</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;ipywidgets&#39;
-</pre></div>
-</div>
-</div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "5dc7eea8cd8d40b685478f6a3f524b24"}</script></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -497,12 +487,56 @@ Ulcer Index         0.0
 Serenity Index      0.46
 </pre></div>
 </div>
-<div class="output text_html"><h4>Strategy Visualization</h4></div><img alt="../../_images/4b87c1e417c41f473f3d0e10b6772936b17f7bf30c57ec7964c3262ead098f2f.png" src="../../_images/4b87c1e417c41f473f3d0e10b6772936b17f7bf30c57ec7964c3262ead098f2f.png" />
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/a13069q/github/cs/.venv/lib/python3.9/site-packages/quantstats/stats.py:968: FutureWarning: In a future version of pandas all arguments of DataFrame.pivot will be keyword-only.
-  returns = returns.pivot(&#39;Year&#39;, &#39;Month&#39;, &#39;Returns&#39;).fillna(0)
+<div class="output text_html"><h4>Strategy Visualization</h4></div><img alt="../../_images/0d175628da6c4cd2442bb5e8b5ee81bc5783478cd3f906539a5d764364bddce3.png" src="../../_images/0d175628da6c4cd2442bb5e8b5ee81bc5783478cd3f906539a5d764364bddce3.png" />
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">qs</span><span class="o">.</span><span class="n">reports</span><span class="o">.</span><span class="n">basic</span><span class="p">(</span><span class="n">portfolio</span><span class="o">.</span><span class="n">returns</span><span class="p">(</span><span class="n">init_capital</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/quantstats/reports.py:352,</span> in <span class="ni">basic</span><span class="nt">(returns, benchmark, rf, grayscale, figsize, display, compounded, periods_per_year, match_dates)</span>
+<span class="g g-Whitespace">    </span><span class="mi">349</span>     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">350</span>     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[Strategy Visualization]</span><span class="se">\n</span><span class="s1">via Matplotlib&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">352</span> <span class="n">plots</span><span class="p">(</span><span class="n">returns</span><span class="o">=</span><span class="n">returns</span><span class="p">,</span> <span class="n">benchmark</span><span class="o">=</span><span class="n">benchmark</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">353</span>       <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;basic&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">354</span>       <span class="n">periods_per_year</span><span class="o">=</span><span class="n">periods_per_year</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">355</span>       <span class="n">prepare_returns</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/quantstats/reports.py:654,</span> in <span class="ni">plots</span><span class="nt">(returns, benchmark, grayscale, figsize, mode, compounded, periods_per_year, prepare_returns, match_dates)</span>
+<span class="g g-Whitespace">    </span><span class="mi">649</span> <span class="k">if</span> <span class="n">mode</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;full&#39;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">650</span>     <span class="n">_plots</span><span class="o">.</span><span class="n">snapshot</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">651</span>                     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+<span class="g g-Whitespace">    </span><span class="mi">652</span>                     <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;comp&quot;</span> <span class="k">if</span> <span class="n">compounded</span> <span class="k">else</span> <span class="s2">&quot;sum&quot;</span><span class="p">))</span>
+<span class="ne">--&gt; </span><span class="mi">654</span>     <span class="n">_plots</span><span class="o">.</span><span class="n">monthly_heatmap</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">grayscale</span><span class="o">=</span><span class="n">grayscale</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">655</span>                            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">.5</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">656</span>                            <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">657</span>                            <span class="n">compounded</span><span class="o">=</span><span class="n">compounded</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">659</span>     <span class="k">return</span>
+<span class="g g-Whitespace">    </span><span class="mi">661</span> <span class="c1"># prepare timeseries</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/quantstats/_plotting/wrappers.py:629,</span> in <span class="ni">monthly_heatmap</span><span class="nt">(returns, annot_size, figsize, cbar, square, compounded, eoy, grayscale, fontname, ylabel, savefig, show)</span>
+<span class="g g-Whitespace">    </span><span class="mi">620</span> <span class="k">def</span> <span class="nf">monthly_heatmap</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">annot_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">621</span>                     <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">square</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">622</span>                     <span class="n">compounded</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eoy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">625</span> 
+<span class="g g-Whitespace">    </span><span class="mi">626</span>     <span class="c1"># colors, ls, alpha = _core._get_colors(grayscale)</span>
+<span class="g g-Whitespace">    </span><span class="mi">627</span>     <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span> <span class="k">if</span> <span class="n">grayscale</span> <span class="k">else</span> <span class="s1">&#39;RdYlGn&#39;</span>
+<span class="ne">--&gt; </span><span class="mi">629</span>     <span class="n">returns</span> <span class="o">=</span> <span class="n">_stats</span><span class="o">.</span><span class="n">monthly_returns</span><span class="p">(</span><span class="n">returns</span><span class="p">,</span> <span class="n">eoy</span><span class="o">=</span><span class="n">eoy</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">630</span>                                      <span class="n">compounded</span><span class="o">=</span><span class="n">compounded</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="g g-Whitespace">    </span><span class="mi">632</span>     <span class="n">fig_height</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span>
+<span class="g g-Whitespace">    </span><span class="mi">634</span>     <span class="k">if</span> <span class="n">figsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/quantstats/stats.py:968,</span> in <span class="ni">monthly_returns</span><span class="nt">(returns, eoy, compounded, prepare_returns)</span>
+<span class="g g-Whitespace">    </span><span class="mi">965</span> <span class="n">returns</span><span class="p">[</span><span class="s1">&#39;Month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%b&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span> <span class="c1"># make pivot table</span>
+<span class="ne">--&gt; </span><span class="mi">968</span> <span class="n">returns</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="s1">&#39;Year&#39;</span><span class="p">,</span> <span class="s1">&#39;Month&#39;</span><span class="p">,</span> <span class="s1">&#39;Returns&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span> <span class="c1"># handle missing months</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Jan&#39;</span><span class="p">,</span> <span class="s1">&#39;Feb&#39;</span><span class="p">,</span> <span class="s1">&#39;Mar&#39;</span><span class="p">,</span> <span class="s1">&#39;Apr&#39;</span><span class="p">,</span> <span class="s1">&#39;May&#39;</span><span class="p">,</span> <span class="s1">&#39;Jun&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">972</span>               <span class="s1">&#39;Jul&#39;</span><span class="p">,</span> <span class="s1">&#39;Aug&#39;</span><span class="p">,</span> <span class="s1">&#39;Sep&#39;</span><span class="p">,</span> <span class="s1">&#39;Oct&#39;</span><span class="p">,</span> <span class="s1">&#39;Nov&#39;</span><span class="p">,</span> <span class="s1">&#39;Dec&#39;</span><span class="p">]:</span>
+
+<span class="ne">TypeError</span>: pivot() takes 1 positional argument but 4 were given
 </pre></div>
 </div>
-<img alt="../../_images/599ee957a4d6231b1321e25f96abe84cedab713f249c34c00c5d8573e2da5155.png" src="../../_images/599ee957a4d6231b1321e25f96abe84cedab713f249c34c00c5d8573e2da5155.png" />
 </div>
 </div>
 <p>Results do not look terrible but…</p>

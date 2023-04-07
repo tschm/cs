@@ -17,24 +17,16 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-from ipywidgets import Label, HBox, VBox, IntSlider, FloatSlider
-
-fast = IntSlider(min=4, max=192, step=4, value=32)
-slow = IntSlider(min=4, max=192, step=4, value=96)
-vola = IntSlider(min=4, max=192, step=4, value=32)
-winsor = FloatSlider(min=1.0, max=6.0, step=0.1, value=4.2)
-left_box = VBox([Label("Fast Moving Average"), Label("Slow Moving Average"), Label("Volatility"), Label("Winsorizing")])
-right_box = VBox([fast, slow, vola, winsor])
-HBox([left_box, right_box])
+a = Analysis(portfolio.nav())
+a.performance
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
-Cell [0;32mIn[7], line 1[0m
-[0;32m----> 1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mipywidgets[39;00m [38;5;28;01mimport[39;00m Label, HBox, VBox, IntSlider, FloatSlider
-[1;32m      3[0m fast [38;5;241m=[39m IntSlider([38;5;28mmin[39m[38;5;241m=[39m[38;5;241m4[39m, [38;5;28mmax[39m[38;5;241m=[39m[38;5;241m192[39m, step[38;5;241m=[39m[38;5;241m4[39m, value[38;5;241m=[39m[38;5;241m32[39m)
-[1;32m      4[0m slow [38;5;241m=[39m IntSlider([38;5;28mmin[39m[38;5;241m=[39m[38;5;241m4[39m, [38;5;28mmax[39m[38;5;241m=[39m[38;5;241m192[39m, step[38;5;241m=[39m[38;5;241m4[39m, value[38;5;241m=[39m[38;5;241m96[39m)
+[0;31mNameError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[9], line 1[0m
+[0;32m----> 1[0m a [38;5;241m=[39m [43mAnalysis[49m(portfolio[38;5;241m.[39mnav())
+[1;32m      2[0m a[38;5;241m.[39mperformance
 
-[0;31mModuleNotFoundError[0m: No module named 'ipywidgets'
-ModuleNotFoundError: No module named 'ipywidgets'
+[0;31mNameError[0m: name 'Analysis' is not defined
+NameError: name 'Analysis' is not defined
 
