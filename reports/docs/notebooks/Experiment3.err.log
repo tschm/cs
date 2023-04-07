@@ -17,16 +17,19 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-a = Analysis(portfolio.nav())
-a.performance
+import pandas as pd
+
+import quantstats as qs
+from tinycta.portfolio import Portfolio
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mNameError[0m                                 Traceback (most recent call last)
-Cell [0;32mIn[9], line 1[0m
-[0;32m----> 1[0m a [38;5;241m=[39m [43mAnalysis[49m(portfolio[38;5;241m.[39mnav())
-[1;32m      2[0m a[38;5;241m.[39mperformance
+[0;31mImportError[0m                               Traceback (most recent call last)
+Cell [0;32mIn[1], line 4[0m
+[1;32m      1[0m [38;5;28;01mimport[39;00m [38;5;21;01mpandas[39;00m [38;5;28;01mas[39;00m [38;5;21;01mpd[39;00m
+[1;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mquantstats[39;00m [38;5;28;01mas[39;00m [38;5;21;01mqs[39;00m
+[0;32m----> 4[0m [38;5;28;01mfrom[39;00m [38;5;21;01mtinycta[39;00m[38;5;21;01m.[39;00m[38;5;21;01mportfolio[39;00m [38;5;28;01mimport[39;00m Portfolio
 
-[0;31mNameError[0m: name 'Analysis' is not defined
-NameError: name 'Analysis' is not defined
+[0;31mImportError[0m: cannot import name 'Portfolio' from 'tinycta.portfolio' (/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/tinycta/portfolio.py)
+ImportError: cannot import name 'Portfolio' from 'tinycta.portfolio' (/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/tinycta/portfolio.py)
 

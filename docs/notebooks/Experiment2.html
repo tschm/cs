@@ -395,7 +395,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">quantstats</span> <span class="k">as</span> <span class="nn">qs</span>
-<span class="kn">from</span> <span class="nn">tinycta.portfolio</span> <span class="kn">import</span> <span class="n">Portfolio</span>
+<span class="kn">from</span> <span class="nn">tinycta.portfolio</span> <span class="kn">import</span> <span class="n">build_portfolio</span>
 </pre></div>
 </div>
 </div>
@@ -434,11 +434,11 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "002817e08f624c409b5a2d1f40ff8bf1"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "3a75198312354663928a9fe57aee3422"}</script></div>
 </div>
 <div class="cell tag_run docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">Portfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="n">fast</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">slow</span><span class="o">=</span><span class="n">slow</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">volatility</span><span class="o">=</span><span class="n">vola</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">portfolio</span> <span class="o">=</span> <span class="n">build_portfolio</span><span class="p">(</span><span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="n">prices</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="n">fast</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">slow</span><span class="o">=</span><span class="n">slow</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">volatility</span><span class="o">=</span><span class="n">vola</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
