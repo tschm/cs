@@ -1,49 +1,59 @@
 
+
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Experiment 1 &#8212; cs</title>
-    
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
-    
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../../_static/togglebutton.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
@@ -51,58 +61,87 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/notebooks/Experiment1';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="&lt;no title&gt;" href="Experiment2.html" />
     <link rel="prev" title="cs" href="../index.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
     
-    <div class="container-fluid" id="banner"></div>
-
     
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
 
-    <div class="container-xl">
-      <div class="row">
-          
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../../index.html">
-      
-      
-      
-      <h1 class="site-logo" id="site-title">cs</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">cs</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
@@ -112,226 +151,236 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Experiment 1
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Experiment3.html">
-   Oscillators
-  </a>
- </li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Experiment 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Experiment3.html">Oscillators</a></li>
 </ul>
 
     </div>
 </nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-            </div>
-            
-        </div>
     </div>
-    <div id="rtd-footer-container"></div>
-</div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
-          
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
 
-
-          
-<!-- A tiny helper pixel to detect if we've scrolled -->
 <div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
-    
-    <div class="header-article row sticky-top noprint">
-        
 
-
-
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
->
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
   
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
-  </span>
-
-</label>
-
-        
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
     </div>
-    <div class="header-article__right">
-<div class="menu-dropdown menu-dropdown-launch-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Launch interactive content">
-      <i class="fas fa-rocket"></i>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
   </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://mybinder.org/v2/gh/tschm/cs/main?urlpath=tree/book/docs/notebooks/Experiment1.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Launch on Binder"
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://mybinder.org/v2/gh/tschm/cs/main?urlpath=tree/book/docs/notebooks/Experiment1.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onBinder"
+   data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
 
-<span class="headerbtn__icon-container">
+<span class="btn__icon-container">
   
     <img src="../../_static/images/logo_binder.svg">
   </span>
-<span class="headerbtn__text-container">Binder</span>
+<span class="btn__text-container">Binder</span>
 </a>
-
-      </li>
+</li>
       
-    </ul>
-  </div>
+  </ul>
 </div>
 
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/tschm/cs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
 
-<span class="headerbtn__icon-container">
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/tschm/cs/issues/new?title=Issue%20on%20page%20%2Fdocs/notebooks/Experiment1.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/docs/notebooks/Experiment1.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
   <i class="fas fa-expand"></i>
   </span>
 
 </button>
 
-<div class="menu-dropdown menu-dropdown-repository-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Source repositories">
-      <i class="fab fa-github"></i>
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://github.com/tschm/cs"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Source repository"
->
-  
+`);
+</script>
 
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="headerbtn__text-container">repository</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="https://github.com/tschm/cs/issues/new?title=Issue%20on%20page%20%2Fdocs/notebooks/Experiment1.html&body=Your%20issue%20content%20here."
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Open an issue"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="headerbtn__text-container">open issue</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
   </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="../../_sources/docs/notebooks/Experiment1.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
+`);
+</script>
 
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.ipynb</span>
-</a>
-
-      </li>
+</div></div>
       
-      <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
+    </div>
   
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
-    </ul>
-  </div>
 </div>
+</div>
+              
+              
 
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Experiment 1</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
     </div>
 </div>
 
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-</div>
-    </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Experiment 1</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                    </div>
-                </div>
-            </div>
-            <main id="main-content" role="main">
+              
                 
-              <div>
-                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <section class="tex2jax_ignore mathjax_ignore" id="experiment-1">
-<h1>Experiment 1<a class="headerlink" href="#experiment-1" title="Permalink to this headline">#</a></h1>
+<h1>Experiment 1<a class="headerlink" href="#experiment-1" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -375,9 +424,17 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "2ccd0260ff5f474280e0990fd17d22b8"}
-</script></div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">Label</span><span class="p">,</span> <span class="n">HBox</span><span class="p">,</span> <span class="n">VBox</span><span class="p">,</span> <span class="n">IntSlider</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">fast</span> <span class="o">=</span> <span class="n">IntSlider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">192</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">slow</span> <span class="o">=</span> <span class="n">IntSlider</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">192</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">96</span><span class="p">)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;ipywidgets&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -440,12 +497,12 @@ Ulcer Index         0.0
 Serenity Index      0.46
 </pre></div>
 </div>
-<div class="output text_html"><h4>Strategy Visualization</h4></div><img alt="../../_images/Experiment1_6_3.png" src="../../_images/Experiment1_6_3.png" />
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/quantstats/stats.py:968: FutureWarning: In a future version of pandas all arguments of DataFrame.pivot will be keyword-only.
+<div class="output text_html"><h4>Strategy Visualization</h4></div><img alt="../../_images/4b87c1e417c41f473f3d0e10b6772936b17f7bf30c57ec7964c3262ead098f2f.png" src="../../_images/4b87c1e417c41f473f3d0e10b6772936b17f7bf30c57ec7964c3262ead098f2f.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/a13069q/github/cs/.venv/lib/python3.9/site-packages/quantstats/stats.py:968: FutureWarning: In a future version of pandas all arguments of DataFrame.pivot will be keyword-only.
   returns = returns.pivot(&#39;Year&#39;, &#39;Month&#39;, &#39;Returns&#39;).fillna(0)
 </pre></div>
 </div>
-<img alt="../../_images/Experiment1_6_5.png" src="../../_images/Experiment1_6_5.png" />
+<img alt="../../_images/599ee957a4d6231b1321e25f96abe84cedab713f249c34c00c5d8573e2da5155.png" src="../../_images/599ee957a4d6231b1321e25f96abe84cedab713f249c34c00c5d8573e2da5155.png" />
 </div>
 </div>
 <p>Results do not look terrible but…</p>
@@ -464,134 +521,364 @@ Serenity Index      0.46
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;/usr/share/fonts/truetype/lato/Lato-Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Trebuchet_MS_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/georgia.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Georgia_Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/arial.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-SemiboldItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-MediumItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/verdanab.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/verdana.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/georgiai.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/verdanaz.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-Light.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Verdana_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/trebucit.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/timesi.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSerifCondensed.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Arial_Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/comicbd.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-Thin.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/couri.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Trebuchet_MS_Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Georgia.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Bold_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-HairlineItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/arialbd.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/timesbi.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Georgia_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-Regular.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/courbd.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-Hairline.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/timesbd.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-BoldOblique.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Trebuchet_MS.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Arial_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/cour.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/verdanai.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSerifCondensed-Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/webdings.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/trebucbd.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSerif-BoldItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Verdana.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-ThinItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationMono-Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/andalemo.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/impact.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Andale_Mono.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-Medium.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Trebuchet_MS_Bold_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Arial.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/georgiaz.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Arial_Black.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/ariali.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Impact.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Courier_New_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Georgia_Bold_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Courier_New.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-BlackItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/comic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Arial_Bold_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/trebuc.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSans-BoldItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Comic_Sans_MS_Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-Black.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/arialbi.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/times.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSerifCondensed-BoldItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationMono-Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Verdana_Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/ariblk.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuMathTeXGyre.ttf&#39;,
- &#39;/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/georgiab.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSerifCondensed-Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Webdings.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Courier_New_Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationMono-BoldItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-LightItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSansCondensed-Oblique.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Regular.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSansNarrow-BoldItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSans-ExtraLight.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Comic_Sans_MS.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-BoldItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-Semibold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/trebucbi.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Courier_New_Bold_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/Verdana_Bold_Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-HeavyItalic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSans-Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/lato/Lato-Heavy.ttf&#39;,
- &#39;/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf&#39;,
- &#39;/usr/share/fonts/truetype/msttcorefonts/courbi.ttf&#39;,
- &#39;/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf&#39;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;/System/Library/Fonts/Supplemental/Hoefler Text.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Mishafi Gold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Oriya Sangam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansManichaean-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXSizThreeSymBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Baskerville.ttc&#39;,
+ &#39;/System/Library/Fonts/AppleSDGothicNeo.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Damascus.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Bodoni 72.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Arial Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/SFCompactItalic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Trebuchet MS Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXGeneral.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Rockwell.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansMongolian-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXNonUniIta.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Futura.ttc&#39;,
+ &#39;/System/Library/Fonts/Avenir Next.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Zapfino.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansOldSouthArabian-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Shree714.ttc&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansTakri-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXGeneralBolIta.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/AppleMyungjo.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Malayalam Sangam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/LastResort.otf&#39;,
+ &#39;/System/Library/Fonts/Apple Braille Pinpoint 6 Dot.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansSundanese-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Lao Sangam MN.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansPauCinHau-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansNKo-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Telugu Sangam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Herculanum.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Arial Narrow Bold Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansMarchen-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/SuperClarendon.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansBassaVah-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansLinearA-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NewPeninimMT.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Gurmukhi Sangam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Wingdings.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansOldPermic-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansHatran-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansTaiViet-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Kannada MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Times.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansKhudawadi-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/PTSans.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Skia.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Beirut.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Papyrus.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/SukhumvitSet.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXSizFourSymBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Bradley Hand Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansMiao-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansLydian-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Impact.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXNonUni.otf&#39;,
+ &#39;/System/Library/Fonts/NotoSerifMyanmar.ttc&#39;,
+ &#39;/System/Library/Fonts/Apple Braille Outline 8 Dot.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansKayahLi-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/PingFang.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/PTMono.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Trebuchet MS.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/KufiStandardGK.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansGlagolitic-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansOlChiki-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansBamum-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Muna.ttc&#39;,
+ &#39;/System/Library/Fonts/Avenir.ttc&#39;,
+ &#39;/System/Library/Fonts/SFNSMono.ttf&#39;,
+ &#39;/System/Library/Fonts/NotoSansKannada.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansWarangCiti-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Sana.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansTifinagh-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Arial Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansKharoshthi-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Kannada Sangam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Bangla Sangam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Apple Braille Outline 6 Dot.ttf&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ角ゴシック W9.ttc&#39;,
+ &#39;/System/Library/Fonts/Geneva.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansTaiLe-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Arial Narrow Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/PTSerifCaption.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Phosphate.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Bangla MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansOsmanya-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Telugu MN.ttc&#39;,
+ &#39;/System/Library/Fonts/STHeiti Medium.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Athelas.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansTaiTham-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/AmericanTypewriter.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Bodoni 72 OS.ttc&#39;,
+ &#39;/System/Library/Fonts/SFNSRounded.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansPalmyrene-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansDuployan-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Georgia Bold Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXGeneralItalic.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Charter.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Andale Mono.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Webdings.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Marion.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Kailasa.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansOldItalic-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/ZapfDingbats.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansMendeKikakui-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansMandaic-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Georgia.ttf&#39;,
+ &#39;/System/Library/Fonts/NewYork.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Mishafi.ttf&#39;,
+ &#39;/System/Library/Fonts/Kohinoor.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/ChalkboardSE.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansSiddham-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansKaithi-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansVai-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Farisi.ttf&#39;,
+ &#39;/System/Library/Fonts/Apple Braille Pinpoint 8 Dot.ttf&#39;,
+ &#39;/System/Library/Fonts/GeezaPro.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Raanana.ttc&#39;,
+ &#39;/System/Library/Fonts/Helvetica.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/InaiMathi-MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXIntDReg.otf&#39;,
+ &#39;/System/Library/Fonts/Hiragino Sans GB.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Luminari.ttf&#39;,
+ &#39;/System/Library/Fonts/STHeiti Light.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSerifYezidi-Regular.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansCuneiform-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ明朝 ProN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXSizFiveSymReg.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Verdana Bold Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Bodoni 72 Smallcaps Book.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXSizThreeSymReg.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Silom.ttf&#39;,
+ &#39;/System/Library/Fonts/NotoSansMyanmar.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansNewTaiLue-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansCaucasianAlbanian-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Mshtakan.ttc&#39;,
+ &#39;/System/Library/Fonts/Optima.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Oriya MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/GujaratiMT.ttc&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ角ゴシック W2.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXVar.otf&#39;,
+ &#39;/System/Library/Fonts/MuktaMahee.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansSharada-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Chalkduster.ttf&#39;,
+ &#39;/System/Library/Fonts/Keyboard.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/AppleGothic.ttf&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ角ゴシック W1.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Didot.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansPahawhHmong-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansThaana-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansBatak-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansCham-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Avenir Next Condensed.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansOsage-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Copperplate.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansOldTurkic-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Farah.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansBrahmi-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansMro-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Monaco.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Wingdings 2.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXNonUniBolIta.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/AlBayan.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Hoefler Text Ornaments.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansLimbu-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/SFNSMonoItalic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/SnellRoundhand.ttc&#39;,
+ &#39;/System/Library/Fonts/Symbol.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansWancho-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansPsalterPahlavi-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Arial.ttf&#39;,
+ &#39;/System/Library/Fonts/NotoSansOriya.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXSizFourSymReg.otf&#39;,
+ &#39;/System/Library/Fonts/Menlo.ttc&#39;,
+ &#39;/System/Library/Fonts/Apple Braille.ttf&#39;,
+ &#39;/System/Library/Fonts/Palatino.ttc&#39;,
+ &#39;/System/Library/Fonts/Apple Symbols.ttf&#39;,
+ &#39;/System/Library/Fonts/KohinoorGujarati.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansMultani-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXIntDBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Arial Black.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Cochin.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansTagalog-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/AquaKana.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansJavanese-Regular.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansNewa-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/DecoTypeNaskh.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/PTSerif.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Courier New Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/NotoSansArmenian.ttc&#39;,
+ &#39;/System/Library/Fonts/SFNS.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Microsoft Sans Serif.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXIntUpBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansLycian-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansTirhuta-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansPhoenician-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXNonUniBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc&#39;,
+ &#39;/System/Library/Fonts/SFCompactRounded.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansAvestan-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXSizTwoSymReg.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Times New Roman Bold Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansInscriptionalParthian-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansBuginese-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/DevanagariMT.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Courier New Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Tahoma Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/PartyLET-plain.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansGothic-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Brush Script.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansHanifiRohingya-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/DIN Condensed Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Arial Narrow Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansMasaramGondi-Regular.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansChakma-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Khmer MN.ttc&#39;,
+ &#39;/System/Library/Fonts/ArialHB.ttc&#39;,
+ &#39;/System/Library/Fonts/KohinoorBangla.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Wingdings 3.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Verdana Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSerifAhom-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Gujarati Sangam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansSamaritan-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansAdlam-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansSyriac-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansCoptic-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/SignPainter.ttc&#39;,
+ &#39;/System/Library/Fonts/LucidaGrande.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansImperialAramaic-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/MarkerFelt.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/ITFDevanagari.ttc&#39;,
+ &#39;/Library/Fonts/Arial Unicode.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXIntSmReg.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Verdana.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansKhojki-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansLisu-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Times New Roman Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansElbasan-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Ayuthaya.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXIntSmBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Arial Unicode.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXIntUpReg.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansYi-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Tahoma.ttf&#39;,
+ &#39;/System/Library/Fonts/SFCompact.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Diwan Thuluth.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Seravek.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Trebuchet MS Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Corsiva.ttc&#39;,
+ &#39;/System/Library/Fonts/SFNSItalic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Waseem.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Trebuchet MS Bold Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Georgia Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansOldHungarian-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Georgia Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Sinhala MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXSizOneSymBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansRejang-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Sathu.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansMeroitic-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Comic Sans MS.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Tamil MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXGeneralBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansOldNorthArabian-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/GillSans.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansGunjalaGondi-Regular.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Myanmar MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXVarBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Khmer Sangam MN.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXSizTwoSymBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Savoye LET.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Malayalam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansSoraSompeng-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/SFArabic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansCypriot-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Sinhala Sangam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Apple Color Emoji.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Lao MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansModi-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/DIN Alternate Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansCarian-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Al Tarikh.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXSizOneSymReg.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Gurmukhi.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansLinearB-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansUgaritic-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ角ゴシック W0.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Songti.ttc&#39;,
+ &#39;/System/Library/Fonts/NewYorkItalic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/BigCaslon.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansEgyptianHieroglyphs-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Kefa.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Courier New Bold Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Devanagari Sangam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Krungthep.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Baghdad.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Times New Roman.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansSaurashtra-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Bodoni Ornaments.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NISC18030.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansPhagsPa-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Arial Narrow.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Diwan Kufi.ttc&#39;,
+ &#39;/System/Library/Fonts/Thonburi.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSerifBalinese-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansHanunoo-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Galvji.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Courier.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansSylotiNagri-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Nadeem.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Comic Sans MS Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Academy Engraved LET Fonts.ttf&#39;,
+ &#39;/System/Library/Fonts/HelveticaNeue.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Trattatello.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansInscriptionalPahlavi-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ角ゴシック W5.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Iowan Old Style.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansBhaiksuki-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Chalkboard.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Al Nile.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansNabataean-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansOldPersian-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Kokonor.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansMahajani-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/NotoNastaliq.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansBuhid-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXIntUpDReg.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Verdana Italic.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXIntUpSmReg.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Myanmar Sangam MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Apple Chancery.ttf&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ角ゴシック W8.ttc&#39;,
+ &#39;/System/Library/Fonts/KohinoorTelugu.ttc&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ角ゴシック W4.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Courier New.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansLepcha-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXIntUpSmBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/PlantagenetCherokee.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansTagbanwa-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/ヒラギノ角ゴシック W7.ttc&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/NotoSansMeeteiMayek-Regular.ttf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/STIXIntUpDBol.otf&#39;,
+ &#39;/System/Library/Fonts/Supplemental/Gurmukhi MN.ttc&#39;,
+ &#39;/System/Library/Fonts/Noteworthy.ttc&#39;]
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-
-
-<script type="application/vnd.jupyter.widget-state+json">
-{"state": {"1e05a18060b241dc8fa1283926b63613": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "0b7964a4c11d4912aec24856177b4d55": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "d1671a46c8f44657b1e94e1553d1376a": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "IntSliderView", "continuous_update": true, "description": "", "description_tooltip": null, "disabled": false, "layout": "IPY_MODEL_1e05a18060b241dc8fa1283926b63613", "max": 192, "min": 4, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 4, "style": "IPY_MODEL_0b7964a4c11d4912aec24856177b4d55", "value": 32}}, "fc753efd2eb948cfb966d5aa3bef7f26": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "d8dac3543f9d4c07bc5ecc895113b186": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "556bc89fd8ab47f188928438229cd609": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "IntSliderView", "continuous_update": true, "description": "", "description_tooltip": null, "disabled": false, "layout": "IPY_MODEL_fc753efd2eb948cfb966d5aa3bef7f26", "max": 192, "min": 4, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 4, "style": "IPY_MODEL_d8dac3543f9d4c07bc5ecc895113b186", "value": 96}}, "95967abb28e1406a989f2d3751212b69": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a97031acbfd0478ea9b6df590c3d07e7": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "27600f3a395e4b63afe4d0e58febbb16": {"model_name": "LabelModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "LabelModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "LabelView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_95967abb28e1406a989f2d3751212b69", "placeholder": "\u200b", "style": "IPY_MODEL_a97031acbfd0478ea9b6df590c3d07e7", "value": "Fast Moving Average"}}, "90278c07b01048d4bab5fc8fa312c2e9": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "6a1fd8dd281a4dbab85e92eb5f313655": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "d176b279d4a74373aa2df22522c09bf4": {"model_name": "LabelModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "LabelModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "LabelView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_90278c07b01048d4bab5fc8fa312c2e9", "placeholder": "\u200b", "style": "IPY_MODEL_6a1fd8dd281a4dbab85e92eb5f313655", "value": "Slow Moving Average"}}, "9d7b097aef844a98be33ef5a8ba84a6f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "5869797d9c5241d78a91a4d0e7d835bc": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "VBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "VBoxView", "box_style": "", "children": ["IPY_MODEL_27600f3a395e4b63afe4d0e58febbb16", "IPY_MODEL_d176b279d4a74373aa2df22522c09bf4"], "layout": "IPY_MODEL_9d7b097aef844a98be33ef5a8ba84a6f"}}, "c559d6dc48334140bf6dea8a4a85b095": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a96616578f8242268d8149df14610ce0": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "VBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "VBoxView", "box_style": "", "children": ["IPY_MODEL_d1671a46c8f44657b1e94e1553d1376a", "IPY_MODEL_556bc89fd8ab47f188928438229cd609"], "layout": "IPY_MODEL_c559d6dc48334140bf6dea8a4a85b095"}}, "25b707ec7ffa4f6abd061b25fae8d554": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "2ccd0260ff5f474280e0990fd17d22b8": {"model_name": "HBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_5869797d9c5241d78a91a4d0e7d835bc", "IPY_MODEL_a96616578f8242268d8149df14610ce0"], "layout": "IPY_MODEL_25b707ec7ffa4f6abd061b25fae8d554"}}}, "version_major": 2, "version_minor": 0}
-</script>
-
 
     <script type="text/x-thebe-config">
     {
@@ -605,7 +892,7 @@ Serenity Index      0.46
             mode: "cs"
         },
         kernelOptions: {
-            kernelName: "cs",
+            name: "cs",
             path: "./docs/notebooks"
         },
         predefinedOutput: true
@@ -613,50 +900,91 @@ Serenity Index      0.46
     </script>
     <script>kernelName = 'cs'</script>
 
-              </div>
+                </article>
               
-            </main>
-            <footer class="footer-article noprint">
-                
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="../index.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">cs</p>
-        </div>
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">cs</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="Experiment2.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="Experiment2.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">&lt;no title&gt;</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
-</div>
-            </footer>
-        </div>
-    </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
-  
-    By Thomas Schmelzer<br/>
-  
-      &copy; Copyright 2022.<br/>
-</p>
-        </footer>
-    </div>
-    
-</div>
-
-
       </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Thomas Schmelzer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
     </div>
+  </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
-
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>
