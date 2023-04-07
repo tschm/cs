@@ -1,2 +1,2 @@
-tinycta==0.2.2
+tinycta==0.2.4
 ipywidgets
