@@ -1,1 +1,2 @@
 tinycta==0.2.2
+ipywidgets
