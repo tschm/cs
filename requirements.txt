@@ -1,2 +1,3 @@
 tinycta==0.2.4
 ipywidgets
+pandas==1.5.3
