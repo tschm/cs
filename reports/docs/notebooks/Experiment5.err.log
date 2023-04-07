@@ -17,13 +17,36 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-portfolio = Portfolio(prices=prices, position=prices.apply(f, slow=slow.value, fast=fast.value, vola=vola.value, clip=winsor.value))
+T = time.time()
+correlation = corr.value
+
+# this is a lot faster than Pandas...
+position = np.nan*np.zeros_like(prices.values)
+
+returns_adj = prices.apply(returns_adjust, com=vola.value, clip=winsor.value)
+# DCC by Engle
+cor = returns_adj.ewm(com=corr.value, min_periods=corr.value).corr()
+
+mu = np.tanh(returns_adj.cumsum().apply(osc)).values
+vo = prices.pct_change().ewm(com=vola.value, min_periods=vola.value).std().values
+
+for n,t in enumerate(prices.index):
+    matrix = shrink2id(cor.loc[t].values, lamb=shrinkage.value)
+    risk_position = solve(matrix, mu[n])/inv_a_norm(mu[n], matrix)
+    position[n] = risk_position/vo[n]
+
+portfolio = Portfolio(prices, pd.DataFrame(index=prices.index, columns=prices.keys(), data=position))
+print(time.time()-T)
+
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mNameError[0m                                 Traceback (most recent call last)
-Cell [0;32mIn[8], line 1[0m
-[0;32m----> 1[0m portfolio [38;5;241m=[39m [43mPortfolio[49m(prices[38;5;241m=[39mprices, position[38;5;241m=[39mprices[38;5;241m.[39mapply(f, slow[38;5;241m=[39mslow[38;5;241m.[39mvalue, fast[38;5;241m=[39mfast[38;5;241m.[39mvalue, vola[38;5;241m=[39mvola[38;5;241m.[39mvalue, clip[38;5;241m=[39mwinsor[38;5;241m.[39mvalue))
+Cell [0;32mIn[4], line 19[0m
+[1;32m     16[0m     risk_position [38;5;241m=[39m solve(matrix, mu[n])[38;5;241m/[39minv_a_norm(mu[n], matrix)
+[1;32m     17[0m     position[n] [38;5;241m=[39m risk_position[38;5;241m/[39mvo[n]
+[0;32m---> 19[0m portfolio [38;5;241m=[39m [43mPortfolio[49m(prices, pd[38;5;241m.[39mDataFrame(index[38;5;241m=[39mprices[38;5;241m.[39mindex, columns[38;5;241m=[39mprices[38;5;241m.[39mkeys(), data[38;5;241m=[39mposition))
+[1;32m     20[0m [38;5;28mprint[39m(time[38;5;241m.[39mtime()[38;5;241m-[39mT)
 
 [0;31mNameError[0m: name 'Portfolio' is not defined
 NameError: name 'Portfolio' is not defined

@@ -17,13 +17,24 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-portfolio = Portfolio(prices=prices, position=prices.apply(f, slow=slow.value, fast=fast.value, vola=vola.value, clip=winsor.value))
+mu = np.tanh(prices.apply(returns_adjust, com=vola.value, clip=winsor.value).cumsum().apply(osc, fast=fast.value, slow=slow.value))
+vola = prices.pct_change().ewm(com=vola.value, min_periods=vola.value).std()
+
+# compute the series of Euclidean norms by compute the sum of squares for each row
+euclid_norm = np.sqrt((mu*mu).sum(axis=1))
+
+# Divide each column of mu by the Euclidean norm
+risk_scaled = mu.apply(lambda x: x/euclid_norm, axis=0)
+
+portfolio = Portfolio(prices=prices, position=risk_scaled/vola)
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mNameError[0m                                 Traceback (most recent call last)
-Cell [0;32mIn[8], line 1[0m
-[0;32m----> 1[0m portfolio [38;5;241m=[39m [43mPortfolio[49m(prices[38;5;241m=[39mprices, position[38;5;241m=[39mprices[38;5;241m.[39mapply(f, slow[38;5;241m=[39mslow[38;5;241m.[39mvalue, fast[38;5;241m=[39mfast[38;5;241m.[39mvalue, vola[38;5;241m=[39mvola[38;5;241m.[39mvalue, clip[38;5;241m=[39mwinsor[38;5;241m.[39mvalue))
+Cell [0;32mIn[4], line 10[0m
+[1;32m      7[0m [38;5;66;03m# Divide each column of mu by the Euclidean norm[39;00m
+[1;32m      8[0m risk_scaled [38;5;241m=[39m mu[38;5;241m.[39mapply([38;5;28;01mlambda[39;00m x: x[38;5;241m/[39meuclid_norm, axis[38;5;241m=[39m[38;5;241m0[39m)
+[0;32m---> 10[0m portfolio [38;5;241m=[39m [43mPortfolio[49m(prices[38;5;241m=[39mprices, position[38;5;241m=[39mrisk_scaled[38;5;241m/[39mvola)
 
 [0;31mNameError[0m: name 'Portfolio' is not defined
 NameError: name 'Portfolio' is not defined
