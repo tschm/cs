@@ -1,5 +1,6 @@
 # [The 10-line CTA](http://tschm.github.io/cs)
 
+[![deploy-book](https://github.com/tschm/cs/actions/workflows/book.yml/badge.svg)](https://github.com/tschm/cs/actions/workflows/book.yml)
 [![pages-build-deployment](https://github.com/tschm/cs/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/tschm/cs/actions/workflows/pages/pages-build-deployment)
 
 Challenged by a young CEO I wrote a terse CTA (Commodity Trading Advisor) investment strategy. I discuss the somewhat quirky background of my code fragment.
