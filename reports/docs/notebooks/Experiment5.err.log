@@ -22,7 +22,7 @@ prices = pd.read_csv("data/p_hashed.csv", index_col=0, parse_dates=True).ffill()
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mValueError[0m                                Traceback (most recent call last)
-[0;32m/tmp/ipykernel_2400/3532311700.py[0m in [0;36m?[0;34m()[0m
+[0;32m/tmp/ipykernel_2342/3532311700.py[0m in [0;36m?[0;34m()[0m
 [0;32m----> 2[0;31m [0;31m# Load prices[0m[0;34m[0m[0;34m[0m[0m
 [0m[1;32m      3[0m [0mprices[0m [0;34m=[0m [0mpd[0m[0;34m.[0m[0mread_csv[0m[0;34m([0m[0;34m"data/p_hashed.csv"[0m[0;34m,[0m [0mindex_col[0m[0;34m=[0m[0;36m0[0m[0;34m,[0m [0mparse_dates[0m[0;34m=[0m[0;32mTrue[0m[0;34m)[0m[0;34m.[0m[0mffill[0m[0;34m([0m[0;34m)[0m[0;34m.[0m[0mtruncate[0m[0;34m([0m[0mbefore[0m[0;34m=[0m[0;34m"1970-01-01"[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
 
