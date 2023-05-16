@@ -27,7 +27,7 @@ jobs:
         sudo fc-cache -vr
         rm ~/.cache/matplotlib -fr
         fc list
-        fc-match Arial 
+        fc-match Arial
 
     - name: Install the kernel
       run: |
@@ -38,7 +38,7 @@ jobs:
       run: |
         jupyter-book clean book
         jupyter-book build book
-    
+
     # Push the book's HTML to github-pages
     - name: GitHub Pages action
       uses: peaceiris/actions-gh-pages@v3.6.1
