@@ -390,7 +390,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-trading-systems-mathrm-cash-position-mu-oslash-mathrm-volatility">Univariate Trading systems: $<span class="math notranslate nohighlight">\(\mathrm{Cash\;Position} = \mu \oslash \mathrm{Volatility}\)</span>$</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-trading-systems">Univariate Trading systems:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-vs-cash">Risk vs. Cash</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-wins">Risk wins</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-return">Expected return</a></li>
@@ -408,8 +408,10 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="optimizing-what">
 <h1>Optimizing what?<a class="headerlink" href="#optimizing-what" title="Permalink to this heading">#</a></h1>
-<section id="univariate-trading-systems-mathrm-cash-position-mu-oslash-mathrm-volatility">
-<h2>Univariate Trading systems: $<span class="math notranslate nohighlight">\(\mathrm{Cash\;Position} = \mu \oslash \mathrm{Volatility}\)</span>$<a class="headerlink" href="#univariate-trading-systems-mathrm-cash-position-mu-oslash-mathrm-volatility" title="Permalink to this heading">#</a></h2>
+<section id="univariate-trading-systems">
+<h2>Univariate Trading systems:<a class="headerlink" href="#univariate-trading-systems" title="Permalink to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[\mathrm{Cash\;Position} = \mu \oslash \mathrm{Volatility}\]</div>
 <p>Here <span class="math notranslate nohighlight">\(\oslash\)</span> denotes the element-wise division of two vectors of the same length.
 The vector <span class="math notranslate nohighlight">\(\mu\)</span> is a prediction for the volatility adjusted return.</p>
 <ul class="simple">
@@ -449,26 +451,28 @@ x^T \mathbf{Cor}\,x
 \]</div>
 <p>So let’s maximize the expected return while keeping the risk constrained.</p>
 <p><img alt="alt text" src="../../_images/2223.png" /></p>
-<p>Hence we solve for the risk position the Markowitz problem
-$<span class="math notranslate nohighlight">\(
+<p>Hence we solve for the risk position the Markowitz problem</p>
+<div class="math notranslate nohighlight">
+\[
 \arg\max_{x\in\mathbb{R}^n}\,x^T \mu
-\)</span><span class="math notranslate nohighlight">\(
-such that
-\)</span><span class="math notranslate nohighlight">\(
+\]</div>
+<p>such that</p>
+<div class="math notranslate nohighlight">
+\[
 x^T \mathbf{Cor}\,x \leq \sigma^2_{\mathrm{max}}.
-\)</span><span class="math notranslate nohighlight">\(
-The solution \)</span>x^<em><span class="math notranslate nohighlight">\( is the optimal risk position. The analytic solution for \)</span>x^</em><span class="math notranslate nohighlight">\( is given by
-\)</span><span class="math notranslate nohighlight">\(
+\]</div>
+<p>The solution <span class="math notranslate nohighlight">\(x^*\)</span> is the optimal risk position. The analytic solution for <span class="math notranslate nohighlight">\(x^*\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[
 x^* = \sigma_{\mathrm{max}} \frac{\mathbf{Cor}^{-1} \mu}{\sqrt{\mu^T\,\mathbf{Cor}^{-1}\,\mu}}
-\)</span>$</p>
+\]</div>
 <p>Note that the term in the denominator <span class="math notranslate nohighlight">\(\sqrt{\mu^T\,\mathbf{Cor}^{-1}\,\mu}\)</span> induces a norm (often called the <span class="math notranslate nohighlight">\(A\)</span>-norm).</p>
-<p>If we assume there are no cross-correlations the correlation matrix boils down to the identity and we get:
-$<span class="math notranslate nohighlight">\( \)</span><span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\(
+<p>If we assume there are no cross-correlations the correlation matrix boils down to the identity and we get:</p>
+<div class="math notranslate nohighlight">
+\[
 x^* = \sigma_{\mathrm{max}}\,{\mu}\, /\, \lVert   \mu \rVert_2
-\)</span><span class="math notranslate nohighlight">\(
-\)</span><span class="math notranslate nohighlight">\( \)</span><span class="math notranslate nohighlight">\(
-The cash position \)</span>c^∗=x^* \oslash \mathrm{Volatility}$  is here a scaled version of the original univariate problem.</p>
+\]</div>
+<p>The cash position <span class="math notranslate nohighlight">\(c^∗=x^* \oslash \mathrm{Volatility}\)</span>  is here a scaled version of the original univariate problem.</p>
 <p>Note that it would be insane to use the sample correlation matrix. It is important to modify the spectrum of the observed correlation matrices.</p>
 <p>Study in particular Sin 1 and Sin 2 from
 <a class="reference external" href="https://arxiv.org/pdf/1310.3396.pdf">https://arxiv.org/pdf/1310.3396.pdf</a></p>
@@ -548,7 +552,7 @@ The cash position \)</span>c^∗=x^* \oslash \mathrm{Volatility}$  is here a sca
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-trading-systems-mathrm-cash-position-mu-oslash-mathrm-volatility">Univariate Trading systems: $<span class="math notranslate nohighlight">\(\mathrm{Cash\;Position} = \mu \oslash \mathrm{Volatility}\)</span>$</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-trading-systems">Univariate Trading systems:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-vs-cash">Risk vs. Cash</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-wins">Risk wins</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-return">Expected return</a></li>
