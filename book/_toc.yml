@@ -10,7 +10,3 @@ chapters:
     - file: docs/notebooks/Experiment5
     - file: docs/notebooks/Optimization
     - file: docs/notebooks/Strategies
-    #- file: docs/examples
-    #  sections:
-    #    - glob: docs/notebooks/*
-
