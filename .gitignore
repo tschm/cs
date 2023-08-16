@@ -1,7 +1,6 @@
 .venv
 *.ipynb_checkpoints
 .idea
-prices.csv
 **/__pycache__
 futures_data.xlsx
 futures_prices.csv
