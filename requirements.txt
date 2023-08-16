@@ -2,4 +2,7 @@ tinycta
 pandas
 ipywidgets
 jupyterlab
-quantstats
+#quantstats
+plotly
+pytest
+
