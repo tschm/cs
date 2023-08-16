@@ -411,9 +411,10 @@ document.write(`
 <section id="univariate-trading-systems">
 <h2>Univariate Trading systems:<a class="headerlink" href="#univariate-trading-systems" title="Permalink to this heading">#</a></h2>
 <div class="math notranslate nohighlight">
-\[\mathrm{Cash\;Position} = \mu \oslash \mathrm{Volatility}\]</div>
+\[\mathrm{Cash\;Position} = G \times \mu \oslash \mathrm{Volatility}\]</div>
 <p>Here <span class="math notranslate nohighlight">\(\oslash\)</span> denotes the element-wise division of two vectors of the same length.
-The vector <span class="math notranslate nohighlight">\(\mu\)</span> is a prediction for the volatility adjusted return.</p>
+The vector <span class="math notranslate nohighlight">\(\mu\)</span> is a prediction for the volatility adjusted return.
+The constant <span class="math notranslate nohighlight">\(G\)</span> is a scaling factor.</p>
 <ul class="simple">
 <li><p>Hedge funds embrace the construction of powerful <span class="math notranslate nohighlight">\(\mu\)</span>. Quant Researchers, Traders</p></li>
 <li><p>Less effort is put into constructing a good measure for Volatility (often based on high-frequency data). Volatility shouldn’t be too nervous but nevertheless respond fast.</p></li>
