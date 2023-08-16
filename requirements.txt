@@ -1,4 +1,5 @@
-tinycta==0.2.4
-pandas==1.5.3
+tinycta
+pandas
 ipywidgets
 jupyterlab
+quantstats
