@@ -20,15 +20,6 @@ jobs:
         pip install -r requirements.txt
         pip install jupyter-book
 
-    - name: Clean Font-Manager
-      run: |
-        sudo echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
-        sudo apt-get install -y ttf-mscorefonts-installer
-        sudo fc-cache -vr
-        rm ~/.cache/matplotlib -fr
-        fc list
-        fc-match Arial
-
     - name: Install the kernel
       run: |
         ipython kernel install --name "cs" --user
