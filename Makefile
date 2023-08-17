@@ -36,3 +36,9 @@ help:  ## Display this help screen
 .PHONY: jupyter
 jupyter: ## Run jupyter lab
 	@.venv/bin/jupyter lab
+
+.PHONY: book
+book: kernel ## Compile the book
+        .venv/bin/pip install jupyter-book
+        .venv/bin/jupyter-book clean book
+        .venv/bin/jupyter-book build book
