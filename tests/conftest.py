@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import pytest
 
@@ -26,7 +25,3 @@ def prices(resource_dir):
         raise AssertionError
 
     return frame
-
-
-def sharpe_ratio(ts):
-    return np.sqrt(252) * ts.mean() / ts.std()
