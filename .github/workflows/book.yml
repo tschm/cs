@@ -9,30 +9,19 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    # Install dependencies
-    - name: Set up Python '3.10'
-      uses: actions/setup-python@v4
+    - name: "Build the book"
+      run: |
+        make book
+
+    - name: GitHub Pages action
+      uses: JamesIves/github-pages-deploy-action@v4.4.3
       with:
-        python-version: '3.10'
-
-    - name: Install jupyterbook
-      run: |
-        pip install -r requirements.txt
-        pip install jupyter-book
-
-    - name: Install the kernel
-      run: |
-        ipython kernel install --name "cs" --user
-
-    # Build the book
-    - name: Build the book
-      run: |
-        jupyter-book clean book
-        jupyter-book build book
+          branch: gh-pages
+          folder: book/_build/html
 
     # Push the book's HTML to github-pages
-    - name: GitHub Pages action
-      uses: peaceiris/actions-gh-pages@v3.6.1
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: book/_build/html
+    #- name: GitHub Pages action
+    #  uses: peaceiris/actions-gh-pages@v3.6.1
+    #  with:
+    #    github_token: ${{ secrets.GITHUB_TOKEN }}
+    #    publish_dir: book/_build/html

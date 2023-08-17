@@ -39,6 +39,6 @@ jupyter: ## Run jupyter lab
 
 .PHONY: book
 book: kernel ## Compile the book
-        .venv/bin/pip install jupyter-book
-        .venv/bin/jupyter-book clean book
-        .venv/bin/jupyter-book build book
+	@.venv/bin/pip install jupyter-book
+	@.venv/bin/jupyter-book clean book
+	@.venv/bin/jupyter-book build book
