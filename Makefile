@@ -11,6 +11,7 @@ install:  ## Install a virtual environment
 
 .PHONY: kernel
 kernel: install ## Create a kernel for jupyter lab
+	.venv/bin/pip install ipykernel
 	.venv/bin/ipython kernel install --name=${NAME} --user
 
 .PHONY: fmt
@@ -40,6 +41,6 @@ jupyter: ## Run jupyter lab
 
 .PHONY: book
 book: kernel ## Compile the book
-	@.venv/bin/pip install jupyter-book
+	@.venv/bin/pip install jupyterlab jupyter-book
 	@.venv/bin/jupyter-book clean book
 	@.venv/bin/jupyter-book build book
