@@ -1,5 +1,4 @@
 tinycta
-pandas
 ipywidgets
 jupyterlab
 pytest
