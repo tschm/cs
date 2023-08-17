@@ -1,5 +1,3 @@
 tinycta
 ipywidgets
-jupyterlab
-pytest
 
