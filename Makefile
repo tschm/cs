@@ -8,10 +8,6 @@ NAME="cs"
 install:  ## Install a virtual environment
 	python -m venv .venv
 	.venv/bin/pip install -r requirements.txt
-	.venv/bin/pip install pre-commit
-	.venv/bin/pin install jupyterlab
-	.venv/bin/pip install jupyter-book
-	.venv/bin/pip install pytest
 
 .PHONY: kernel
 kernel: install ## Create a kernel for jupyter lab
@@ -19,6 +15,7 @@ kernel: install ## Create a kernel for jupyter lab
 
 .PHONY: fmt
 fmt:  install ## Run autoformatting and linting
+	.venv/bin/pip install pre-commit
 	.venv/bin/pre-commit install
 	.venv/bin/pre-commit run --all-files
 
@@ -28,6 +25,7 @@ clean:  ## Clean up caches and build artifacts
 
 .PHONY: test
 test: install ## Run tests
+	.venv/bin/pip install pytest
 	.venv/bin/pytest tests
 
 .PHONY: help
@@ -37,9 +35,11 @@ help:  ## Display this help screen
 
 .PHONY: jupyter
 jupyter: ## Run jupyter lab
+	@.venv/bin/pip install jupyterlab
 	@.venv/bin/jupyter lab
 
 .PHONY: book
 book: kernel ## Compile the book
+	@.venv/bin/pip install jupyter-book
 	@.venv/bin/jupyter-book clean book
 	@.venv/bin/jupyter-book build book
