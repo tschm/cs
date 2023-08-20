@@ -3,10 +3,11 @@
 format: jb-book
 root: docs/index
 chapters:
+    - file: docs/notebooks/Strategies
     - file: docs/notebooks/Experiment1
     - file: docs/notebooks/Experiment2
     - file: docs/notebooks/Experiment3
     - file: docs/notebooks/Experiment4
     - file: docs/notebooks/Experiment5
     - file: docs/notebooks/Optimization
-    - file: docs/notebooks/Strategies
+
