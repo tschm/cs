@@ -155,10 +155,6 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Implement a hedge fund strategy in 10 lines</a></li>
 
-
-
-
-
 <li class="toctree-l1"><a class="reference internal" href="Experiment1.html">Experiment 1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Experiment2.html">Experiment 2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Experiment3.html">Experiment 3</a></li>
@@ -398,10 +394,6 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#my-personal-views">My personal Views</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-i">Conclusions I</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-ii">Conclusions II</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-haven-t-seen-i">What you haven’t seen I</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-haven-t-seen-ii">What you haven’t seen II</a></li>
 </ul>
 
             </nav>
@@ -480,39 +472,6 @@ Available at SSRN: <a class="reference external" href="https://ssrn.com/abstract
 <p>In a fifth experiment we run Markowitz (with shrinkage in the sample correlation matrix) on a Futures portfolio</p>
 <p><a class="reference internal" href="Experiment5.html"><span class="doc std std-doc">Experiment 5</span></a></p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="conclusions-i">
-<h1>Conclusions I<a class="headerlink" href="#conclusions-i" title="Permalink to this heading">#</a></h1>
-<ul class="simple">
-<li><p>Applying two moving averages gives a somewhat promising start (Experiment 1)</p></li>
-<li><p>All positions should be scaled by the inverse price volatility (Experiment 2)</p></li>
-<li><p>Using adjusted prices and scaled signals helps to address data problems and opens the door for statistics (Experiment 3)</p></li>
-</ul>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="conclusions-ii">
-<h1>Conclusions II<a class="headerlink" href="#conclusions-ii" title="Permalink to this heading">#</a></h1>
-<ul class="simple">
-<li><p>Asset allocation can be done both in cash and risk space. Risk wins (Optimization)</p></li>
-<li><p>The common univariate systems are closely related to diagonal Markowitz (Experiment 4)</p></li>
-<li><p>Ignoring cross correlations is a bad idea (Experiment 5)</p></li>
-<li><p>The <strong>smart combination of univariate trading systems</strong> is extremely helpful to boost returns.</p></li>
-</ul>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="what-you-haven-t-seen-i">
-<h1>What you haven’t seen I<a class="headerlink" href="#what-you-haven-t-seen-i" title="Permalink to this heading">#</a></h1>
-<ul class="simple">
-<li><p>In practice you hardly can rely on the analytic solution of convex problems. Need solvers such as Mosek (and cvxpy).</p></li>
-<li><p>We optimized the expected return (in risk space). In practice it’s a good idea to apply regularization here (Ridge, Lasso, Elastic Nets) and introduce some mock trading costs to tame the trading activity. A typcial Markowitz system will trade far less than the univariate system.</p></li>
-<li><p>Applying Lasso/Elastic Nets regularization opens the door for sparse updates.</p></li>
-</ul>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="what-you-haven-t-seen-ii">
-<h1>What you haven’t seen II<a class="headerlink" href="#what-you-haven-t-seen-ii" title="Permalink to this heading">#</a></h1>
-<ul class="simple">
-<li><p>The construction of more powerful signals is about the <strong>smart combination of standard signals</strong> by using convex programming (Index-Tracking).</p></li>
-<li><p>We treated all underlying markets the same, e.g. did not distinguish capacity or measure market share</p></li>
-<li><p>We did not address the problem of low volatilities, e.g. the system will operate with often huge positions (lack of volatility in interest rates). Constraints on the leverage help here…</p></li>
-</ul>
-</section>
 
     <script type="text/x-thebe-config">
     {
@@ -589,10 +548,6 @@ Available at SSRN: <a class="reference external" href="https://ssrn.com/abstract
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#my-personal-views">My personal Views</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-i">Conclusions I</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-ii">Conclusions II</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-haven-t-seen-i">What you haven’t seen I</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-haven-t-seen-ii">What you haven’t seen II</a></li>
 </ul>
 
   </nav></div>
