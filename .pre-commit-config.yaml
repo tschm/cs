@@ -1,16 +1,16 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v4.4.0
     hooks:
       - id: trailing-whitespace
 
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 23.7.0
     hooks:
       - id: black
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.0.277'
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 'v0.0.286'
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix ]
@@ -22,12 +22,12 @@ repos:
 
   # enforcing the use of new python syntax with pyupgrade
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.9.0
+    rev: v3.10.1
     hooks:
       - id: pyupgrade
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.26.2
+    rev: 0.26.3
     hooks:
       - id: check-dependabot
         args: [ "--verbose" ]
