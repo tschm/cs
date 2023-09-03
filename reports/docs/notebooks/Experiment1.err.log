@@ -1,0 +1,87 @@
+Traceback (most recent call last):
+  File "/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 166, in wrapped
+    return loop.run_until_complete(inner)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+fig = portfolio.plot()
+fig.update_layout(autosize=True)
+fig.show(renderer="browser")
+------------------
+
+----- stderr -----
+/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/tinycta/port.py:137: FutureWarning:
+
+The default fill_method='pad' in DataFrame.pct_change is deprecated and will be removed in a future version. Call ffill before calling pct_change to retain current behavior and silence this warning.
+
+/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/tinycta/port.py:137: FutureWarning:
+
+The default fill_method='pad' in DataFrame.pct_change is deprecated and will be removed in a future version. Call ffill before calling pct_change to retain current behavior and silence this warning.
+
+/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/tinycta/port.py:137: FutureWarning:
+
+The default fill_method='pad' in DataFrame.pct_change is deprecated and will be removed in a future version. Call ffill before calling pct_change to retain current behavior and silence this warning.
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mError[0m                                     Traceback (most recent call last)
+Cell [0;32mIn[6], line 3[0m
+[1;32m      1[0m fig [38;5;241m=[39m portfolio[38;5;241m.[39mplot()
+[1;32m      2[0m fig[38;5;241m.[39mupdate_layout(autosize[38;5;241m=[39m[38;5;28;01mTrue[39;00m)
+[0;32m----> 3[0m [43mfig[49m[38;5;241;43m.[39;49m[43mshow[49m[43m([49m[43mrenderer[49m[38;5;241;43m=[39;49m[38;5;124;43m"[39;49m[38;5;124;43mbrowser[39;49m[38;5;124;43m"[39;49m[43m)[49m
+
+File [0;32m~/work/cs/cs/.venv/lib/python3.10/site-packages/plotly/basedatatypes.py:3409[0m, in [0;36mBaseFigure.show[0;34m(self, *args, **kwargs)[0m
+[1;32m   3376[0m [38;5;250m[39m[38;5;124;03m"""[39;00m
+[1;32m   3377[0m [38;5;124;03mShow a figure using either the default renderer(s) or the renderer(s)[39;00m
+[1;32m   3378[0m [38;5;124;03mspecified by the renderer argument[39;00m
+[0;32m   (...)[0m
+[1;32m   3405[0m [38;5;124;03mNone[39;00m
+[1;32m   3406[0m [38;5;124;03m"""[39;00m
+[1;32m   3407[0m [38;5;28;01mimport[39;00m [38;5;21;01mplotly[39;00m[38;5;21;01m.[39;00m[38;5;21;01mio[39;00m [38;5;28;01mas[39;00m [38;5;21;01mpio[39;00m
+[0;32m-> 3409[0m [38;5;28;01mreturn[39;00m [43mpio[49m[38;5;241;43m.[39;49m[43mshow[49m[43m([49m[38;5;28;43mself[39;49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m~/work/cs/cs/.venv/lib/python3.10/site-packages/plotly/io/_renderers.py:403[0m, in [0;36mshow[0;34m(fig, renderer, validate, **kwargs)[0m
+[1;32m    400[0m     ipython_display[38;5;241m.[39mdisplay(bundle, raw[38;5;241m=[39m[38;5;28;01mTrue[39;00m)
+[1;32m    402[0m [38;5;66;03m# external renderers[39;00m
+[0;32m--> 403[0m [43mrenderers[49m[38;5;241;43m.[39;49m[43m_perform_external_rendering[49m[43m([49m[43mfig_dict[49m[43m,[49m[43m [49m[43mrenderers_string[49m[38;5;241;43m=[39;49m[43mrenderer[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m~/work/cs/cs/.venv/lib/python3.10/site-packages/plotly/io/_renderers.py:340[0m, in [0;36mRenderersConfig._perform_external_rendering[0;34m(self, fig_dict, renderers_string, **kwargs)[0m
+[1;32m    337[0m     [38;5;28;01mif[39;00m [38;5;28mhasattr[39m(renderer, k):
+[1;32m    338[0m         [38;5;28msetattr[39m(renderer, k, v)
+[0;32m--> 340[0m [43mrenderer[49m[38;5;241;43m.[39;49m[43mrender[49m[43m([49m[43mfig_dict[49m[43m)[49m
+
+File [0;32m~/work/cs/cs/.venv/lib/python3.10/site-packages/plotly/io/_base_renderers.py:761[0m, in [0;36mBrowserRenderer.render[0;34m(self, fig_dict)[0m
+[1;32m    746[0m [38;5;28;01mfrom[39;00m [38;5;21;01mplotly[39;00m[38;5;21;01m.[39;00m[38;5;21;01mio[39;00m [38;5;28;01mimport[39;00m to_html
+[1;32m    748[0m html [38;5;241m=[39m to_html(
+[1;32m    749[0m     fig_dict,
+[1;32m    750[0m     config[38;5;241m=[39m[38;5;28mself[39m[38;5;241m.[39mconfig,
+[0;32m   (...)[0m
+[1;32m    759[0m     validate[38;5;241m=[39m[38;5;28;01mFalse[39;00m,
+[1;32m    760[0m )
+[0;32m--> 761[0m [43mopen_html_in_browser[49m[43m([49m[43mhtml[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43musing[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mnew[49m[43m,[49m[43m [49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mautoraise[49m[43m)[49m
+
+File [0;32m~/work/cs/cs/.venv/lib/python3.10/site-packages/plotly/io/_base_renderers.py:676[0m, in [0;36mopen_html_in_browser[0;34m(html, using, new, autoraise)[0m
+[1;32m    673[0m browser [38;5;241m=[39m [38;5;28;01mNone[39;00m
+[1;32m    675[0m [38;5;28;01mif[39;00m using [38;5;129;01mis[39;00m [38;5;28;01mNone[39;00m:
+[0;32m--> 676[0m     browser [38;5;241m=[39m [43mwebbrowser[49m[38;5;241;43m.[39;49m[43mget[49m[43m([49m[38;5;28;43;01mNone[39;49;00m[43m)[49m
+[1;32m    677[0m [38;5;28;01melse[39;00m:
+[1;32m    678[0m     [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m [38;5;28misinstance[39m(using, [38;5;28mtuple[39m):
+
+File [0;32m/usr/lib/python3.10/webbrowser.py:65[0m, in [0;36mget[0;34m(using)[0m
+[1;32m     63[0m         [38;5;28;01melif[39;00m command[[38;5;241m0[39m] [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
+[1;32m     64[0m             [38;5;28;01mreturn[39;00m command[[38;5;241m0[39m]()
+[0;32m---> 65[0m [38;5;28;01mraise[39;00m Error([38;5;124m"[39m[38;5;124mcould not locate runnable browser[39m[38;5;124m"[39m)
+
+[0;31mError[0m: could not locate runnable browser
+
