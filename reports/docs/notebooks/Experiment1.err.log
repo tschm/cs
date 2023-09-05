@@ -20,19 +20,6 @@ fig.update_layout(autosize=True)
 fig.show(renderer="browser")
 ------------------
 
------ stderr -----
-/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/tinycta/port.py:137: FutureWarning:
-
-The default fill_method='pad' in DataFrame.pct_change is deprecated and will be removed in a future version. Call ffill before calling pct_change to retain current behavior and silence this warning.
-
-/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/tinycta/port.py:137: FutureWarning:
-
-The default fill_method='pad' in DataFrame.pct_change is deprecated and will be removed in a future version. Call ffill before calling pct_change to retain current behavior and silence this warning.
-
-/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/tinycta/port.py:137: FutureWarning:
-
-The default fill_method='pad' in DataFrame.pct_change is deprecated and will be removed in a future version. Call ffill before calling pct_change to retain current behavior and silence this warning.
-------------------
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mError[0m                                     Traceback (most recent call last)
