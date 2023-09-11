@@ -11,4 +11,4 @@ I will boost the Sharpe Ratio and control both Kurtosis and trading costs.
 
 I compile a Jupyter Book that will allow you to run experiments online using Binder.
 
-You can follow this book on [https://tschm.github.io/cs](https://tschm.github.io/cs)
+You can follow this talk on [https://tschm.github.io/cs](https://tschm.github.io/cs)
