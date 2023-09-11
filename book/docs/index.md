@@ -1,4 +1,4 @@
-# [The 10-line CTA](http://tschm.github.io/cs)
+# [The 10-line CTA](https://tschm.github.io/cs)
 
 [![binder](https://github.com/tschm/cs/actions/workflows/binder.yml/badge.svg)](https://github.com/tschm/cs/actions/workflows/binder.yml)
 [![deploy-book](https://github.com/tschm/cs/actions/workflows/book.yml/badge.svg)](https://github.com/tschm/cs/actions/workflows/book.yml)
@@ -10,3 +10,5 @@ Convex Programming opens the door to deeper insights into the 10 line strategy.
 I will boost the Sharpe Ratio and control both Kurtosis and trading costs.
 
 I compile a Jupyter Book that will allow you to run experiments online using Binder.
+
+You can follow this book on [https://tschm.github.io/cs](https://tschm.github.io/cs)
