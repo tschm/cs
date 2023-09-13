@@ -208,37 +208,6 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
-<div class="dropdown dropdown-launch-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
-    <i class="fas fa-rocket"></i>
-  </button>
-  <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="https://mybinder.org/v2/gh/tschm/cs/main?urlpath=tree/book/docs/notebooks/Optimization.ipynb" target="_blank"
-   class="btn btn-sm dropdown-item"
-   title="Launch onBinder"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  
-    <img src="../../_static/images/logo_binder.svg">
-  </span>
-<span class="btn__text-container">Binder</span>
-</a>
-</li>
-      
-  </ul>
-</div>
-
-
-
-
-
-
 <div class="dropdown dropdown-source-buttons">
   <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
     <i class="fab fa-github"></i>
@@ -294,7 +263,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../../_sources/docs/notebooks/Optimization.ipynb" target="_blank"
+      <li><a href="../../_sources/docs/notebooks/Optimization.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -304,7 +273,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.ipynb</span>
+<span class="btn__text-container">.md</span>
 </a>
 </li>
       
@@ -387,10 +356,6 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-trading-systems">Univariate Trading systems:</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-vs-cash">Risk vs. Cash</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-wins">Risk wins</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-return">Expected return</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk">Risk</a></li>
 </ul>
             </nav>
         </div>
@@ -408,77 +373,6 @@ document.write(`
 <h2>Univariate Trading systems:<a class="headerlink" href="#univariate-trading-systems" title="Permalink to this heading">#</a></h2>
 <div class="math notranslate nohighlight">
 \[\mathrm{Cash\;Position} = G \times \mu \oslash \mathrm{Volatility}\]</div>
-<p>Here <span class="math notranslate nohighlight">\(\oslash\)</span> denotes the element-wise division of two vectors of the same length.
-The vector <span class="math notranslate nohighlight">\(\mu\)</span> is a prediction for the volatility adjusted return.
-The constant <span class="math notranslate nohighlight">\(G\)</span> is a scaling factor.</p>
-<ul class="simple">
-<li><p>Hedge funds embrace the construction of powerful <span class="math notranslate nohighlight">\(\mu\)</span>. Quant Researchers, Traders</p></li>
-<li><p>Less effort is put into constructing a good measure for Volatility (often based on high-frequency data). Volatility shouldn’t be too nervous but nevertheless respond fast.</p></li>
-<li><p>Combination of many such individual systems often considered to be a pure IT problem. Risk Managers or Committee.</p></li>
-</ul>
-</section>
-<section id="risk-vs-cash">
-<h2>Risk vs. Cash<a class="headerlink" href="#risk-vs-cash" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Asset allocation can be done both in <strong>risk</strong> or in <strong>cash</strong> space. Both approaches are equivalent.</p></li>
-<li><p>The risk (variance) of the portfolio is
-$<span class="math notranslate nohighlight">\(
-c^T\,\mathbf{Cov}\,c = (c \odot \mathrm{Volatility})^T \mathbf{Cor}\,( \mathrm{Volatility} \odot c) = x^T \mathbf{Cor}\,x
-\)</span>$</p></li>
-<li><p>The condition number for <span class="math notranslate nohighlight">\(\mathbf{Cor}\)</span> is lower than the condition number for <span class="math notranslate nohighlight">\(\mathbf{Cov}\)</span>.</p></li>
-<li><p>The entries of <span class="math notranslate nohighlight">\(x\)</span> will spread less than the entries in <span class="math notranslate nohighlight">\(c\)</span>.</p></li>
-<li><p>The entries of <span class="math notranslate nohighlight">\(x\)</span> bear more insight than the entries of <span class="math notranslate nohighlight">\(c\)</span>.</p></li>
-</ul>
-</section>
-<section id="risk-wins">
-<h2>Risk wins<a class="headerlink" href="#risk-wins" title="Permalink to this heading">#</a></h2>
-</section>
-<section id="expected-return">
-<h2>Expected return<a class="headerlink" href="#expected-return" title="Permalink to this heading">#</a></h2>
-<div class="math notranslate nohighlight">
-\[
-(c \odot \mathrm{Volatility})^T \mu = x^T \mu
-\]</div>
-</section>
-<section id="risk">
-<h2>Risk<a class="headerlink" href="#risk" title="Permalink to this heading">#</a></h2>
-<div class="math notranslate nohighlight">
-\[
-x^T \mathbf{Cor}\,x
-\]</div>
-<p>So let’s maximize the expected return while keeping the risk constrained.</p>
-<p><img alt="alt text" src="../../_images/2223.png" /></p>
-<p>Hence we solve for the risk position the Markowitz problem</p>
-<div class="math notranslate nohighlight">
-\[
-\arg\max_{x\in\mathbb{R}^n}\,x^T \mu
-\]</div>
-<p>such that</p>
-<div class="math notranslate nohighlight">
-\[
-x^T \mathbf{Cor}\,x \leq \sigma^2_{\mathrm{max}}.
-\]</div>
-<p>The solution <span class="math notranslate nohighlight">\(x^*\)</span> is the optimal risk position. The analytic solution for <span class="math notranslate nohighlight">\(x^*\)</span> is given by</p>
-<div class="math notranslate nohighlight">
-\[
-x^* = \sigma_{\mathrm{max}} \frac{\mathbf{Cor}^{-1} \mu}{\sqrt{\mu^T\,\mathbf{Cor}^{-1}\,\mu}}
-\]</div>
-<p>Note that the term in the denominator <span class="math notranslate nohighlight">\(\sqrt{\mu^T\,\mathbf{Cor}^{-1}\,\mu}\)</span> induces a norm (often called the <span class="math notranslate nohighlight">\(A\)</span>-norm).</p>
-<p>If we assume there are no cross-correlations the correlation matrix boils down to the identity and we get:</p>
-<div class="math notranslate nohighlight">
-\[
-x^* = \sigma_{\mathrm{max}}\,{\mu}\, /\, \lVert   \mu \rVert_2
-\]</div>
-<p>The cash position <span class="math notranslate nohighlight">\(c^∗=x^* \oslash \mathrm{Volatility}\)</span>  is here a scaled version of the original univariate problem.</p>
-<p>Note that it would be insane to use the sample correlation matrix. It is important to modify the spectrum of the observed correlation matrices.</p>
-<p>Study in particular Sin 1 and Sin 2 from
-<a class="reference external" href="https://arxiv.org/pdf/1310.3396.pdf">https://arxiv.org/pdf/1310.3396.pdf</a></p>
-<p>Conclusions:</p>
-<ul class="simple">
-<li><p>We interpret <span class="math notranslate nohighlight">\(\frac{\mu}{\mathrm{volatility}}\)</span> as the (unscaled) solution of a convex program.</p></li>
-<li><p>The univariate trading system is now a special case of much richer class of multivariate trading systems.</p></li>
-<li><p>We work in the space of risk rather than cash positions.</p></li>
-</ul>
 </section>
 </section>
 
@@ -550,10 +444,6 @@ x^* = \sigma_{\mathrm{max}}\,{\mu}\, /\, \lVert   \mu \rVert_2
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-trading-systems">Univariate Trading systems:</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-vs-cash">Risk vs. Cash</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-wins">Risk wins</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-return">Expected return</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk">Risk</a></li>
 </ul>
   </nav></div>
 
