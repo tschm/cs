@@ -353,12 +353,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thomas-schmelzer">Thomas Schmelzer</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thomas-schmelzer-gmail-com">thomas.schmelzer@gmail.com</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#https-github-com-tschm-cs">https://github.com/tschm/cs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-short-history">A short history</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-underlying-paper">The underlying paper</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cta-commodity-trading-advisor">CTA - Commodity Trading Advisor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rules-of-the-game">Rules of the game</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization">Optimization</a></li>
 </ul>
             </nav>
         </div>
@@ -372,22 +371,19 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="implement-a-hedge-fund-strategy-in-10-lines">
 <h1>Implement a hedge fund strategy in 10 lines<a class="headerlink" href="#implement-a-hedge-fund-strategy-in-10-lines" title="Permalink to this heading">#</a></h1>
-<section id="thomas-schmelzer">
-<h2>Thomas Schmelzer<a class="headerlink" href="#thomas-schmelzer" title="Permalink to this heading">#</a></h2>
-</section>
-<section id="thomas-schmelzer-gmail-com">
-<h2><a class="reference external" href="mailto:thomas&#46;schmelzer&#37;&#52;&#48;gmail&#46;com">thomas<span>&#46;</span>schmelzer<span>&#64;</span>gmail<span>&#46;</span>com</a><a class="headerlink" href="#thomas-schmelzer-gmail-com" title="Permalink to this heading">#</a></h2>
-</section>
-<section id="https-github-com-tschm-cs">
-<h2><a class="github reference external" href="https://github.com/tschm/cs">tschm/cs</a><a class="headerlink" href="#https-github-com-tschm-cs" title="Permalink to this heading">#</a></h2>
-</section>
 <section id="a-short-history">
 <h2>A short history<a class="headerlink" href="#a-short-history" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Summer 2017: Lunch with Cyrus Fazel (CEO, Swissborg)</p></li>
 <li><p>Motivation to implement a CTA strategy with less than 10 lines of code</p></li>
-<li><p>Today: Attempt to help demystifying quantitative hedge funds and
+<li><p>Published CTA 3.0 on <a class="reference external" href="https://www.linkedin.com/pulse/implement-cta-less-than-10-lines-code-thomas-schmelzer/">LinkedIn</a></p></li>
+<li><p>Today:</p>
+<ul>
+<li><p>Attempt to help demystifying quantitative hedge funds and
 their level of sophistication.</p></li>
+<li><p>Introduce convex optimization for CTAs.</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="the-underlying-paper">
@@ -410,6 +406,26 @@ Available at SSRN: <a class="reference external" href="https://ssrn.com/abstract
 <li><p>Ashenden Capital</p></li>
 <li><p>…</p></li>
 <li><p>Barclays CTA Index</p></li>
+</ul>
+</section>
+<section id="rules-of-the-game">
+<h2>Rules of the game<a class="headerlink" href="#rules-of-the-game" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Use 50 liquid futures (including frozen orange juice)</p></li>
+<li><p>Adjust them by ratio for rolling</p></li>
+<li><p>Rebalance daily without any delay</p></li>
+<li><p>Assume no transaction costs</p></li>
+<li><p>Assume fractional position sizes. All positions are given
+as target cash positions.</p></li>
+</ul>
+</section>
+<section id="optimization">
+<h2>Optimization<a class="headerlink" href="#optimization" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>We barely scratch the surface of the area.</p></li>
+<li><p>We use analytical solutions to convex problems.</p></li>
+<li><p>We use the <a class="reference external" href="https://arxiv.org/abs/1310.3396">Seven Sins in Portfolio Optimisation</a>
+paper.</p></li>
 </ul>
 </section>
 </section>
@@ -481,12 +497,11 @@ Available at SSRN: <a class="reference external" href="https://ssrn.com/abstract
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thomas-schmelzer">Thomas Schmelzer</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thomas-schmelzer-gmail-com">thomas.schmelzer@gmail.com</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#https-github-com-tschm-cs">https://github.com/tschm/cs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-short-history">A short history</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-underlying-paper">The underlying paper</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cta-commodity-trading-advisor">CTA - Commodity Trading Advisor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rules-of-the-game">Rules of the game</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization">Optimization</a></li>
 </ul>
   </nav></div>
 
