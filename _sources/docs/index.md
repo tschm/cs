@@ -1,5 +1,9 @@
 # [The 10-line CTA](https://tschm.github.io/cs)
 
+[![binder](https://github.com/tschm/cs/actions/workflows/binder.yml/badge.svg)](https://github.com/tschm/cs/actions/workflows/binder.yml)
+[![deploy-book](https://github.com/tschm/cs/actions/workflows/book.yml/badge.svg)](https://github.com/tschm/cs/actions/workflows/book.yml)
+[![test](https://github.com/tschm/cs/actions/workflows/test.yml/badge.svg)](https://github.com/tschm/cs/actions/workflows/test.yml)
+
 Challenged by a young CEO I wrote a terse CTA (Commodity Trading Advisor)
 investment strategy. I discuss the somewhat quirky background of my code fragment.
 Convex Programming opens the door to deeper insights into the 10 line strategy.
