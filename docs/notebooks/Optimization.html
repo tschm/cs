@@ -360,6 +360,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-return">Expected return</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk">Risk</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization">Optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions">Conclusions</a></li>
 </ul>
             </nav>
         </div>
@@ -426,6 +427,46 @@ x^T \mathbf{Cor}\,x
 <section id="optimization">
 <h2>Optimization<a class="headerlink" href="#optimization" title="Permalink to this heading">#</a></h2>
 <p><img alt="alt text" src="../../_images/2223.png" /></p>
+<p>Hence we solve for the risk position the Markowitz problem</p>
+<div class="math notranslate nohighlight">
+\[
+\arg\max_{x\in\mathbb{R}^n}\,x^T \mu
+\]</div>
+<p>such that</p>
+<div class="math notranslate nohighlight">
+\[
+x^T \mathbf{Cor}\,x \leq \sigma^2_{\mathrm{max}}.
+\]</div>
+<p>The solution <span class="math notranslate nohighlight">\(x^*\)</span> is the optimal risk position. The analytic solution for <span class="math notranslate nohighlight">\(x^*\)</span>
+is given by</p>
+<div class="math notranslate nohighlight">
+\[
+x^* = \sigma_{\mathrm{max}} \frac{\mathbf{Cor}^{-1} \mu}{\sqrt{\mu^T\,\mathbf{Cor}^{-1}\,\mu}}
+\]</div>
+<p>Note that the term in the denominator <span class="math notranslate nohighlight">\(\sqrt{\mu^T\,\mathbf{Cor}^{-1}\,\mu}\)</span>
+induces a norm (often called the <span class="math notranslate nohighlight">\(A\)</span>-norm).</p>
+<p>If we assume there are no cross-correlations the correlation matrix boils down
+to the identity and we get:</p>
+<div class="math notranslate nohighlight">
+\[
+x^* = \sigma_{\mathrm{max}}\,{\mu}\, /\, \lVert   \mu \rVert_2
+\]</div>
+<p>The cash position <span class="math notranslate nohighlight">\(c^∗=x^* \oslash \mathrm{Volatility}\)</span>  is here a scaled version
+of the original univariate problem.</p>
+<p>Note that it would be insane to use the sample correlation matrix.
+It is important to modify the spectrum of the observed correlation matrices.</p>
+<p>Study in particular Sin 1 and Sin 2 from
+<a class="reference external" href="https://arxiv.org/pdf/1310.3396.pdf">https://arxiv.org/pdf/1310.3396.pdf</a></p>
+</section>
+<section id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>We interpret <span class="math notranslate nohighlight">\(\frac{\mu}{\mathrm{volatility}}\)</span> as the (unscaled) solution
+of a convex program.</p></li>
+<li><p>The univariate trading system is now a special case of much richer class
+of multivariate trading systems.</p></li>
+<li><p>We work in the space of risk rather than cash positions.</p></li>
+</ul>
 </section>
 </section>
 
@@ -501,6 +542,7 @@ x^T \mathbf{Cor}\,x
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-return">Expected return</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk">Risk</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization">Optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions">Conclusions</a></li>
 </ul>
   </nav></div>
 
