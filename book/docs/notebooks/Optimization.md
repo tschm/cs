@@ -47,3 +47,49 @@ $$
 ## Optimization
 
 ![alt text](img/2223.png "Title")
+
+Hence we solve for the risk position the Markowitz problem
+
+$$
+\arg\max_{x\in\mathbb{R}^n}\,x^T \mu
+$$
+
+such that
+
+$$
+x^T \mathbf{Cor}\,x \leq \sigma^2_{\mathrm{max}}.
+$$
+
+The solution $x^*$ is the optimal risk position. The analytic solution for $x^*$
+is given by
+
+$$
+x^* = \sigma_{\mathrm{max}} \frac{\mathbf{Cor}^{-1} \mu}{\sqrt{\mu^T\,\mathbf{Cor}^{-1}\,\mu}}
+$$
+
+Note that the term in the denominator $\sqrt{\mu^T\,\mathbf{Cor}^{-1}\,\mu}$
+induces a norm (often called the $A$-norm).
+
+If we assume there are no cross-correlations the correlation matrix boils down
+to the identity and we get:
+
+$$
+x^* = \sigma_{\mathrm{max}}\,{\mu}\, /\, \lVert   \mu \rVert_2
+$$
+
+The cash position $c^∗=x^* \oslash \mathrm{Volatility}$  is here a scaled version
+of the original univariate problem.
+
+Note that it would be insane to use the sample correlation matrix.
+It is important to modify the spectrum of the observed correlation matrices.
+
+Study in particular Sin 1 and Sin 2 from
+<https://arxiv.org/pdf/1310.3396.pdf>
+
+## Conclusions
+
+* We interpret $\frac{\mu}{\mathrm{volatility}}$ as the (unscaled) solution
+  of a convex program.
+* The univariate trading system is now a special case of much richer class
+  of multivariate trading systems.
+* We work in the space of risk rather than cash positions.
