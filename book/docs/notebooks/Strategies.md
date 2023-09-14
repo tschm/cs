@@ -38,6 +38,9 @@ Available at SSRN: <https://ssrn.com/abstract=2695101> or
 * Assume no transaction costs
 * Assume fractional position sizes. All positions are given
   as target cash positions.
+* We start every day with 100m USD AUM. We accumulate profits.
+  We do not compound returns.
+  We like our profits to positive and homoscedastic.
 
 ## Optimization
 
