@@ -356,6 +356,10 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-trading-systems">Univariate Trading systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-vs-cash">Risk vs. Cash</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-return">Expected return</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk">Risk</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization">Optimization</a></li>
 </ul>
             </nav>
         </div>
@@ -373,6 +377,55 @@ document.write(`
 <h2>Univariate Trading systems<a class="headerlink" href="#univariate-trading-systems" title="Permalink to this heading">#</a></h2>
 <div class="math notranslate nohighlight">
 \[\mathrm{Cash\;Position} = G \times \mu \oslash \mathrm{Volatility}\]</div>
+<p>Here <span class="math notranslate nohighlight">\(\oslash\)</span> denotes the element-wise division of two vectors of the same length.
+The vector <span class="math notranslate nohighlight">\(\mu\)</span> is a prediction for the volatility adjusted return.
+The constant <span class="math notranslate nohighlight">\(G\)</span> is a scaling factor.</p>
+<ul class="simple">
+<li><p>Hedge funds embrace the construction of powerful <span class="math notranslate nohighlight">\(\mu\)</span>. Quant Researchers, Traders</p></li>
+<li><p>Less effort is put into constructing a good measure for Volatility
+(often based on high-frequency data). Volatility shouldn’t be too nervous but
+nevertheless respond fast.</p></li>
+<li><p>Combination of many such individual systems often considered to be a pure IT
+problem. Risk Managers or Committee.</p></li>
+</ul>
+</section>
+<section id="risk-vs-cash">
+<h2>Risk vs. Cash<a class="headerlink" href="#risk-vs-cash" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Asset allocation can be done both in <strong>risk</strong> or in <strong>cash</strong> space. Both approaches
+are equivalent.</p></li>
+<li><p>The risk (variance) of the portfolio is</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+c^T\,\mathbf{Cov}\,c
+= (c \odot \mathrm{Volatility})^T \mathbf{Cor}\,( \mathrm{Volatility} \odot c)
+= x^T \mathbf{Cor}\,x
+\]</div>
+<ul class="simple">
+<li><p>The condition number for <span class="math notranslate nohighlight">\(\mathbf{Cor}\)</span> is lower than the condition number
+for <span class="math notranslate nohighlight">\(\mathbf{Cov}\)</span>.</p></li>
+<li><p>The entries of <span class="math notranslate nohighlight">\(x\)</span> will spread less than the entries in <span class="math notranslate nohighlight">\(c\)</span>.</p></li>
+<li><p>The entries of <span class="math notranslate nohighlight">\(x\)</span> bear more insight than the entries of <span class="math notranslate nohighlight">\(c\)</span>.</p></li>
+</ul>
+</section>
+<section id="expected-return">
+<h2>Expected return<a class="headerlink" href="#expected-return" title="Permalink to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[
+(c \odot \mathrm{Volatility})^T \mu = x^T \mu
+\]</div>
+</section>
+<section id="risk">
+<h2>Risk<a class="headerlink" href="#risk" title="Permalink to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[
+x^T \mathbf{Cor}\,x
+\]</div>
+</section>
+<section id="optimization">
+<h2>Optimization<a class="headerlink" href="#optimization" title="Permalink to this heading">#</a></h2>
+<p><img alt="alt text" src="../../_images/2223.png" /></p>
 </section>
 </section>
 
@@ -444,6 +497,10 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-trading-systems">Univariate Trading systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk-vs-cash">Risk vs. Cash</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-return">Expected return</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risk">Risk</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization">Optimization</a></li>
 </ul>
   </nav></div>
 
