@@ -33,14 +33,19 @@ Available at SSRN: <https://ssrn.com/abstract=2695101> or
 ## Rules of the game
 
 * Use 50 liquid futures (including frozen orange juice)
-* Adjust them by ratio for rolling
+* Adjust them by ratio for rolling 3 days prior to expiry
 * Rebalance daily without any delay
 * Assume no transaction costs
 * Assume fractional position sizes. All positions are given
   as target cash positions.
 * We start every day with 100m USD AUM. We accumulate profits.
   We do not compound returns.
-  We like our profits positive and homoscedastic.
+  We like our profits positive, homoscedastic and not too leptokurtic.
+
+## Software
+
+* We use the open source [TinyCTA](https://pypi.org/project/TinyCTA/) package.
+* All material has been merged into a [JupyterBook](https://jupyterbook.org/en/stable/intro.html).
 
 ## Optimization
 
