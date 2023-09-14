@@ -41,7 +41,7 @@ Available at SSRN: <https://ssrn.com/abstract=2695101> or
   * 6000$ initial margin.
   * Played a minor role in [Trading places](https://en.wikipedia.org/wiki/Trading_Places)
     with Eddy Murphy and Dan Aykroyd
-   
+
 * Adjust them by ratio for rolling 3 days prior to expiry
 * Rebalance daily without any delay
 * Assume no transaction costs
