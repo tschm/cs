@@ -357,6 +357,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-underlying-paper">The underlying paper</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cta-commodity-trading-advisor">CTA - Commodity Trading Advisor</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rules-of-the-game">Rules of the game</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#software">Software</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization">Optimization</a></li>
 </ul>
             </nav>
@@ -412,14 +413,21 @@ Available at SSRN: <a class="reference external" href="https://ssrn.com/abstract
 <h2>Rules of the game<a class="headerlink" href="#rules-of-the-game" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Use 50 liquid futures (including frozen orange juice)</p></li>
-<li><p>Adjust them by ratio for rolling</p></li>
+<li><p>Adjust them by ratio for rolling 3 days prior to expiry</p></li>
 <li><p>Rebalance daily without any delay</p></li>
 <li><p>Assume no transaction costs</p></li>
 <li><p>Assume fractional position sizes. All positions are given
 as target cash positions.</p></li>
 <li><p>We start every day with 100m USD AUM. We accumulate profits.
 We do not compound returns.
-We like our profits positive and homoscedastic.</p></li>
+We like our profits positive, homoscedastic and not too leptokurtic.</p></li>
+</ul>
+</section>
+<section id="software">
+<h2>Software<a class="headerlink" href="#software" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>We use the open source <a class="reference external" href="https://pypi.org/project/TinyCTA/">TinyCTA</a> package.</p></li>
+<li><p>All material has been merged into a <a class="reference external" href="https://jupyterbook.org/en/stable/intro.html">JupyterBook</a>.</p></li>
 </ul>
 </section>
 <section id="optimization">
@@ -504,6 +512,7 @@ paper.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-underlying-paper">The underlying paper</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cta-commodity-trading-advisor">CTA - Commodity Trading Advisor</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rules-of-the-game">Rules of the game</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#software">Software</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization">Optimization</a></li>
 </ul>
   </nav></div>
