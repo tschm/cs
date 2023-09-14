@@ -42,14 +42,23 @@ Available at SSRN: <https://ssrn.com/abstract=2695101> or
   We do not compound returns.
   We like our profits positive, homoscedastic and not too leptokurtic.
 
-## Software
-
-* We use the open source [TinyCTA](https://pypi.org/project/TinyCTA/) package.
-* All material has been merged into a [JupyterBook](https://jupyterbook.org/en/stable/intro.html).
-
 ## Optimization
 
 * We barely scratch the surface of the area.
 * We use analytical solutions to convex problems.
 * We use the [Seven Sins in Portfolio Optimisation](https://arxiv.org/abs/1310.3396)
   paper.
+
+## Software
+
+* We use the open source [TinyCTA](https://pypi.org/project/TinyCTA/) package.
+* All material has been merged into a [JupyterBook](https://jupyterbook.org/en/stable/intro.html).
+* Binder may or may not work.
+
+For brave souls:
+
+```bash
+git clone git@github.com:tschm/cs.git
+cd cs
+make jupyter
+```
