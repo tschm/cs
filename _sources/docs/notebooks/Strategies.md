@@ -53,6 +53,7 @@ Available at SSRN: <https://ssrn.com/abstract=2695101> or
 
 * We use the open source [TinyCTA](https://pypi.org/project/TinyCTA/) package.
 * All material has been merged into a [JupyterBook](https://jupyterbook.org/en/stable/intro.html).
+* Move to [Marimo](https://github.com/marimo-team/marimo) in preparation
 * Binder may or may not work.
 
 For brave souls:
