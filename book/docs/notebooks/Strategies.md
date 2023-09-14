@@ -33,7 +33,7 @@ Available at SSRN: <https://ssrn.com/abstract=2695101> or
 ## Rules of the game
 
 * Use 50 liquid futures (including *frozen* orange juice)
-* Orange Juice future:
+* [Orange Juice](https://www.investing.com/commodities/orange-juice) future:
 
   * 150$ FPV (full point value)
   * 300 pts (September 2023)
