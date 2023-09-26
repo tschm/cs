@@ -10,19 +10,19 @@ repos:
       - id: black
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'v0.0.290'
+    rev: 'v0.0.291'
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix ]
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.36.0
+    rev: v0.37.0
     hooks:
       - id: markdownlint-fix
 
   # enforcing the use of new python syntax with pyupgrade
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.11.0
+    rev: v3.13.0
     hooks:
       - id: pyupgrade
 
