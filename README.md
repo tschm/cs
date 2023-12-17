@@ -4,7 +4,6 @@
 [![deploy-book](https://github.com/tschm/cs/actions/workflows/book.yml/badge.svg)](https://github.com/tschm/cs/actions/workflows/book.yml)
 [![pages-build-deployment](https://github.com/tschm/cs/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/tschm/cs/actions/workflows/pages/pages-build-deployment)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/tschm/cs/main.svg)](https://results.pre-commit.ci/latest/github/tschm/cs/main)
-[![test](https://github.com/tschm/cs/actions/workflows/test.yml/badge.svg)](https://github.com/tschm/cs/actions/workflows/test.yml)
 
 Challenged by a young CEO I wrote a terse CTA (Commodity Trading Advisor) investment
 strategy. I discuss the somewhat quirky background of my code fragment.
