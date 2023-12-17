@@ -20,11 +20,6 @@ fmt: install ## Run autoformatting and linting
 clean:  ## Clean up caches and build artifacts
 	@git clean -d -X -f
 
-.PHONY: test
-test: install ## Run tests
-	.venv/bin/pip install pytest
-	.venv/bin/pytest tests
-
 .PHONY: help
 help:  ## Display this help screen
 	@echo -e "\033[1mAvailable commands:\033[0m"
