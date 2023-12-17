@@ -1,3 +1,4 @@
-tinycta
+tinycta==0.7.0
+cvxsimulator==0.8.16
 ipywidgets
 
