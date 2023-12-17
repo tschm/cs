@@ -7,3 +7,5 @@ futures_prices.csv
 futures_data.csv
 book/_build
 
+.pytest_cache
+.ruff_cache
