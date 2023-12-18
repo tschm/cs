@@ -408,6 +408,7 @@ document.write(`
 <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">cvx.simulator</span> <span class="kn">import</span> <span class="n">FuturesPortfolio</span>
 <span class="kn">from</span> <span class="nn">cvx.simulator</span> <span class="kn">import</span> <span class="n">interpolate</span>
@@ -421,10 +422,10 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">11</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">cvx.simulator</span> <span class="kn">import</span> <span class="n">interpolate</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">from</span> <span class="nn">tinycta.signal</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="ne">---&gt; </span><span class="mi">11</span> <span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">plotting</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="s2">&quot;plotly&quot;</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">12</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span> <span class="nn">cvx.simulator</span> <span class="kn">import</span> <span class="n">interpolate</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span> <span class="nn">tinycta.signal</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="ne">---&gt; </span><span class="mi">12</span> <span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">plotting</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="s2">&quot;plotly&quot;</span>
 
 <span class="nn">File ~/work/cs/cs/.venv/lib/python3.10/site-packages/pandas/_config/config.py:235,</span> in <span class="ni">DictWrapper.__setattr__</span><span class="nt">(self, key, val)</span>
 <span class="g g-Whitespace">    </span><span class="mi">232</span> <span class="c1"># you can&#39;t set new keys</span>
