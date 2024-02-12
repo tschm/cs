@@ -23,14 +23,10 @@ import numpy as np
 
 from cvx.simulator import FuturesPortfolio
 from cvx.simulator import interpolate
-
-from tinycta.signal import *
-
-pd.options.plotting.backend = "plotly"
 ------------------
 
 ----- stderr -----
-/tmp/ipykernel_1981/417786502.py:4: DeprecationWarning: 
+/tmp/ipykernel_1939/282140159.py:4: DeprecationWarning: 
 Pyarrow will become a required dependency of pandas in the next major release of pandas (pandas 3.0),
 (to allow more performant data types, such as the Arrow string type, and better interoperability with other libraries)
 but was not found to be installed on your system.
@@ -47,7 +43,6 @@ Cell [0;32mIn[1], line 7[0m
 [1;32m      5[0m [38;5;28;01mimport[39;00m [38;5;21;01mnumpy[39;00m [38;5;28;01mas[39;00m [38;5;21;01mnp[39;00m
 [0;32m----> 7[0m [38;5;28;01mfrom[39;00m [38;5;21;01mcvx[39;00m[38;5;21;01m.[39;00m[38;5;21;01msimulator[39;00m [38;5;28;01mimport[39;00m FuturesPortfolio
 [1;32m      8[0m [38;5;28;01mfrom[39;00m [38;5;21;01mcvx[39;00m[38;5;21;01m.[39;00m[38;5;21;01msimulator[39;00m [38;5;28;01mimport[39;00m interpolate
-[1;32m     10[0m [38;5;28;01mfrom[39;00m [38;5;21;01mtinycta[39;00m[38;5;21;01m.[39;00m[38;5;21;01msignal[39;00m [38;5;28;01mimport[39;00m [38;5;241m*[39m
 
 [0;31mImportError[0m: cannot import name 'FuturesPortfolio' from 'cvx.simulator' (/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/cvx/simulator/__init__.py)
 
