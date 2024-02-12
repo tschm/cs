@@ -6,6 +6,7 @@ on: [push]
 jobs:
 
   deploy-book:
+    
     permissions:
       contents: write
       
