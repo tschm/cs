@@ -6,7 +6,7 @@ on: [push]
 jobs:
 
   deploy-book:
-    
+  
     permissions:
       contents: write
 
@@ -21,5 +21,5 @@ jobs:
     - name: GitHub Pages action
       uses: JamesIves/github-pages-deploy-action@v4.4.3
       with:
-          branch: gh-pages
-          folder: book/_build/html
+        branch: gh-pages
+        folder: book/_build/html
