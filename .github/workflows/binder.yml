@@ -7,7 +7,7 @@ jobs:
   Serve-binder-cache:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     # cache for binder
     - name: cache binder build on mybinder.org
