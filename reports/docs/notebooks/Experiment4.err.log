@@ -30,7 +30,7 @@ pd.options.plotting.backend = "plotly"
 ------------------
 
 ----- stderr -----
-/tmp/ipykernel_1981/417786502.py:4: DeprecationWarning: 
+/tmp/ipykernel_1984/417786502.py:4: DeprecationWarning: 
 Pyarrow will become a required dependency of pandas in the next major release of pandas (pandas 3.0),
 (to allow more performant data types, such as the Arrow string type, and better interoperability with other libraries)
 but was not found to be installed on your system.
@@ -41,13 +41,49 @@ please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mImportError[0m                               Traceback (most recent call last)
-Cell [0;32mIn[1], line 7[0m
-[1;32m      4[0m [38;5;28;01mimport[39;00m [38;5;21;01mpandas[39;00m [38;5;28;01mas[39;00m [38;5;21;01mpd[39;00m
-[1;32m      5[0m [38;5;28;01mimport[39;00m [38;5;21;01mnumpy[39;00m [38;5;28;01mas[39;00m [38;5;21;01mnp[39;00m
-[0;32m----> 7[0m [38;5;28;01mfrom[39;00m [38;5;21;01mcvx[39;00m[38;5;21;01m.[39;00m[38;5;21;01msimulator[39;00m [38;5;28;01mimport[39;00m FuturesPortfolio
+[0;31mValueError[0m                                Traceback (most recent call last)
+Cell [0;32mIn[1], line 12[0m
 [1;32m      8[0m [38;5;28;01mfrom[39;00m [38;5;21;01mcvx[39;00m[38;5;21;01m.[39;00m[38;5;21;01msimulator[39;00m [38;5;28;01mimport[39;00m interpolate
 [1;32m     10[0m [38;5;28;01mfrom[39;00m [38;5;21;01mtinycta[39;00m[38;5;21;01m.[39;00m[38;5;21;01msignal[39;00m [38;5;28;01mimport[39;00m [38;5;241m*[39m
+[0;32m---> 12[0m [43mpd[49m[38;5;241;43m.[39;49m[43moptions[49m[38;5;241;43m.[39;49m[43mplotting[49m[38;5;241;43m.[39;49m[43mbackend[49m [38;5;241m=[39m [38;5;124m"[39m[38;5;124mplotly[39m[38;5;124m"[39m
 
-[0;31mImportError[0m: cannot import name 'FuturesPortfolio' from 'cvx.simulator' (/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/cvx/simulator/__init__.py)
+File [0;32m~/work/cs/cs/.venv/lib/python3.10/site-packages/pandas/_config/config.py:237[0m, in [0;36mDictWrapper.__setattr__[0;34m(self, key, val)[0m
+[1;32m    234[0m [38;5;66;03m# you can't set new keys[39;00m
+[1;32m    235[0m [38;5;66;03m# can you can't overwrite subtrees[39;00m
+[1;32m    236[0m [38;5;28;01mif[39;00m key [38;5;129;01min[39;00m [38;5;28mself[39m[38;5;241m.[39md [38;5;129;01mand[39;00m [38;5;129;01mnot[39;00m [38;5;28misinstance[39m([38;5;28mself[39m[38;5;241m.[39md[key], [38;5;28mdict[39m):
+[0;32m--> 237[0m     [43m_set_option[49m[43m([49m[43mprefix[49m[43m,[49m[43m [49m[43mval[49m[43m)[49m
+[1;32m    238[0m [38;5;28;01melse[39;00m:
+[1;32m    239[0m     [38;5;28;01mraise[39;00m OptionError([38;5;124m"[39m[38;5;124mYou can only set the value of existing options[39m[38;5;124m"[39m)
+
+File [0;32m~/work/cs/cs/.venv/lib/python3.10/site-packages/pandas/_config/config.py:171[0m, in [0;36m_set_option[0;34m(*args, **kwargs)[0m
+[1;32m    169[0m o [38;5;241m=[39m _get_registered_option(key)
+[1;32m    170[0m [38;5;28;01mif[39;00m o [38;5;129;01mand[39;00m o[38;5;241m.[39mvalidator:
+[0;32m--> 171[0m     [43mo[49m[38;5;241;43m.[39;49m[43mvalidator[49m[43m([49m[43mv[49m[43m)[49m
+[1;32m    173[0m [38;5;66;03m# walk the nested dict[39;00m
+[1;32m    174[0m root, k_root [38;5;241m=[39m _get_root(key)
+
+File [0;32m~/work/cs/cs/.venv/lib/python3.10/site-packages/pandas/core/config_init.py:662[0m, in [0;36mregister_plotting_backend_cb[0;34m(key)[0m
+[1;32m    659[0m     [38;5;28;01mreturn[39;00m
+[1;32m    660[0m [38;5;28;01mfrom[39;00m [38;5;21;01mpandas[39;00m[38;5;21;01m.[39;00m[38;5;21;01mplotting[39;00m[38;5;21;01m.[39;00m[38;5;21;01m_core[39;00m [38;5;28;01mimport[39;00m _get_plot_backend
+[0;32m--> 662[0m [43m_get_plot_backend[49m[43m([49m[43mkey[49m[43m)[49m
+
+File [0;32m~/work/cs/cs/.venv/lib/python3.10/site-packages/pandas/plotting/_core.py:1944[0m, in [0;36m_get_plot_backend[0;34m(backend)[0m
+[1;32m   1941[0m [38;5;28;01mif[39;00m backend_str [38;5;129;01min[39;00m _backends:
+[1;32m   1942[0m     [38;5;28;01mreturn[39;00m _backends[backend_str]
+[0;32m-> 1944[0m module [38;5;241m=[39m [43m_load_backend[49m[43m([49m[43mbackend_str[49m[43m)[49m
+[1;32m   1945[0m _backends[backend_str] [38;5;241m=[39m module
+[1;32m   1946[0m [38;5;28;01mreturn[39;00m module
+
+File [0;32m~/work/cs/cs/.venv/lib/python3.10/site-packages/pandas/plotting/_core.py:1913[0m, in [0;36m_load_backend[0;34m(backend)[0m
+[1;32m   1908[0m     [38;5;28;01mif[39;00m [38;5;28mhasattr[39m(module, [38;5;124m"[39m[38;5;124mplot[39m[38;5;124m"[39m):
+[1;32m   1909[0m         [38;5;66;03m# Validate that the interface is implemented when the option is set,[39;00m
+[1;32m   1910[0m         [38;5;66;03m# rather than at plot time.[39;00m
+[1;32m   1911[0m         [38;5;28;01mreturn[39;00m module
+[0;32m-> 1913[0m [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m(
+[1;32m   1914[0m     [38;5;124mf[39m[38;5;124m"[39m[38;5;124mCould not find plotting backend [39m[38;5;124m'[39m[38;5;132;01m{[39;00mbackend[38;5;132;01m}[39;00m[38;5;124m'[39m[38;5;124m. Ensure that you[39m[38;5;124m'[39m[38;5;124mve [39m[38;5;124m"[39m
+[1;32m   1915[0m     [38;5;124mf[39m[38;5;124m"[39m[38;5;124minstalled the package providing the [39m[38;5;124m'[39m[38;5;132;01m{[39;00mbackend[38;5;132;01m}[39;00m[38;5;124m'[39m[38;5;124m entrypoint, or that [39m[38;5;124m"[39m
+[1;32m   1916[0m     [38;5;124m"[39m[38;5;124mthe package has a top-level `.plot` method.[39m[38;5;124m"[39m
+[1;32m   1917[0m )
+
+[0;31mValueError[0m: Could not find plotting backend 'plotly'. Ensure that you've installed the package providing the 'plotly' entrypoint, or that the package has a top-level `.plot` method.
 
