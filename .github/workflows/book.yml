@@ -19,7 +19,7 @@ jobs:
         make book
 
     - name: GitHub Pages action
-      uses: JamesIves/github-pages-deploy-action@v4.6.0
+      uses: JamesIves/github-pages-deploy-action@v4.6.1
       with:
         branch: gh-pages
         folder: book/_build/html
