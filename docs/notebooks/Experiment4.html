@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
@@ -37,9 +37,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
@@ -139,6 +139,8 @@
         <div class="sidebar-primary-item">
 
   
+    
+  
 
 <a class="navbar-brand logo" href="../index.html">
   
@@ -154,7 +156,7 @@
 
  <script>
  document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
     <span class="search-button__default-text">Search</span>
     <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -368,10 +370,10 @@
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script>
@@ -379,7 +381,7 @@ document.write(`
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
@@ -430,51 +432,15 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">12</span>
+<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">cvx.simulator</span> <span class="kn">import</span> <span class="n">FuturesPortfolio</span>
 <span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span> <span class="nn">cvx.simulator</span> <span class="kn">import</span> <span class="n">interpolate</span>
 <span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span> <span class="nn">tinycta.signal</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="ne">---&gt; </span><span class="mi">12</span> <span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">plotting</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="s2">&quot;plotly&quot;</span>
 
-<span class="nn">File ~/work/cs/cs/.venv/lib/python3.10/site-packages/pandas/_config/config.py:237,</span> in <span class="ni">DictWrapper.__setattr__</span><span class="nt">(self, key, val)</span>
-<span class="g g-Whitespace">    </span><span class="mi">234</span> <span class="c1"># you can&#39;t set new keys</span>
-<span class="g g-Whitespace">    </span><span class="mi">235</span> <span class="c1"># can you can&#39;t overwrite subtrees</span>
-<span class="g g-Whitespace">    </span><span class="mi">236</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">237</span>     <span class="n">_set_option</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">238</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">239</span>     <span class="k">raise</span> <span class="n">OptionError</span><span class="p">(</span><span class="s2">&quot;You can only set the value of existing options&quot;</span><span class="p">)</span>
-
-<span class="nn">File ~/work/cs/cs/.venv/lib/python3.10/site-packages/pandas/_config/config.py:171,</span> in <span class="ni">_set_option</span><span class="nt">(*args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">169</span> <span class="n">o</span> <span class="o">=</span> <span class="n">_get_registered_option</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">170</span> <span class="k">if</span> <span class="n">o</span> <span class="ow">and</span> <span class="n">o</span><span class="o">.</span><span class="n">validator</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">171</span>     <span class="n">o</span><span class="o">.</span><span class="n">validator</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">173</span> <span class="c1"># walk the nested dict</span>
-<span class="g g-Whitespace">    </span><span class="mi">174</span> <span class="n">root</span><span class="p">,</span> <span class="n">k_root</span> <span class="o">=</span> <span class="n">_get_root</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-
-<span class="nn">File ~/work/cs/cs/.venv/lib/python3.10/site-packages/pandas/core/config_init.py:662,</span> in <span class="ni">register_plotting_backend_cb</span><span class="nt">(key)</span>
-<span class="g g-Whitespace">    </span><span class="mi">659</span>     <span class="k">return</span>
-<span class="g g-Whitespace">    </span><span class="mi">660</span> <span class="kn">from</span> <span class="nn">pandas.plotting._core</span> <span class="kn">import</span> <span class="n">_get_plot_backend</span>
-<span class="ne">--&gt; </span><span class="mi">662</span> <span class="n">_get_plot_backend</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-
-<span class="nn">File ~/work/cs/cs/.venv/lib/python3.10/site-packages/pandas/plotting/_core.py:1944,</span> in <span class="ni">_get_plot_backend</span><span class="nt">(backend)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1941</span> <span class="k">if</span> <span class="n">backend_str</span> <span class="ow">in</span> <span class="n">_backends</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1942</span>     <span class="k">return</span> <span class="n">_backends</span><span class="p">[</span><span class="n">backend_str</span><span class="p">]</span>
-<span class="ne">-&gt; </span><span class="mi">1944</span> <span class="n">module</span> <span class="o">=</span> <span class="n">_load_backend</span><span class="p">(</span><span class="n">backend_str</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1945</span> <span class="n">_backends</span><span class="p">[</span><span class="n">backend_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">module</span>
-<span class="g g-Whitespace">   </span><span class="mi">1946</span> <span class="k">return</span> <span class="n">module</span>
-
-<span class="nn">File ~/work/cs/cs/.venv/lib/python3.10/site-packages/pandas/plotting/_core.py:1913,</span> in <span class="ni">_load_backend</span><span class="nt">(backend)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1908</span>     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s2">&quot;plot&quot;</span><span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1909</span>         <span class="c1"># Validate that the interface is implemented when the option is set,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1910</span>         <span class="c1"># rather than at plot time.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1911</span>         <span class="k">return</span> <span class="n">module</span>
-<span class="ne">-&gt; </span><span class="mi">1913</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1914</span>     <span class="sa">f</span><span class="s2">&quot;Could not find plotting backend &#39;</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">&#39;. Ensure that you&#39;ve &quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1915</span>     <span class="sa">f</span><span class="s2">&quot;installed the package providing the &#39;</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">&#39; entrypoint, or that &quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1916</span>     <span class="s2">&quot;the package has a top-level `.plot` method.&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1917</span> <span class="p">)</span>
-
-<span class="ne">ValueError</span>: Could not find plotting backend &#39;plotly&#39;. Ensure that you&#39;ve installed the package providing the &#39;plotly&#39; entrypoint, or that the package has a top-level `.plot` method.
+<span class="ne">ImportError</span>: cannot import name &#39;FuturesPortfolio&#39; from &#39;cvx.simulator&#39; (/home/runner/work/cs/cs/.venv/lib/python3.10/site-packages/cvx/simulator/__init__.py)
 </pre></div>
 </div>
 </div>
@@ -697,8 +663,8 @@ By Thomas Schmelzer
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
