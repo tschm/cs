@@ -26,7 +26,6 @@ from cvx.simulator import interpolate
 
 from tinycta.signal import *
 
-pd.options.plotting.backend = "plotly"
 ------------------
 
 
