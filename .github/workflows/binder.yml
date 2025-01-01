@@ -1,6 +1,10 @@
 name: binder
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 # This job installs dependencies, builds the book, and pushes it to `gh-pages`
 jobs:
