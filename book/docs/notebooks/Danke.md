@@ -19,7 +19,7 @@
   Need solvers such as Mosek (and cvxpy).
 * We optimized the expected return (in risk space). In practice it's a good idea
   to apply regularization here (Ridge, Lasso, Elastic Nets) and introduce some
-  mock trading costs to tame the trading activity. A typcial Markowitz system
+  mock trading costs to tame the trading activity. A typical Markowitz system
   will trade far less than the univariate system.
 * Applying Lasso/Elastic Nets regularization opens the door for sparse updates.
 * The construction of more powerful signals is about the smart combination of
