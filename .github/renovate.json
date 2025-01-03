@@ -3,6 +3,9 @@
   "extends": [
     "config:recommended"
   ],
+  "ignorePaths": [
+    "**/.python-version"
+  ],
   "pre-commit": {
     "enabled": true
   }
