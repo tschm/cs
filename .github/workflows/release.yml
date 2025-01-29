@@ -1,0 +1,22 @@
+name: Bump version and publish
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  tag:
+    permissions:
+      contents: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
+
+      - name: Generate Tag
+        uses: cvxgrp/.github/actions/uv/tag@v2.0.11
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          build_package: 'false'
