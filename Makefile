@@ -4,7 +4,7 @@
 
 venv:
 	curl -LsSf https://astral.sh/uv/install.sh | sh
-	uv venv
+	uv venv --python='3.12'
 
 install: venv ## Install dependencies and setup environment
 	uv pip install --upgrade pip
@@ -24,7 +24,6 @@ help: ## Show this help message
 	@echo ""
 	@echo "Targets:"
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-
 
 
 .PHONY: jupyter
