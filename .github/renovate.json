@@ -13,4 +13,15 @@
   "pre-commit": {
     "enabled": true
   }
+  
+  // Schedule when updates are checked
+  "schedule": ["every Friday", "before 8am"],
+  "packageRules": [
+    {
+      "groupName": "pre-commit hooks",
+      "matchManagers": ["pre-commit"],
+      "matchDepTypes": ["repository"],
+      "groupSlug": "precommit"
+    }
+  ]
 }
