@@ -12,9 +12,7 @@
   },
   "pre-commit": {
     "enabled": true
-  }
-  
-  // Schedule when updates are checked
+  },
   "schedule": ["every Friday", "before 8am"],
   "packageRules": [
     {
