@@ -13,7 +13,7 @@
   "pre-commit": {
     "enabled": true
   },
-  "schedule": ["every Friday", "before 8am"],
+  "schedule": ["every friday", "before 8am"],
   "packageRules": [
     {
       "groupName": "pre-commit hooks",
