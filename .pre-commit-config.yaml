@@ -7,7 +7,7 @@ repos:
       - id: check-yaml
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'v0.9.4'
+    rev: 'v0.9.10'
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix ]
@@ -20,7 +20,7 @@ repos:
       - id: markdownlint
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.31.1
+    rev: 0.31.3
     hooks:
       - id: check-renovate
         args: [ "--verbose" ]
