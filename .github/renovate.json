@@ -4,8 +4,7 @@
     ":enablePreCommit",
     ":automergeMinor",
     ":dependencyDashboard",
-    ":semanticCommits",
-    ":pinVersions"
+    ":semanticCommits"
   ],
   "enabledManagers": [
     "pip_requirements",
