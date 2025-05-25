@@ -1,4 +1,4 @@
 tinycta==0.7.17
-cvxsimulator==1.3.11
+cvxsimulator==1.3.12
 ipywidgets
 pre-commit
