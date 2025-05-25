@@ -5,7 +5,6 @@
     ":automergeMinor",
     ":dependencyDashboard",
     ":semanticCommits",
-    ":pinVersions"
   ],
   "enabledManagers": [
     "pip_requirements",
