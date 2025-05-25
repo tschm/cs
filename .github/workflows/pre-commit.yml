@@ -17,4 +17,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Use reusable action from cvxgrp to run pre-commit checks
-      - uses: cvxgrp/.github/actions/pre-commit@v2.1.1
+      - uses: cvxgrp/.github/actions/pre-commit@v2.2.8
