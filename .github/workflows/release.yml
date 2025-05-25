@@ -1,17 +1,24 @@
+# Workflow for creating a new version release
+# This workflow is manually triggered to create a new version tag
+
 name: Bump version and publish
 
+# Trigger the workflow manually using the GitHub Actions UI
 on:
   workflow_dispatch:
 
 
 jobs:
+  # Job to generate a new version tag
   tag:
+    # Permission to write to repository contents (create tags)
     permissions:
       contents: write
 
     runs-on: ubuntu-latest
 
     steps:
+      # Generate a new version tag based on semantic versioning
       - name: Generate Tag
         uses: tschm/cradle/actions/tag@v0.1.68
         with:

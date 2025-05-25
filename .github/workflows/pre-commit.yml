@@ -1,13 +1,20 @@
+# Workflow for running pre-commit checks on code
+# This workflow ensures code quality and consistency
+
 name: pre-commit
 
+# Trigger the workflow on push events
 on:
   push:
 
+# Set permissions to read repository contents
 permissions:
   contents: read
 
 jobs:
+  # Job to run pre-commit hooks on all files
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: tschm/cradle/actions/pre-commit@v0.1.68
+      # Use reusable action from cvxgrp to run pre-commit checks
+      - uses: cvxgrp/.github/actions/pre-commit@v2.1.1
