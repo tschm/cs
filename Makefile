@@ -1,7 +1,13 @@
+# Makefile for the cs (computer science) project
+# This file contains commands for setting up the environment, formatting code,
+# building the book, and other maintenance tasks.
+
 .DEFAULT_GOAL := help
 
+# Define all phony targets (targets that don't create files with the same name)
 .PHONY: venv install fmt clean help test jupyter book
 
+# Create a virtual environment using uv with Python 3.12
 venv:
 	curl -LsSf https://astral.sh/uv/install.sh | sh
 	uv venv --python='3.12'
@@ -26,11 +32,13 @@ help: ## Show this help message
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 
+# Start Jupyter Lab for interactive notebook development
 .PHONY: jupyter
 jupyter: install ## Run jupyter lab
 	uv pip install jupyterlab
 	uv run jupyter lab
 
+# Build the Jupyter Book documentation
 .PHONY: book
 book: install  ## Compile the book
 	uv pip install jupyterlab jupyter-book

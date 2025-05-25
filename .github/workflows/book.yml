@@ -1,5 +1,9 @@
+# Workflow for building and deploying the Jupyter Book documentation
+# This workflow builds the book and publishes it to GitHub Pages
+
 name: deploy-book
 
+# Trigger the workflow on push events
 on:
   push:
 
@@ -7,21 +11,26 @@ on:
 # This job installs dependencies, builds the book, and pushes it to `gh-pages`
 jobs:
 
+  # Job to deploy the book to GitHub Pages
   deploy-book:
 
+    # Permission to write to repository contents (for gh-pages branch)
     permissions:
       contents: write
 
     runs-on: ubuntu-latest
     steps:
+    # Check out the repository code
     - uses: actions/checkout@v4
 
+    # Build the Jupyter Book using the make command
     - name: "Build the book"
       run: |
         make book
 
+    # Deploy the built book to GitHub Pages
     - name: GitHub Pages action
       uses: JamesIves/github-pages-deploy-action@v4.7.3
       with:
-        branch: gh-pages
-        folder: book/_build/html
+        branch: gh-pages  # Deploy to the gh-pages branch
+        folder: book/_build/html  # Source folder to deploy
