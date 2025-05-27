@@ -2,7 +2,6 @@
 
 [![deploy-book](https://github.com/tschm/cs/actions/workflows/book.yml/badge.svg)](https://github.com/tschm/cs/actions/workflows/book.yml)
 [![pages-build-deployment](https://github.com/tschm/cs/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/tschm/cs/actions/workflows/pages/pages-build-deployment)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/tschm/cs/main.svg)](https://results.pre-commit.ci/latest/github/tschm/cs/main)
 [![CodeFactor](https://www.codefactor.io/repository/github/tschm/cs/badge)](https://www.codefactor.io/repository/github/tschm/cs)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://github.com/renovatebot/renovate)
 
