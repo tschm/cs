@@ -6,11 +6,7 @@ app = marimo.App()
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # CTA 3.0
-        """
-    )
+    mo.md(r"""# CTA 3.0""")
     return
 
 
@@ -64,13 +60,13 @@ def _(interpolate, path, pd):
 def _(mo):
     mo.md(
         r"""
-        We use the system:
-        $$\mathrm{CashPosition}=\frac{f(\mathrm{Price})}{\mathrm{Volatility(Returns)}}$$
+    We use the system:
+    $$\mathrm{CashPosition}=\frac{f(\mathrm{Price})}{\mathrm{Volatility(Returns)}}$$
 
-        This is very problematic:
-        * Prices may live on very different scales, hence trying to find a more universal function $f$ is almost impossible. The sign-function was a good choice as the results don't depend on the scale of the argument.
-        * Price may come with all sorts of spikes/outliers/problems.
-        """
+    This is very problematic:
+    * Prices may live on very different scales, hence trying to find a more universal function $f$ is almost impossible. The sign-function was a good choice as the results don't depend on the scale of the argument.
+    * Price may come with all sorts of spikes/outliers/problems.
+    """
     )
     return
 
@@ -79,11 +75,10 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-        We need a simple price filter process
-        * We compute volatility-adjusted returns, filter them and compute prices from those returns.
-        * Don't call it Winsorizing in Switzerland. We apply Huber functions.
-
-        """
+    We need a simple price filter process
+    * We compute volatility-adjusted returns, filter them and compute prices from those returns.
+    * Don't call it Winsorizing in Switzerland. We apply Huber functions.
+    """
     )
     return
 
@@ -103,12 +98,11 @@ def _(np):
 def _(mo):
     mo.md(
         r"""
-        ### Oscillators
-        * All prices are now following a standard arithmetic Brownian motion with std $1$.
-        * What we want is the difference of two moving means (exponentially weighted) to have a constant std regardless of the two lengths.
-        * An oscillator is the **scaled difference of two moving averages**.
-
-        """
+    ### Oscillators
+    * All prices are now following a standard arithmetic Brownian motion with std $1$.
+    * What we want is the difference of two moving means (exponentially weighted) to have a constant std regardless of the two lengths.
+    * An oscillator is the **scaled difference of two moving averages**.
+    """
     )
     return
 
