@@ -10,6 +10,8 @@ parse:
     - substitution
     - linkify
     - dollarmath
+  myst_substitutions:
+    book_url: https://tschm.github.io/cs
 
 #######################################################################################
 # Information about where the book exists on the web
