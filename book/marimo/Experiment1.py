@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.13.14"
-app = marimo.App()
+app = marimo.App(layout_file="layouts/notebook.slides.json")
 
 
 @app.cell(hide_code=True)
