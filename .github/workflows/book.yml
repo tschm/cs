@@ -81,5 +81,13 @@ jobs:
       #    mkdir -p book/docs/wasm
       #    cp -r wasm/* book/docs/wasm/
       #    echo "Copied WASM artifacts to book/docs/wasm/"
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+           path: .book
+
+      - name: Inspection
+        run: |
+          ls -all .book
 
       - uses: tschm/cradle/actions/book@v0.1.69
