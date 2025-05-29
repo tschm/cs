@@ -29,9 +29,13 @@ jobs:
            # Find all Python files in book/marimo directory
            for notebook in book/marimo/Experiment*.py; do
              # Extract the filename without extension
+             echo "Detected notebook $notebook"
              filename=$(basename "$notebook" .py)
+             echo "Detected filename $filename"
              # Create output directory
              mkdir -p "artifacts/wasm/$filename"
+             echo "Folder artifacts/wasm/$notebook"
+             echo "Folder artifacts/wasm/$filename"
              # Export as readonly, with code locked
              marimo export html-wasm "$notebook" -o "artifacts/wasm/$filename" --mode run
              echo "Exported $notebook to artifacts/wasm/$filename"
