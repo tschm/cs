@@ -34,7 +34,7 @@ jobs:
              mkdir -p "artifacts/wasm/$filename"
              # Export as readonly, with code locked
              marimo export html-wasm "$notebook" -o "artifacts/wasm/$filename" --mode run
-             echo "Exported $notebook to wasm/$filename"
+             echo "Exported $notebook to artifacts/wasm/$filename"
            done
 
            ls -all wasm
