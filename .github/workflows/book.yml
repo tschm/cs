@@ -67,7 +67,7 @@ jobs:
       - name: Copy WASM artifacts to book directory
         run: |
           mkdir -p book/docs/wasm
-          cp -r artifacts/wasm/* book/docs/wasm/
+          cp -r wasm/* book/docs/wasm/
           echo "Copied WASM artifacts to book/docs/wasm/"
 
       - uses: tschm/cradle/actions/book@v0.1.69
