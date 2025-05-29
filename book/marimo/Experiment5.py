@@ -63,9 +63,11 @@ def _():
 
 
 @app.cell
-def _(interpolate, pd):
+def _(path, interpolate, pd):
     # Load prices
-    prices = pd.read_csv("data/Prices_hashed.csv", index_col=0, parse_dates=True)
+    prices = pd.read_csv(
+        path / "data" / "Prices_hashed.csv", index_col=0, parse_dates=True
+    )
 
     # interpolate the prices
     prices = prices.apply(interpolate)
