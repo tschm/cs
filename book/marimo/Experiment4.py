@@ -71,7 +71,7 @@ def _():
     winsor = mo.ui.slider(1.0, 6.0, step=0.1, value=4.2, label="Winsorizing")
 
     # Display the sliders in a vertical stack
-    mo.ui.vstack([fast, slow, vola, winsor])
+    mo.vstack([fast, slow, vola, winsor])
 
     return fast, slow, vola, winsor
 

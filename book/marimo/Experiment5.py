@@ -85,7 +85,7 @@ def _():
     shrinkage = mo.ui.slider(0.0, 1.0, step=0.05, value=0.5, label="Shrinkage")
 
     # Display the sliders in a vertical stack
-    mo.ui.vstack([fast, slow, vola, winsor, corr, shrinkage])
+    mo.vstack([fast, slow, vola, winsor, corr, shrinkage])
 
     return corr, fast, shrinkage, slow, vola, winsor
 

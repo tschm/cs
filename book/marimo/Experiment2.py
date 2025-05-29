@@ -80,7 +80,7 @@ def _(mo):
     vola = mo.ui.slider(4, 192, step=4, value=32, label="Volatility")
 
     # Display the sliders in a vertical stack
-    mo.ui.vstack([fast, slow, vola])
+    mo.vstack([fast, slow, vola])
 
     return fast, slow, vola
 
