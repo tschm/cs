@@ -2,6 +2,6 @@
 
 This section contains the WASM artifacts generated from the marimo notebooks.
 
-## Experiment Notebooks
+## Experiment1
 
-- [Experiment1](docs/wasm/Experiment1/index.html)
+{{ '[Experiment1]({url}/wasm/Experiment1/index.html)'.format(url=book_url) }}
