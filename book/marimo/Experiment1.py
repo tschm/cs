@@ -14,6 +14,18 @@ def _(mo):
 def _():
     import warnings
 
+    from pathlib import Path
+
+    #
+    path = Path(__file__).parent
+
+    # Suppress noisy warnings
+    warnings.simplefilter(action="ignore", category=FutureWarning)
+    return (path,)
+
+
+@app.cell
+def _():
     import marimo as mo
     import pandas as pd
     import numpy as np
@@ -21,22 +33,19 @@ def _():
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
-
-    # Suppress noisy warnings
-    warnings.simplefilter(action="ignore", category=FutureWarning)
-
-    # Optional: import simulation modules
-    from cvx.simulator import interpolate, Portfolio
-
-    return Portfolio, interpolate, mo, np, pd, pio
+    return mo, np, pd
 
 
 @app.cell
-def _(interpolate, pd):
-    from pathlib import Path
+def _():
+    # Optional: import simulation modules
+    from cvx.simulator import interpolate, Portfolio
 
-    path = Path(__file__).parent
+    return Portfolio, interpolate
 
+
+@app.cell
+def _(interpolate, path, pd):
     # Load prices
     prices = pd.read_csv(
         path / "data" / "Prices_hashed.csv", index_col=0, parse_dates=True
@@ -135,14 +144,6 @@ def _(mo):
     is when we have computed all desirec cash-positions
     """
     )
-    return
-
-
-@app.cell
-def _(pio):
-    for renderer in pio.renderers:
-        print(renderer)
-
     return
 
 
