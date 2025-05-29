@@ -5,7 +5,7 @@
 .DEFAULT_GOAL := help
 
 # Define all phony targets (targets that don't create files with the same name)
-.PHONY: venv install fmt clean help test jupyter book
+.PHONY: venv install fmt clean help test jupyter marimo
 
 # Create a virtual environment using uv with Python 3.12
 venv:
@@ -17,7 +17,7 @@ install: venv ## Install dependencies and setup environment
 	uv pip install --no-cache-dir -r requirements.txt
 
 fmt: venv ## Format and lint code
-	uv pip install pre-commit
+	uv pip install --no-cache-dir pre-commit
 	uv run pre-commit install
 	uv run pre-commit run --all-files
 
@@ -38,9 +38,9 @@ jupyter: install ## Run jupyter lab
 	uv pip install jupyterlab
 	uv run jupyter lab
 
-# Build the Jupyter Book documentation
-.PHONY: book
-book: install  ## Compile the book
-	uv pip install jupyterlab jupyter-book
-	uv run jupyter-book clean book
-	uv run jupyter-book build book
+# Run marimo for interactive notebook development
+.PHONY: marimo
+marimo: install ## Start a Marimo server
+	#@printf "$(BLUE)Start Marimo server...$(RESET)\n"
+	#@uv pip install --no-cache-dir marimo  # Install marimo interactive notebook tool
+	@uv run marimo edit book/marimo  # Start marimo server in edit mode for the book/marimo directory
