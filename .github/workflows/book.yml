@@ -37,8 +37,9 @@ jobs:
              echo "Exported $notebook to wasm/$filename"
            done
 
+           ls -all wasm
+
       - name: Upload HTML artifacts
-        if: ${{ env.ACT != 'true' }}  # Skip if running with 'act'
         uses: actions/upload-artifact@v4
         with:
           name: wasm
@@ -63,6 +64,12 @@ jobs:
     steps:
       - name: Checkout [${{ github.repository }}]
         uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        #if: ${{ env.ACT != 'true' }}  # Skip if running with 'act'
+        uses: actions/download-artifact@v4
+        with:
+          path: wasm
 
       - name: Copy WASM artifacts to book directory
         run: |
