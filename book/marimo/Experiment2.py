@@ -73,9 +73,7 @@ def _(np):
 
 
 @app.cell
-def _():
-    import marimo as mo
-
+def _(mo):
     # Create sliders using marimo's UI components
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
