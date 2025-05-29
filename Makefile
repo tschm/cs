@@ -5,7 +5,7 @@
 .DEFAULT_GOAL := help
 
 # Define all phony targets (targets that don't create files with the same name)
-.PHONY: venv install fmt clean help test jupyter marimo
+.PHONY: venv install fmt clean help test marimo
 
 # Create a virtual environment using uv with Python 3.12
 venv:
@@ -31,16 +31,6 @@ help: ## Show this help message
 	@echo "Targets:"
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-
-# Start Jupyter Lab for interactive notebook development
-.PHONY: jupyter
-jupyter: install ## Run jupyter lab
-	uv pip install jupyterlab
-	uv run jupyter lab
-
 # Run marimo for interactive notebook development
-.PHONY: marimo
-marimo: install ## Start a Marimo server
-	#@printf "$(BLUE)Start Marimo server...$(RESET)\n"
-	#@uv pip install --no-cache-dir marimo  # Install marimo interactive notebook tool
+marimo: ## Start a Marimo server
 	@uv run marimo edit book/marimo  # Start marimo server in edit mode for the book/marimo directory
