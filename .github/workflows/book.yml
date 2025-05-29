@@ -10,13 +10,32 @@ on:
 
 # This job installs dependencies, builds the book, and pushes it to `gh-pages`
 jobs:
-  marimo:
+  marimo_old:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: tschm/cradle/actions/environment@v0.1.69
 
-      - uses: tschm/cradle/actions/marimo@v0.1.69
+      - uses:  tschm/cradle/actions/marimo@v0.1.69
+
+  marimo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Build the virtual environment for ${{ github.repository }}"
+        uses: tschm/cradle/actions/environment@v0.1.69
+
+      - name: Export notebooks via wasm
+        run: |
+           # Find all Python files in book/marimo directory
+           for notebook in book/marimo/Experiment*.py; do
+             # Extract the filename without extension
+             filename=$(basename "$notebook" .py)
+             # Create output directory
+             mkdir -p "artifacts/wasm/$filename"
+             # Export as readonly, with code locked
+             marimo export html-wasm "$notebook" -o "artifacts/wasm/$filename" --mode run
+             echo "Exported $notebook to artifacts/wasm/$filename"
+           done
 
   jupyter:
     runs-on: "ubuntu-latest"
@@ -28,7 +47,7 @@ jobs:
 
   book:
     runs-on: "ubuntu-latest"
-    needs: [ jupyter, marimo ]
+    needs: [ jupyter ]
 
     permissions:
       contents: write
