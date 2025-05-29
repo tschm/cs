@@ -1,10 +1,7 @@
-# Workflow to automatically bump the version and create a new tag
-# This workflow is manually triggered via the GitHub UI
-
-name: Bump version and publish
+name: WASM
 
 on:
-  workflow_dispatch:  # Manual trigger
+  push
 
 # Permissions needed for the workflow
 permissions:
