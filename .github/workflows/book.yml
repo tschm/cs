@@ -70,17 +70,6 @@ jobs:
       - name: Checkout [${{ github.repository }}]
         uses: actions/checkout@v4
 
-      #- name: Download all artifacts
-      #  #if: ${{ env.ACT != 'true' }}  # Skip if running with 'act'
-      #  uses: actions/download-artifact@v4
-      #  with:
-      #    path: wasm
-
-      #- name: Copy WASM artifacts to book directory
-      #  run: |
-      #    mkdir -p book/docs/wasm
-      #    cp -r wasm/* book/docs/wasm/
-      #    echo "Copied WASM artifacts to book/docs/wasm/"
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
@@ -90,4 +79,5 @@ jobs:
         run: |
           ls -all .book
           ls -all
+
       - uses: tschm/cradle/actions/book@v0.1.69
