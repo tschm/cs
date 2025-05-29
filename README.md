@@ -1,4 +1,4 @@
-# 📈 [The 10-line CTA](http://tschm.github.io/cs)
+# 📈 [The 10-line CTA](http://tschm.github.io/cs/book)
 
 [![deploy-book](https://github.com/tschm/cs/actions/workflows/book.yml/badge.svg)](https://github.com/tschm/cs/actions/workflows/book.yml)
 [![pages-build-deployment](https://github.com/tschm/cs/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/tschm/cs/actions/workflows/pages/pages-build-deployment)
