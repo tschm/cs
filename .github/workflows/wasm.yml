@@ -16,8 +16,15 @@ jobs:
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: tschm/cradle/actions/environment@v0.1.69
 
-      - name: Export notebook via wasm
+      - name: Export notebooks via wasm
         run: |
-          mkdir -p dist/wasm/ex1
-          # export as readonly, with code locked
-          marimo export html-wasm book/marimo/Experiment1.py -o dist/wasm/ex1 --mode run
+          # Find all Python files in book/marimo directory
+          for notebook in book/marimo/Experiment*.py; do
+            # Extract the filename without extension
+            filename=$(basename "$notebook" .py)
+            # Create output directory
+            mkdir -p "dist/wasm/$filename"
+            # Export as readonly, with code locked
+            marimo export html-wasm "$notebook" -o "dist/wasm/$filename" --mode run
+            echo "Exported $notebook to dist/wasm/$filename"
+          done
