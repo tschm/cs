@@ -31,11 +31,19 @@ jobs:
              # Extract the filename without extension
              filename=$(basename "$notebook" .py)
              # Create output directory
-             mkdir -p "artifacts/wasm/$filename"
+             mkdir -p "wasm/$filename"
              # Export as readonly, with code locked
-             marimo export html-wasm "$notebook" -o "artifacts/wasm/$filename" --mode run
-             echo "Exported $notebook to artifacts/wasm/$filename"
+             marimo export html-wasm "$notebook" -o "wasm/$filename" --mode run
+             echo "Exported $notebook to wasm/$filename"
            done
+
+      - name: Upload HTML artifacts
+        if: ${{ env.ACT != 'true' }}  # Skip if running with 'act'
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasm
+          path: artifacts/books
+          retention-days: 1
 
   jupyter:
     runs-on: "ubuntu-latest"
