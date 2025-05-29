@@ -30,10 +30,19 @@ def _():
 
 @app.cell
 def _():
-    import time
-
+    import marimo as mo
     import pandas as pd
     import numpy as np
+    import plotly.io as pio
+
+    # Ensure Plotly works with Marimo
+    pio.renderers.default = "plotly_mimetype"
+    return mo, np, pd
+
+
+@app.cell
+def _():
+    import time
 
     from cvx.simulator import Builder
     from cvx.simulator import interpolate
@@ -45,9 +54,7 @@ def _():
         Builder,
         interpolate,
         inv_a_norm,
-        np,
         osc,
-        pd,
         returns_adjust,
         shrink2id,
         solve,

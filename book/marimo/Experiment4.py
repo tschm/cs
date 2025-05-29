@@ -30,15 +30,24 @@ def _():
 
 @app.cell
 def _():
+    import marimo as mo
     import pandas as pd
     import numpy as np
+    import plotly.io as pio
 
+    # Ensure Plotly works with Marimo
+    pio.renderers.default = "plotly_mimetype"
+    return mo, np, pd
+
+
+@app.cell
+def _():
     from cvx.simulator import Portfolio
     from cvx.simulator import interpolate
 
     from tinycta.signal import osc, returns_adjust
 
-    return Portfolio, interpolate, np, osc, pd, returns_adjust
+    return Portfolio, interpolate, osc, returns_adjust
 
 
 @app.cell
