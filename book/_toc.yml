@@ -11,3 +11,4 @@ chapters:
     #- file: docs/notebooks/Experiment4
     #- file: docs/notebooks/Experiment5
     - file: docs/notebooks/Danke
+    - file: docs/notebooks/wasm
