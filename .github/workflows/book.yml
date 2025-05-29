@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wasm
-          path: artifacts/wasm
+          path: wasm
           retention-days: 1
 
   jupyter:
