@@ -10,27 +10,31 @@ on:
 
 # This job installs dependencies, builds the book, and pushes it to `gh-pages`
 jobs:
+  marimo:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Build the virtual environment for ${{ github.repository }}"
+        uses: tschm/cradle/actions/environment@v0.1.68
 
-  # Job to deploy the book to GitHub Pages
-  deploy-book:
+      - uses: tschm/cradle/actions/marimo@v0.1.68
 
-    # Permission to write to repository contents (for gh-pages branch)
+  jupyter:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Build the virtual environment for ${{ github.repository }}"
+        uses: tschm/cradle/actions/environment@v0.1.68
+
+      - uses: tschm/cradle/actions/jupyter@v0.1.68
+
+  book:
+    runs-on: "ubuntu-latest"
+    needs: [ jupyter, marimo ]
+
     permissions:
       contents: write
 
-    runs-on: ubuntu-latest
     steps:
-    # Check out the repository code
-    - uses: actions/checkout@v4
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
 
-    # Build the Jupyter Book using the make command
-    - name: "Build the book"
-      run: |
-        make book
-
-    # Deploy the built book to GitHub Pages
-    - name: GitHub Pages action
-      uses: JamesIves/github-pages-deploy-action@v4.7.3
-      with:
-        branch: gh-pages  # Deploy to the gh-pages branch
-        folder: book/_build/html  # Source folder to deploy
+      - uses: tschm/cradle/actions/book@v0.1.68
