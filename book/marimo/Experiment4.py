@@ -42,22 +42,17 @@ def _(interpolate, pd):
 
 @app.cell
 def _():
-    from ipywidgets import Label, HBox, VBox, IntSlider, FloatSlider
+    import marimo as mo
 
-    fast = IntSlider(min=4, max=192, step=4, value=32)
-    slow = IntSlider(min=4, max=192, step=4, value=96)
-    vola = IntSlider(min=4, max=192, step=4, value=32)
-    winsor = FloatSlider(min=1.0, max=6.0, step=0.1, value=4.2)
-    left_box = VBox(
-        [
-            Label("Fast Moving Average"),
-            Label("Slow Moving Average"),
-            Label("Volatility"),
-            Label("Winsorizing"),
-        ]
-    )
-    right_box = VBox([fast, slow, vola, winsor])
-    HBox([left_box, right_box])
+    # Create sliders using marimo's UI components
+    fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
+    slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
+    vola = mo.ui.slider(4, 192, step=4, value=32, label="Volatility")
+    winsor = mo.ui.slider(1.0, 6.0, step=0.1, value=4.2, label="Winsorizing")
+
+    # Display the sliders in a vertical stack
+    mo.ui.vstack([fast, slow, vola, winsor])
+
     return fast, slow, vola, winsor
 
 

@@ -18,20 +18,42 @@ def _(mo):
 def _():
     import warnings
 
-    import pandas as pd
-    import numpy as np
+    from pathlib import Path
 
-    from cvx.simulator import Portfolio
-    from cvx.simulator import interpolate
+    #
+    path = Path(__file__).parent
 
+    # Suppress noisy warnings
     warnings.simplefilter(action="ignore", category=FutureWarning)
-    return Portfolio, interpolate, np, pd
+    return (path,)
 
 
 @app.cell
-def _(interpolate, pd):
+def _():
+    import marimo as mo
+    import pandas as pd
+    import numpy as np
+    import plotly.io as pio
+
+    # Ensure Plotly works with Marimo
+    pio.renderers.default = "plotly_mimetype"
+    return mo, np, pd
+
+
+@app.cell
+def _():
+    # Optional: import simulation modules
+    from cvx.simulator import interpolate, Portfolio
+
+    return Portfolio, interpolate
+
+
+@app.cell
+def _(interpolate, path, pd):
     # Load prices
-    prices = pd.read_csv("data/Prices_hashed.csv", index_col=0, parse_dates=True)
+    prices = pd.read_csv(
+        path / "data" / "Prices_hashed.csv", index_col=0, parse_dates=True
+    )
 
     # interpolate the prices
     prices = prices.apply(interpolate)
@@ -136,22 +158,17 @@ def _(filter, np):
 
 @app.cell
 def _():
-    from ipywidgets import Label, HBox, VBox, IntSlider, FloatSlider
+    import marimo as mo
 
-    fast = IntSlider(min=4, max=192, step=4, value=32)
-    slow = IntSlider(min=4, max=192, step=4, value=96)
-    vola = IntSlider(min=4, max=192, step=4, value=32)
-    winsor = FloatSlider(min=1.0, max=6.0, step=0.1, value=4.2)
-    left_box = VBox(
-        [
-            Label("Fast Moving Average"),
-            Label("Slow Moving Average"),
-            Label("Volatility"),
-            Label("Winsorizing"),
-        ]
-    )
-    right_box = VBox([fast, slow, vola, winsor])
-    HBox([left_box, right_box])
+    # Create sliders using marimo's UI components
+    fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
+    slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
+    vola = mo.ui.slider(4, 192, step=4, value=32, label="Volatility")
+    winsor = mo.ui.slider(1.0, 6.0, step=0.1, value=4.2, label="Winsorizing")
+
+    # Display the sliders in a vertical stack
+    mo.ui.vstack([fast, slow, vola, winsor])
+
     return fast, slow, vola, winsor
 
 
