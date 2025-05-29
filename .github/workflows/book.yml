@@ -89,5 +89,5 @@ jobs:
       - name: Inspection
         run: |
           ls -all .book
-
+          ls -all
       - uses: tschm/cradle/actions/book@v0.1.69
