@@ -41,7 +41,7 @@ jobs:
              marimo export html-wasm $notebook -o $folder --mode run
              echo "Exported $notebook to artifacts/wasm/$filename"
            done
-
+           echo "Hello World!"
            ls -all wasm
 
       - name: Upload HTML artifacts
