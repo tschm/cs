@@ -18,6 +18,18 @@ def _(mo):
 def _():
     import warnings
 
+    from pathlib import Path
+
+    #
+    path = Path(__file__).parent
+
+    # Suppress noisy warnings
+    warnings.simplefilter(action="ignore", category=FutureWarning)
+    return (path,)
+
+
+@app.cell
+def _():
     import time
 
     import pandas as pd
@@ -29,7 +41,6 @@ def _():
     from tinycta.linalg import solve, inv_a_norm
     from tinycta.signal import returns_adjust, osc, shrink2id
 
-    warnings.simplefilter(action="ignore", category=FutureWarning)
     return (
         Builder,
         interpolate,

@@ -18,6 +18,18 @@ def _(mo):
 def _():
     import warnings
 
+    from pathlib import Path
+
+    #
+    path = Path(__file__).parent
+
+    # Suppress noisy warnings
+    warnings.simplefilter(action="ignore", category=FutureWarning)
+    return (path,)
+
+
+@app.cell
+def _():
     import pandas as pd
     import numpy as np
 
@@ -26,7 +38,6 @@ def _():
 
     from tinycta.signal import osc, returns_adjust
 
-    warnings.simplefilter(action="ignore", category=FutureWarning)
     return Portfolio, interpolate, np, osc, pd, returns_adjust
 
 
@@ -78,15 +89,9 @@ def _(Portfolio, fast, np, osc, prices, returns_adjust, slow, vola, winsor):
 
 @app.cell
 def _(portfolio):
-    portfolio.snapshot()
+    fig = portfolio.snapshot()
+    fig
     return
-
-
-@app.cell
-def _():
-    import marimo as mo
-
-    return (mo,)
 
 
 if __name__ == "__main__":

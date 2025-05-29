@@ -157,9 +157,7 @@ def _(filter, np):
 
 
 @app.cell
-def _():
-    import marimo as mo
-
+def _(mo):
     # Create sliders using marimo's UI components
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
@@ -183,15 +181,9 @@ def _(Portfolio, f, fast, prices, slow, vola, winsor):
 
 @app.cell
 def _(portfolio):
-    portfolio.snapshot()
+    fig = portfolio.snapshot()
+    fig
     return
-
-
-@app.cell
-def _():
-    import marimo as mo
-
-    return (mo,)
 
 
 if __name__ == "__main__":
