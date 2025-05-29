@@ -1,0 +1,36 @@
+# Workflow to automatically bump the version and create a new tag
+# This workflow is manually triggered via the GitHub UI
+
+name: Bump version and publish
+
+on:
+  workflow_dispatch:  # Manual trigger
+
+# Permissions needed for the workflow
+permissions:
+  contents: write  # Allows the workflow to write to the repository (create tags)
+
+jobs:
+  # Job to generate a new version tag
+  html:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir -r "requirements.txt"
+
+      - name: Export notebook via wasm
+        run: |
+          mkdir -p dist/wasm/ex1
+          # export as readonly, with code locked
+          marimo export html-wasm book/marimo/Experiment1.py -o dist/wasm/ex1 --mode run
