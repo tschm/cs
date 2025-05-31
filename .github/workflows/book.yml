@@ -25,21 +25,21 @@ jobs:
              filename=$(basename "$notebook" .py)
              echo "Detected filename $filename"
              # Create output
-             folder=artifacts/wasm/$filename
+             folder=artifacts/notebooks/$filename
 
              mkdir -p $folder
              echo "Folder $folder"
              # Export as readonly, with code locked
-             marimo export html-wasm $notebook -o $folder --mode run
-             echo "Exported $notebook to artifacts/wasm/$filename"
+             marimo export html $notebook -o $folder/index.html
+             echo "Exported $notebook to $folder"
            done
            ls -all artifacts/wasm
 
       - name: Upload HTML artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: wasm
-          path: artifacts/wasm
+          name: notebooks
+          path: artifacts/notebooks
           retention-days: 1
 
   jupyter:
