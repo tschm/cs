@@ -10,11 +10,9 @@ chapters:
       title: Experiment2
     - url: https://tschm.github.io/cs/notebooks/Experiment3/index.html
       title: Experiment3
-    #- file: docs/notebooks/Experiment1
-    #- file: docs/notebooks/Experiment2
-    #- file: docs/notebooks/Experiment3
     - file: docs/notebooks/Optimization
-    #- file: docs/notebooks/Experiment4
-    #- file: docs/notebooks/Experiment5
+    - url: https://tschm.github.io/cs/notebooks/Experiment4/index.html
+      title: Experiment4
+    - url: https://tschm.github.io/cs/notebooks/Experiment5/index.html
+      title: Experiment5
     - file: docs/notebooks/Danke
-    - file: docs/notebooks/Notebooks
