@@ -33,7 +33,7 @@ jobs:
              marimo export html $notebook -o $folder/index.html
              echo "Exported $notebook to $folder"
            done
-           ls -all artifacts/wasm
+           ls -all artifacts/notebooks
 
       - name: Upload HTML artifacts
         uses: actions/upload-artifact@v4
