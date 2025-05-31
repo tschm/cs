@@ -4,7 +4,7 @@
 tinycta==0.7.20
 
 # Convex optimization simulator for financial modeling
-cvxsimulator==1.3.12
+cvxsimulator==1.3.14
 
 # Framework for managing and maintaining pre-commit hooks
 pre-commit==4.2.0
