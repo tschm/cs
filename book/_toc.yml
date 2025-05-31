@@ -4,6 +4,8 @@ format: jb-book
 root: docs/index
 chapters:
     - file: docs/notebooks/Strategies
+    - url: https://github.com/tschm/cs/notebooks/Experiment1/index.html
+      title: Experiment1
     #- file: docs/notebooks/Experiment1
     #- file: docs/notebooks/Experiment2
     #- file: docs/notebooks/Experiment3
@@ -11,4 +13,4 @@ chapters:
     #- file: docs/notebooks/Experiment4
     #- file: docs/notebooks/Experiment5
     - file: docs/notebooks/Danke
-    - file: docs/notebooks/wasm
+    - file: docs/notebooks/Notebooks
