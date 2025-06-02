@@ -47,8 +47,8 @@ make book
 ### 🧪 Interactive Development
 
 ```bash
-# Start Jupyter Lab
-make jupyter
+# Start Marimo
+make marimo
 ```
 
 ## ⚠️ DISCLAIMER
