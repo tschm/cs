@@ -1,16 +1,12 @@
 import marimo
 
-__generated_with = "0.13.14"
-app = marimo.App(layout_file="layouts/notebook.slides.json")
+__generated_with = "0.13.15"
+app = marimo.App(layout_file="layouts/Experiment5.slides.json")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # CTA 5.0 - Optimization 2.0
-        """
-    )
+    mo.md(r"""# CTA 5.0 - Optimization 2.0""")
     return
 
 
@@ -18,14 +14,9 @@ def _(mo):
 def _():
     import warnings
 
-    from pathlib import Path
-
-    #
-    path = Path(__file__).parent
-
     # Suppress noisy warnings
     warnings.simplefilter(action="ignore", category=FutureWarning)
-    return (path,)
+    return
 
 
 @app.cell
@@ -63,10 +54,12 @@ def _():
 
 
 @app.cell
-def _(path, interpolate, pd):
+def _(interpolate, mo, pd):
     # Load prices
     prices = pd.read_csv(
-        path / "data" / "Prices_hashed.csv", index_col=0, parse_dates=True
+        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        index_col=0,
+        parse_dates=True,
     )
 
     # interpolate the prices
@@ -87,7 +80,7 @@ def _(mo):
     # Display the sliders in a vertical stack
     mo.vstack([fast, slow, vola, winsor, corr, shrinkage])
 
-    return corr, fast, shrinkage, slow, vola, winsor
+    return corr, shrinkage, vola, winsor
 
 
 @app.cell
@@ -139,12 +132,12 @@ def _(
 def _(mo):
     mo.md(
         r"""
-        # Conclusions
-        * Dramatic relativ improvements observable despite using the same signals as in previous Experiment.
-        * Main difference here is to take advantage of cross-correlations in the risk measurement.
-        * Possible to add constraints on individual assets or groups of them.
-        * Possible to reflect trading costs in objective with regularization terms (Ridge, Lars, Elastic Nets, ...)
-        """
+    # Conclusions
+    * Dramatic relativ improvements observable despite using the same signals as in previous Experiment.
+    * Main difference here is to take advantage of cross-correlations in the risk measurement.
+    * Possible to add constraints on individual assets or groups of them.
+    * Possible to reflect trading costs in objective with regularization terms (Ridge, Lars, Elastic Nets, ...)
+    """
     )
     return
 
