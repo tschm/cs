@@ -82,13 +82,6 @@ jobs:
         with:
            path: artifacts
 
-      # List the downloaded artifacts for debugging purposes
-      # This helps verify that all expected files were generated
-      - name: Inspection
-        run: |
-          ls -all artifacts
-          ls -all artifacts
-
       # Package all artifacts for GitHub Pages deployment
       # This prepares the combined outputs for deployment
       - name: Upload static files as artifact
