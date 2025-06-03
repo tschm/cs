@@ -1,16 +1,12 @@
 import marimo
 
-__generated_with = "0.13.14"
-app = marimo.App(layout_file="layouts/notebook.slides.json")
+__generated_with = "0.13.15"
+app = marimo.App(layout_file="layouts/Experiment4.slides.json")
 
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""
-        # CTA 4.0 - Optimization 1.0
-        """
-    )
+    mo.md(r"""# CTA 4.0 - Optimization 1.0""")
     return
 
 
@@ -18,14 +14,9 @@ def _(mo):
 def _():
     import warnings
 
-    from pathlib import Path
-
-    #
-    path = Path(__file__).parent
-
     # Suppress noisy warnings
     warnings.simplefilter(action="ignore", category=FutureWarning)
-    return (path,)
+    return
 
 
 @app.cell
@@ -51,10 +42,12 @@ def _():
 
 
 @app.cell
-def _(path, interpolate, pd):
+def _(interpolate, mo, pd):
     # Load prices
     prices = pd.read_csv(
-        path / "data" / "Prices_hashed.csv", index_col=0, parse_dates=True
+        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        index_col=0,
+        parse_dates=True,
     )
 
     # interpolate the prices

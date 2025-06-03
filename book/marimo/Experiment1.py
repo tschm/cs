@@ -12,20 +12,6 @@ def _(mo):
 
 @app.cell
 def _():
-    import warnings
-
-    from pathlib import Path
-
-    #
-    path = Path(__file__).parent
-
-    # Suppress noisy warnings
-    warnings.simplefilter(action="ignore", category=FutureWarning)
-    return (path,)
-
-
-@app.cell
-def _():
     import marimo as mo
     import pandas as pd
     import numpy as np
@@ -45,10 +31,12 @@ def _():
 
 
 @app.cell
-def _(interpolate, path, pd):
+def _(mo, interpolate, pd):
     # Load prices
     prices = pd.read_csv(
-        path / "data" / "Prices_hashed.csv", index_col=0, parse_dates=True
+        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        index_col=0,
+        parse_dates=True,
     )
 
     # interpolate the prices
