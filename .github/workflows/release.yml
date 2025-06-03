@@ -1,26 +1,32 @@
 # Workflow for creating a new version release
-# This workflow is manually triggered to create a new version tag
+# This workflow is manually triggered to create a new version tag for the CS project
+# Unlike other workflows, this one only creates a tag and does not deploy to GitHub Pages
+# It specifically disables package building with the build_package parameter
 
 name: Bump version and publish
 
 # Trigger the workflow manually using the GitHub Actions UI
+# This allows controlled releases when needed rather than on every push
 on:
   workflow_dispatch:
 
 
 jobs:
-  # Job to generate a new version tag
+  # Job to generate a new version tag based on semantic versioning
+  # This is a simple workflow with just one job to create a new version tag
   tag:
-    # Permission to write to repository contents (create tags)
+    # Permission to write to repository contents (needed to create tags)
     permissions:
       contents: write
 
     runs-on: ubuntu-latest
 
     steps:
-      # Generate a new version tag based on semantic versioning
+      # Use the cradle/actions/tag action to generate a semantic version tag
+      # This automatically determines the next version number based on commit messages
+      # The build_package parameter is set to false to prevent building a package
       - name: Generate Tag
         uses: tschm/cradle/actions/tag@v0.1.69
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          build_package: 'false'
+          build_package: 'false'  # Explicitly disable package building
