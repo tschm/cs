@@ -87,7 +87,7 @@ jobs:
       - name: Inspection
         run: |
           ls -all artifacts
-          ls -all
+          ls -all artifacts
 
       # Package all artifacts for GitHub Pages deployment
       # This prepares the combined outputs for deployment
