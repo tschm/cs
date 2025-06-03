@@ -9,3 +9,4 @@ book/_build
 
 .pytest_cache
 .ruff_cache
+__marimo__
