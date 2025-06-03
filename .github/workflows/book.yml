@@ -1,21 +1,31 @@
 # Workflow for building and deploying the Jupyter Book documentation
-# This workflow builds the book and publishes it to GitHub Pages
+# This workflow is triggered on push events and performs the following tasks:
+# 1. Builds Marimo notebooks and exports them to HTML
+# 2. Builds Jupyter notebooks into a book
+# 3. Combines all artifacts and deploys them to GitHub Pages
 
 name: deploy-book
 
 # Trigger the workflow on push events
+# This ensures the documentation is automatically updated whenever code changes are pushed
 on:
   push:
 
 
-# This job installs dependencies, builds the book, and pushes it to `gh-pages`
+# This workflow contains multiple jobs that run in parallel and sequentially
 jobs:
+  # Job to build Marimo interactive notebooks and export them to HTML
+  # This converts Python files in the book/marimo directory to interactive web pages
   marimo:
     runs-on: ubuntu-latest
     steps:
+      # Set up the Python virtual environment with all required dependencies
+      # This uses a reusable action from the cradle repository
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: tschm/cradle/actions/environment@v0.1.69
 
+      # Find all Experiment*.py files in the book/marimo directory and export them to HTML
+      # This creates static HTML versions of the interactive notebooks
       - name: Export notebooks via wasm
         run: |
            # Find all Python files in book/marimo directory
@@ -35,40 +45,77 @@ jobs:
            done
            ls -all artifacts/notebooks
 
+      # Upload the generated HTML files as a GitHub Actions artifact
+      # This makes the files available for the deployment job
       - name: Upload HTML artifacts
         uses: actions/upload-artifact@v4
         with:
           name: notebooks
           path: artifacts/notebooks
-          retention-days: 1
+          retention-days: 1  # Keep artifacts for 1 day to save storage
 
+  # Job to build the Jupyter Book documentation
+  # This converts Jupyter notebooks to a static website with navigation
   jupyter:
     runs-on: "ubuntu-latest"
     steps:
+      # Set up the Python virtual environment with all required dependencies
+      # This uses a reusable action from the cradle repository
       - name: "Build the virtual environment for ${{ github.repository }}"
         uses: tschm/cradle/actions/environment@v0.1.69
 
+      # Build the Jupyter Book using a reusable action
+      # This action handles the book building process including configuration
       - uses: tschm/cradle/actions/jupyter@v0.1.69
 
-  book:
+  # Job to combine all artifacts and prepare them for deployment
+  # This job runs after both marimo and jupyter jobs have completed
+  build:
     runs-on: "ubuntu-latest"
-    needs: [ jupyter, marimo ]
-
-    permissions:
-      contents: write
+    needs: [ jupyter, marimo ]  # This job depends on both jupyter and marimo jobs
 
     steps:
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
-
+      # Download all artifacts from previous jobs
+      # This collects the outputs from both the marimo and jupyter jobs
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-           path: .book
+           path: artifacts
 
+      # List the downloaded artifacts for debugging purposes
+      # This helps verify that all expected files were generated
       - name: Inspection
         run: |
-          ls -all .book
+          ls -all artifacts
           ls -all
 
-      - uses: tschm/cradle/actions/book@v0.1.69
+      # Package all artifacts for GitHub Pages deployment
+      # This prepares the combined outputs for deployment
+      - name: Upload static files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: artifacts/  # Path to the directory containing all artifacts
+
+  # Job to deploy the built book to GitHub Pages
+  # This job publishes the combined artifacts to the GitHub Pages site
+  deploy-book:
+    runs-on: ubuntu-latest
+    # This job depends on the build job completing successfully
+    needs: build
+    # Need specific permissions for GitHub Pages deployment
+    permissions:
+        pages: write      # Permission to deploy to Pages
+        id-token: write   # Permission to verify deployment origin
+
+    # Configure the deployment environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}  # URL will be available after deployment
+
+    steps:
+      # Deploy the artifact to GitHub Pages using GitHub's official action
+      # This publishes the website to the repository's GitHub Pages URL
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
