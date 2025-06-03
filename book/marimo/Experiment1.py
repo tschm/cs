@@ -34,7 +34,9 @@ def _():
 def _(mo, interpolate, pd):
     # Load prices
     prices = pd.read_csv(
-        mo.notebook_location() / "data" / "Prices_hashed.csv", index_col=0, parse_dates=True
+        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        index_col=0,
+        parse_dates=True,
     )
 
     # interpolate the prices
