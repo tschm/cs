@@ -50,25 +50,53 @@ jobs:
 
       - uses: tschm/cradle/actions/jupyter@v0.1.69
 
-  book:
-    runs-on: "ubuntu-latest"
-    needs: [ jupyter, marimo ]
-
-    permissions:
-      contents: write
+  # Job to combine all artifacts and prepare them for deployment
+  # This job runs after both jupyter and marimo jobs have completed
+  build:
+    runs-on: ubuntu-latest
+    needs: [jupyter, marimo]  # This job depends on both jupyter and marimo jobs
 
     steps:
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
-
+      # Download all artifacts from previous jobs
+      # This collects the outputs from both the jupyter and marimo jobs
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-           path: .book
+          path: artifacts
 
-      - name: Inspection
-        run: |
-          ls -all .book
+      # List the downloaded artifacts for debugging purposes
+      # This helps verify that all expected files were generated
+      - run: |
           ls -all
+          ls -all artifacts
 
-      - uses: tschm/cradle/actions/book@v0.1.69
+      # Package all artifacts for GitHub Pages deployment
+      # This prepares the combined outputs for deployment
+      - name: Upload static files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
+        with:
+          path: artifacts/  # Path to the directory containing all artifacts
+
+  # Job to deploy the built book to GitHub Pages
+  # This job publishes the combined artifacts to the GitHub Pages site
+  deploy-book:
+    runs-on: ubuntu-latest
+    # This job depends on the build job completing successfully
+    needs: build
+    # Need specific permissions for GitHub Pages deployment
+    permissions:
+        pages: write      # Permission to deploy to Pages
+        id-token: write   # Permission to verify deployment origin
+
+    # Configure the deployment environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}  # URL will be available after deployment
+
+    steps:
+      # Deploy the artifact to GitHub Pages using GitHub's official action
+      # This publishes the website to the repository's GitHub Pages URL
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
