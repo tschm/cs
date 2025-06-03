@@ -33,4 +33,5 @@ help: ## Show this help message
 
 # Run marimo for interactive notebook development
 marimo: ## Start a Marimo server
+	@uv run pip instlal --no-cache-dir marimo
 	@uv run marimo edit book/marimo  # Start marimo server in edit mode for the book/marimo directory
