@@ -30,6 +30,8 @@ jobs:
       # This creates static HTML versions of the interactive notebooks
       - name: Export notebooks via wasm
         run: |
+           uv run pip install --no-cache-dir marimo
+        
            # Find all Python files in book/marimo directory
            for notebook in book/marimo/Experiment*.py; do
              # Extract the filename without extension
@@ -42,7 +44,7 @@ jobs:
              mkdir -p $folder
              echo "Folder $folder"
              # Export as readonly, with code locked
-             uvx marimo export html $notebook -o $folder/index.html
+             uv run marimo export html $notebook -o $folder/index.html
              echo "Exported $notebook to $folder"
            done
            ls -all artifacts/notebooks
