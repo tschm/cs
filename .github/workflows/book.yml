@@ -91,4 +91,3 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: artifacts/  # Path to the directory containing all artifacts
-
