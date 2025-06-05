@@ -42,7 +42,7 @@ jobs:
              mkdir -p $folder
              echo "Folder $folder"
              # Export as readonly, with code locked
-             marimo export html $notebook -o $folder/index.html
+             uvx marimo export html $notebook -o $folder/index.html
              echo "Exported $notebook to $folder"
            done
            ls -all artifacts/notebooks
