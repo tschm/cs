@@ -24,7 +24,7 @@ jobs:
       # Set up the Python virtual environment with all required dependencies
       # This uses a reusable action from the cradle repository
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.69
+        uses: tschm/cradle/actions/environment@v0.1.71
 
       # Find all Experiment*.py files in the book/marimo directory and export them to HTML
       # This creates static HTML versions of the interactive notebooks
@@ -66,11 +66,11 @@ jobs:
       # Set up the Python virtual environment with all required dependencies
       # This uses a reusable action from the cradle repository
       - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.69
+        uses: tschm/cradle/actions/environment@v0.1.71
 
       # Build the Jupyter Book using a reusable action
       # This action handles the book building process including configuration
-      - uses: tschm/cradle/actions/jupyter@v0.1.69
+      - uses: tschm/cradle/actions/jupyter@v0.1.71
 
   # Job to combine all artifacts and prepare them for deployment
   # This job runs after both jupyter and marimo jobs have completed
