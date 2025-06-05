@@ -6,10 +6,4 @@ tinycta==0.7.20
 # Convex optimization simulator for financial modeling
 cvxsimulator==1.3.14
 
-# Framework for managing and maintaining pre-commit hooks
-# pre-commit==4.2.0
-
-# Interactive Python notebooks with reactive programming
-# marimo==0.13.15
-
 plotly==6.1.2
