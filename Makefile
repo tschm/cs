@@ -17,9 +17,8 @@ install: venv ## Install dependencies and setup environment
 	uv pip install --no-cache-dir -r requirements.txt
 
 fmt: venv ## Format and lint code
-	uv pip install --no-cache-dir pre-commit
-	uv run pre-commit install
-	uv run pre-commit run --all-files
+	uvx pre-commit install
+	uvx pre-commit run --all-files
 
 clean: ## Clean build artifacts and stale branches
 	git clean -X -d -f
@@ -33,5 +32,4 @@ help: ## Show this help message
 
 # Run marimo for interactive notebook development
 marimo: ## Start a Marimo server
-	@uv run pip instlal --no-cache-dir marimo
-	@uv run marimo edit book/marimo  # Start marimo server in edit mode for the book/marimo directory
+	@uvx marimo edit book/marimo  # Start marimo server in edit mode for the book/marimo directory
