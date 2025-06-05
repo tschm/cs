@@ -31,7 +31,7 @@ jobs:
       - name: Export notebooks via wasm
         run: |
            uv run pip install --no-cache-dir marimo
-        
+
            # Find all Python files in book/marimo directory
            for notebook in book/marimo/Experiment*.py; do
              # Extract the filename without extension
