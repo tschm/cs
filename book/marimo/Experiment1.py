@@ -3,6 +3,10 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App()
 
+with app.setup:
+    import numpy as np
+    import pandas as pd
+
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -13,10 +17,8 @@ def _(mo):
 @app.cell
 def _():
     import marimo as mo
-    import numpy as np
-    import pandas as pd
 
-    return mo, np, pd
+    return (mo,)
 
 
 @app.cell
@@ -29,16 +31,10 @@ def _():
 
 
 @app.cell
-def _():
-    # Optional: import simulation modules
-    from cvx.simulator import Portfolio, interpolate
-
-    return Portfolio, interpolate
-
-
-@app.cell
-def _(interpolate, mo, pd):
+def _(mo):
     # Load prices
+    from cvx.simulator import interpolate
+
     prices = pd.read_csv(
         mo.notebook_location() / "public" / "Prices_hashed.csv",
         index_col=0,
@@ -50,15 +46,12 @@ def _(interpolate, mo, pd):
     return (prices,)
 
 
-@app.cell
-def _(np):
-    # take two moving averages and apply sign-functiond
-    def f(price, fast=32, slow=96):
-        s = price.ewm(com=slow, min_periods=100).mean()
-        f = price.ewm(com=fast, min_periods=100).mean()
-        return np.sign(f - s)
-
-    return (f,)
+@app.function
+# take two moving averages and apply sign-functiond
+def f(price, fast=32, slow=96):
+    s = price.ewm(com=slow, min_periods=100).mean()
+    f = price.ewm(com=fast, min_periods=100).mean()
+    return np.sign(f - s)
 
 
 @app.cell
@@ -72,13 +65,14 @@ def _(mo):
 
 
 @app.cell
-def _(f, fast, prices, slow):
+def _(fast, prices, slow):
     pos = 5e6 * prices.apply(f, fast=fast.value, slow=slow.value).fillna(0.0)
     return (pos,)
 
 
 @app.cell
-def _(Portfolio, pos, prices):
+def _(pos, prices):
+    from cvx.simulator import Portfolio
     # builder = Builder(prices=prices, initial_aum=1e8)
 
     # for t, state in builder:
@@ -91,6 +85,7 @@ def _(Portfolio, pos, prices):
     # portfolio = builder.build()
 
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
+    print(portfolio.sharpe())
     return (portfolio,)
 
 
@@ -110,9 +105,13 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(r"""Such fundamental flaws are not addressed by **parameter-hacking**
+    mo.md(
+        r"""
+    Such fundamental flaws are not addressed by **parameter-hacking**
     or **pimp-my-trading-system** steps (remove the worst performing assets,
-    insane quantity of stop-loss limits, ...)""")
+    insane quantity of stop-loss limits, ...)
+    """
+    )
     return
 
 
@@ -124,7 +123,7 @@ def _(portfolio):
 
 
 @app.cell
-def _(pd):
+def _():
     pd.set_option("display.precision", 2)
     return
 

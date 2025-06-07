@@ -24,14 +24,13 @@ dev = [
     #"pre-commit>=4.2.0",
     #"clarabel>=0.9.0",
     "loguru",
-    #"tinycta",
     "marimo>=0.13.15",
-    #"micropip>=0.9.0"
+    "micropip>=0.9.0"
 ]
 
 # Links to project resources
 [project.urls]
-repository = "https://github.com/cvxgrp/simulator"
+repository = "https://github.com/tschm/cs"
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
@@ -62,8 +61,8 @@ exclude = [
 # Same as Black.
 line-length = 120
 
-# Assume Python 3.10.
-target-version = "py310"
+# Assume Python 3.12.
+target-version = "py312"
 
 [tool.ruff.lint]
 # Enable flake8-bugbear (`B`) rules.

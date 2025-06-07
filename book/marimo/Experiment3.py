@@ -3,6 +3,10 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App()
 
+with app.setup:
+    import numpy as np
+    import pandas as pd
+
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -22,25 +26,17 @@ def _():
 @app.cell
 def _():
     import marimo as mo
-    import numpy as np
-    import pandas as pd
     import plotly.io as pio
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
-    return mo, np, pd
+    return mo
 
 
 @app.cell
-def _():
-    # Optional: import simulation modules
-    from cvx.simulator import Portfolio, interpolate
+def _(mo):
+    from cvx.simulator import interpolate
 
-    return Portfolio, interpolate
-
-
-@app.cell
-def _(interpolate, mo, pd):
     # Load prices
     prices = pd.read_csv(
         mo.notebook_location() / "public" / "Prices_hashed.csv",
@@ -50,6 +46,7 @@ def _(interpolate, mo, pd):
 
     # interpolate the prices
     prices = prices.apply(interpolate)
+    print(prices)
     return (prices,)
 
 
@@ -82,15 +79,12 @@ def _(mo):
     return
 
 
-@app.cell
-def _(np):
-    def filter(price, volatility=32, clip=4.2, min_periods=300):
-        r = np.log(price).diff()
-        vola = r.ewm(com=volatility, min_periods=min_periods).std()
-        price_adj = (r / vola).clip(-clip, clip).cumsum()
-        return price_adj
-
-    return (filter,)
+@app.function
+def filter(price, volatility=32, clip=4.2, min_periods=300):
+    r = np.log(price).diff()
+    vola = r.ewm(com=volatility, min_periods=min_periods).std()
+    price_adj = (r / vola).clip(-clip, clip).cumsum()
+    return price_adj
 
 
 @app.cell(hide_code=True)
@@ -109,7 +103,8 @@ def _(mo):
 
 
 @app.function
-def osc(np, prices, fast=32, slow=96, scaling=True):
+def osc(prices, fast=32, slow=96, scaling=True):
+    print(prices)
     diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
     if scaling:
         # attention this formula is forward-looking
@@ -125,19 +120,7 @@ def osc(np, prices, fast=32, slow=96, scaling=True):
 
 
 @app.cell
-def _(np, pd):
-    from numpy.random import randn
-
-    price = pd.Series(data=randn(100000)).cumsum()
-
-    o = osc(price, 40, 200, scaling=True)
-    print("The std for the oscillator (Should be close to 1.0):")
-    print(np.std(o))
-    return
-
-
-@app.cell
-def _(filter, np):
+def _(filter):
     # from pycta.signal import osc
 
     # take two moving averages and apply tanh
@@ -166,9 +149,12 @@ def _(mo):
 
 
 @app.cell
-def _(Portfolio, f, fast, prices, slow, vola, winsor):
+def _(f, fast, prices, slow, vola, winsor):
+    from cvx.simulator import Portfolio
+
     pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
+    print(portfolio.sharpe())
     return (portfolio,)
 
 

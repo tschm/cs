@@ -3,6 +3,10 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App()
 
+with app.setup:
+    import numpy as np
+    import pandas as pd
+
 
 @app.cell(hide_code=True)
 def _(mo):
@@ -22,38 +26,26 @@ def _():
 @app.cell
 def _():
     import marimo as mo
-    import numpy as np
-    import pandas as pd
     import plotly.io as pio
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
-    return mo, np, pd
+    return (mo,)
 
 
 @app.cell
 def _():
-    import time
-
-    from cvx.simulator import Builder, interpolate
     from tinycta.linalg import inv_a_norm, solve
     from tinycta.signal import osc, returns_adjust, shrink2id
 
-    return (
-        Builder,
-        interpolate,
-        inv_a_norm,
-        osc,
-        returns_adjust,
-        shrink2id,
-        solve,
-        time,
-    )
+    return inv_a_norm, osc, returns_adjust, shrink2id, solve
 
 
 @app.cell
-def _(interpolate, mo, pd):
+def _(mo):
     # Load prices
+    from cvx.simulator import interpolate
+
     prices = pd.read_csv(
         mo.notebook_location() / "public" / "Prices_hashed.csv",
         index_col=0,
@@ -83,21 +75,19 @@ def _(mo):
 
 @app.cell
 def _(
-    Builder,
     corr,
     inv_a_norm,
-    np,
     osc,
     prices,
     returns_adjust,
     shrink2id,
     shrinkage,
     solve,
-    time,
     vola,
     winsor,
 ):
-    t = time.time()
+    from cvx.simulator import Builder
+
     correlation = corr.value
 
     returns_adj = prices.apply(returns_adjust, com=vola.value, clip=winsor.value)
@@ -120,7 +110,7 @@ def _(
         builder.aum = state.aum
 
     portfolio = builder.build()
-    print(time.time() - t)
+    print(portfolio.sharpe())
     return (portfolio,)
 
 

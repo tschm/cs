@@ -38,5 +38,5 @@ help: ## Show this help message
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 # Run marimo for interactive notebook development
-marimo: ## Start a Marimo server
-	@uvx marimo edit book/marimo  # Start marimo server in edit mode for the book/marimo directory
+marimo: install ## Start a Marimo server
+	@uv run marimo edit book/marimo  # Start marimo server in edit mode for the book/marimo directory
