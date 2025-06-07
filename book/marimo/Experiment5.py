@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.13.15"
-app = marimo.App(layout_file="layouts/notebook.slides.json")
+app = marimo.App()
 
 
 @app.cell(hide_code=True)
@@ -22,8 +22,8 @@ def _():
 @app.cell
 def _():
     import marimo as mo
-    import pandas as pd
     import numpy as np
+    import pandas as pd
     import plotly.io as pio
 
     # Ensure Plotly works with Marimo
@@ -35,11 +35,9 @@ def _():
 def _():
     import time
 
-    from cvx.simulator import Builder
-    from cvx.simulator import interpolate
-
-    from tinycta.linalg import solve, inv_a_norm
-    from tinycta.signal import returns_adjust, osc, shrink2id
+    from cvx.simulator import Builder, interpolate
+    from tinycta.linalg import inv_a_norm, solve
+    from tinycta.signal import osc, returns_adjust, shrink2id
 
     return (
         Builder,
@@ -57,7 +55,7 @@ def _():
 def _(interpolate, mo, pd):
     # Load prices
     prices = pd.read_csv(
-        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        mo.notebook_location() / "public" / "Prices_hashed.csv",
         index_col=0,
         parse_dates=True,
     )
@@ -99,7 +97,7 @@ def _(
     vola,
     winsor,
 ):
-    T = time.time()
+    t = time.time()
     correlation = corr.value
 
     returns_adj = prices.apply(returns_adjust, com=vola.value, clip=winsor.value)
@@ -114,9 +112,7 @@ def _(
 
     for n, (t, state) in enumerate(builder):
         mask = state.mask
-        matrix = shrink2id(cor.loc[t[-1]].values, lamb=shrinkage.value)[mask, :][
-            :, mask
-        ]
+        matrix = shrink2id(cor.loc[t[-1]].values, lamb=shrinkage.value)[mask, :][:, mask]
         expected_mu = np.nan_to_num(mu[n][mask])
         expected_vo = np.nan_to_num(vo[n][mask])
         risk_position = solve(matrix, expected_mu) / inv_a_norm(expected_mu, matrix)
@@ -124,7 +120,7 @@ def _(
         builder.aum = state.aum
 
     portfolio = builder.build()
-    print(time.time() - T)
+    print(time.time() - t)
     return (portfolio,)
 
 

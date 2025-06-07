@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.13.15"
-app = marimo.App(layout_file="layouts/notebook.slides.json")
+app = marimo.App()
 
 
 @app.cell(hide_code=True)
@@ -22,8 +22,8 @@ def _():
 @app.cell
 def _():
     import marimo as mo
-    import pandas as pd
     import numpy as np
+    import pandas as pd
     import plotly.io as pio
 
     # Ensure Plotly works with Marimo
@@ -33,9 +33,7 @@ def _():
 
 @app.cell
 def _():
-    from cvx.simulator import Portfolio
-    from cvx.simulator import interpolate
-
+    from cvx.simulator import Portfolio, interpolate
     from tinycta.signal import osc, returns_adjust
 
     return Portfolio, interpolate, osc, returns_adjust
@@ -45,7 +43,7 @@ def _():
 def _(interpolate, mo, pd):
     # Load prices
     prices = pd.read_csv(
-        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        mo.notebook_location() / "public" / "Prices_hashed.csv",
         index_col=0,
         parse_dates=True,
     )

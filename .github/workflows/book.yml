@@ -44,7 +44,7 @@ jobs:
              mkdir -p $folder
              echo "Folder $folder"
              # Export as readonly, with code locked
-             uv run marimo export html $notebook -o $folder/index.html
+             uv run marimo export html-wasm $notebook -o $folder/index.html
              echo "Exported $notebook to $folder"
            done
            ls -all artifacts/notebooks
