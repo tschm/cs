@@ -5,7 +5,7 @@
 .DEFAULT_GOAL := help
 
 # Define all phony targets (targets that don't create files with the same name)
-.PHONY: venv install fmt clean help test marimo
+.PHONY: venv install fmt clean help test marimo lint
 
 # Create a virtual environment using uv with Python 3.12
 venv:
@@ -14,11 +14,18 @@ venv:
 
 install: venv ## Install dependencies and setup environment
 	uv pip install --upgrade pip
-	uv pip install --no-cache-dir -r requirements.txt
+	uv sync --dev --frozen --all-extras
 
-fmt: venv ## Format and lint code
+fmt: venv lint ## Format and lint code
 	uvx pre-commit install
 	uvx pre-commit run --all-files
+
+ty: install
+	@uvx ty check book/marimo
+
+lint: venv ## Run ruff linter and formatter
+	@uvx ruff check --fix .
+	@uvx ruff format .
 
 clean: ## Clean build artifacts and stale branches
 	git clean -X -d -f
@@ -31,5 +38,5 @@ help: ## Show this help message
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 # Run marimo for interactive notebook development
-marimo: ## Start a Marimo server
-	@uvx marimo edit book/marimo  # Start marimo server in edit mode for the book/marimo directory
+marimo: install ## Start a Marimo server
+	@uv run marimo edit book/marimo  # Start marimo server in edit mode for the book/marimo directory

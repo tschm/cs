@@ -1,7 +1,11 @@
 import marimo
 
 __generated_with = "0.13.15"
-app = marimo.App(layout_file="layouts/notebook.slides.json")
+app = marimo.App()
+
+with app.setup:
+    import numpy as np
+    import pandas as pd
 
 
 @app.cell(hide_code=True)
@@ -22,30 +26,27 @@ def _():
 @app.cell
 def _():
     import marimo as mo
-    import pandas as pd
-    import numpy as np
     import plotly.io as pio
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
-    return mo, np, pd
+    return mo
 
 
 @app.cell
 def _():
-    from cvx.simulator import Portfolio
-    from cvx.simulator import interpolate
-
     from tinycta.signal import osc, returns_adjust
 
-    return Portfolio, interpolate, osc, returns_adjust
+    return osc, returns_adjust
 
 
 @app.cell
-def _(interpolate, mo, pd):
+def _(mo):
     # Load prices
+    from cvx.simulator import interpolate
+
     prices = pd.read_csv(
-        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        mo.notebook_location() / "public" / "Prices_hashed.csv",
         index_col=0,
         parse_dates=True,
     )
@@ -70,7 +71,9 @@ def _(mo):
 
 
 @app.cell
-def _(Portfolio, fast, np, osc, prices, returns_adjust, slow, vola, winsor):
+def _(fast, osc, prices, returns_adjust, slow, vola, winsor):
+    from cvx.simulator import Portfolio
+
     mu = np.tanh(
         prices.apply(returns_adjust, com=vola.value, clip=winsor.value)
         .cumsum()
@@ -86,6 +89,7 @@ def _(Portfolio, fast, np, osc, prices, returns_adjust, slow, vola, winsor):
 
     pos = 5e5 * risk_scaled / volax
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
+    print(portfolio.sharpe())
     return (portfolio,)
 
 

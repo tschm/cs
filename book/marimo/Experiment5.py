@@ -1,7 +1,11 @@
 import marimo
 
 __generated_with = "0.13.15"
-app = marimo.App(layout_file="layouts/notebook.slides.json")
+app = marimo.App()
+
+with app.setup:
+    import numpy as np
+    import pandas as pd
 
 
 @app.cell(hide_code=True)
@@ -22,42 +26,28 @@ def _():
 @app.cell
 def _():
     import marimo as mo
-    import pandas as pd
-    import numpy as np
     import plotly.io as pio
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
-    return mo, np, pd
+    return (mo,)
 
 
 @app.cell
 def _():
-    import time
+    from tinycta.linalg import inv_a_norm, solve
+    from tinycta.signal import osc, returns_adjust, shrink2id
 
-    from cvx.simulator import Builder
-    from cvx.simulator import interpolate
-
-    from tinycta.linalg import solve, inv_a_norm
-    from tinycta.signal import returns_adjust, osc, shrink2id
-
-    return (
-        Builder,
-        interpolate,
-        inv_a_norm,
-        osc,
-        returns_adjust,
-        shrink2id,
-        solve,
-        time,
-    )
+    return inv_a_norm, osc, returns_adjust, shrink2id, solve
 
 
 @app.cell
-def _(interpolate, mo, pd):
+def _(mo):
     # Load prices
+    from cvx.simulator import interpolate
+
     prices = pd.read_csv(
-        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        mo.notebook_location() / "public" / "Prices_hashed.csv",
         index_col=0,
         parse_dates=True,
     )
@@ -85,21 +75,19 @@ def _(mo):
 
 @app.cell
 def _(
-    Builder,
     corr,
     inv_a_norm,
-    np,
     osc,
     prices,
     returns_adjust,
     shrink2id,
     shrinkage,
     solve,
-    time,
     vola,
     winsor,
 ):
-    T = time.time()
+    from cvx.simulator import Builder
+
     correlation = corr.value
 
     returns_adj = prices.apply(returns_adjust, com=vola.value, clip=winsor.value)
@@ -114,9 +102,7 @@ def _(
 
     for n, (t, state) in enumerate(builder):
         mask = state.mask
-        matrix = shrink2id(cor.loc[t[-1]].values, lamb=shrinkage.value)[mask, :][
-            :, mask
-        ]
+        matrix = shrink2id(cor.loc[t[-1]].values, lamb=shrinkage.value)[mask, :][:, mask]
         expected_mu = np.nan_to_num(mu[n][mask])
         expected_vo = np.nan_to_num(vo[n][mask])
         risk_position = solve(matrix, expected_mu) / inv_a_norm(expected_mu, matrix)
@@ -124,7 +110,7 @@ def _(
         builder.aum = state.aum
 
     portfolio = builder.build()
-    print(time.time() - T)
+    print(portfolio.sharpe())
     return (portfolio,)
 
 

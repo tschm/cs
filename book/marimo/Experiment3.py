@@ -1,7 +1,11 @@
 import marimo
 
 __generated_with = "0.13.15"
-app = marimo.App(layout_file="layouts/notebook.slides.json")
+app = marimo.App()
+
+with app.setup:
+    import numpy as np
+    import pandas as pd
 
 
 @app.cell(hide_code=True)
@@ -22,34 +26,27 @@ def _():
 @app.cell
 def _():
     import marimo as mo
-    import pandas as pd
-    import numpy as np
     import plotly.io as pio
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
-    return mo, np, pd
+    return mo
 
 
 @app.cell
-def _():
-    # Optional: import simulation modules
-    from cvx.simulator import interpolate, Portfolio
+def _(mo):
+    from cvx.simulator import interpolate
 
-    return Portfolio, interpolate
-
-
-@app.cell
-def _(interpolate, mo, pd):
     # Load prices
     prices = pd.read_csv(
-        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        mo.notebook_location() / "public" / "Prices_hashed.csv",
         index_col=0,
         parse_dates=True,
     )
 
     # interpolate the prices
     prices = prices.apply(interpolate)
+    print(prices)
     return (prices,)
 
 
@@ -61,7 +58,9 @@ def _(mo):
     $$\mathrm{CashPosition}=\frac{f(\mathrm{Price})}{\mathrm{Volatility(Returns)}}$$
 
     This is very problematic:
-    * Prices may live on very different scales, hence trying to find a more universal function $f$ is almost impossible. The sign-function was a good choice as the results don't depend on the scale of the argument.
+    * Prices may live on very different scales, hence trying to find a
+    more universal function $f$ is almost impossible. The sign-function was
+    a good choice as the results don't depend on the scale of the argument.
     * Price may come with all sorts of spikes/outliers/problems.
     """
     )
@@ -80,15 +79,12 @@ def _(mo):
     return
 
 
-@app.cell
-def _(np):
-    def filter(price, volatility=32, clip=4.2, min_periods=300):
-        r = np.log(price).diff()
-        vola = r.ewm(com=volatility, min_periods=min_periods).std()
-        price_adj = (r / vola).clip(-clip, clip).cumsum()
-        return price_adj
-
-    return (filter,)
+@app.function
+def filter(price, volatility=32, clip=4.2, min_periods=300):
+    r = np.log(price).diff()
+    vola = r.ewm(com=volatility, min_periods=min_periods).std()
+    price_adj = (r / vola).clip(-clip, clip).cumsum()
+    return price_adj
 
 
 @app.cell(hide_code=True)
@@ -96,8 +92,10 @@ def _(mo):
     mo.md(
         r"""
     ### Oscillators
-    * All prices are now following a standard arithmetic Brownian motion with std $1$.
-    * What we want is the difference of two moving means (exponentially weighted) to have a constant std regardless of the two lengths.
+    * All prices are now following a standard arithmetic Brownian
+    motion with std $1$.
+    * What we want is the difference of two moving means (exponentially weighted)
+    to have a constant std regardless of the two lengths.
     * An oscillator is the **scaled difference of two moving averages**.
     """
     )
@@ -106,13 +104,14 @@ def _(mo):
 
 @app.function
 def osc(prices, fast=32, slow=96, scaling=True):
+    print(prices)
     diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
     if scaling:
         # attention this formula is forward-looking
-        s = diff.std()
+        # s = diff.std()
         # you may want to use
-        #   f,g = 1 - 1/fast, 1-1/slow
-        #   s = np.sqrt(1.0 / (1 - f * f) - 2.0 / (1 - f * g) + 1.0 / (1 - g * g))
+        f, g = 1 - 1 / fast, 1 - 1 / slow
+        s = np.sqrt(1.0 / (1 - f * f) - 2.0 / (1 - f * g) + 1.0 / (1 - g * g))
         # or a moving std
     else:
         s = 1
@@ -121,19 +120,7 @@ def osc(prices, fast=32, slow=96, scaling=True):
 
 
 @app.cell
-def _(np, pd):
-    from numpy.random import randn
-
-    price = pd.Series(data=randn(100000)).cumsum()
-
-    o = osc(price, 40, 200, scaling=True)
-    print("The std for the oscillator (Should be close to 1.0):")
-    print(np.std(o))
-    return
-
-
-@app.cell
-def _(filter, np):
+def _(filter):
     # from pycta.signal import osc
 
     # take two moving averages and apply tanh
@@ -162,11 +149,12 @@ def _(mo):
 
 
 @app.cell
-def _(Portfolio, f, fast, prices, slow, vola, winsor):
-    pos = 1e5 * f(
-        prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value
-    )
+def _(f, fast, prices, slow, vola, winsor):
+    from cvx.simulator import Portfolio
+
+    pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
+    print(portfolio.sharpe())
     return (portfolio,)
 
 

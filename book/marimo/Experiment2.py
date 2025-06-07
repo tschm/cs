@@ -1,7 +1,11 @@
 import marimo
 
 __generated_with = "0.13.15"
-app = marimo.App(layout_file="layouts/notebook.slides.json")
+app = marimo.App()
+
+with app.setup:
+    import numpy as np
+    import pandas as pd
 
 
 @app.cell(hide_code=True)
@@ -22,28 +26,20 @@ def _():
 @app.cell
 def _():
     import marimo as mo
-    import pandas as pd
-    import numpy as np
     import plotly.io as pio
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
-    return mo, np, pd
+    return mo
 
 
 @app.cell
-def _():
-    # Optional: import simulation modules
-    from cvx.simulator import interpolate, Portfolio
+def _(mo):
+    from cvx.simulator import interpolate
 
-    return Portfolio, interpolate
-
-
-@app.cell
-def _(interpolate, mo, pd):
     # Load prices
     prices = pd.read_csv(
-        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        mo.notebook_location() / "public" / "Prices_hashed.csv",
         index_col=0,
         parse_dates=True,
     )
@@ -53,16 +49,12 @@ def _(interpolate, mo, pd):
     return (prices,)
 
 
-@app.cell
-def _(np):
-    # take two moving averages and apply the sign-function, adjust by volatility
-    def f(price, fast=32, slow=96, volatility=32):
-        s = price.ewm(com=slow, min_periods=300).mean()
-        f = price.ewm(com=fast, min_periods=300).mean()
-        std = price.pct_change().ewm(com=volatility, min_periods=300).std()
-        return np.sign(f - s) / std
-
-    return (f,)
+@app.function
+def f(price, fast=32, slow=96, volatility=32):
+    s = price.ewm(com=slow, min_periods=300).mean()
+    f = price.ewm(com=fast, min_periods=300).mean()
+    std = price.pct_change().ewm(com=volatility, min_periods=300).std()
+    return np.sign(f - s) / std
 
 
 @app.cell
@@ -79,9 +71,12 @@ def _(mo):
 
 
 @app.cell
-def _(Portfolio, f, fast, prices, slow, vola):
+def _(f, fast, prices, slow, vola):
+    from cvx.simulator import Portfolio
+
     pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, volatility=vola.value)
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
+    print(portfolio.sharpe())
     return (portfolio,)
 
 
