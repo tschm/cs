@@ -14,14 +14,14 @@ venv:
 
 install: venv ## Install dependencies and setup environment
 	uv pip install --upgrade pip
-	uv pip install --no-cache-dir -r requirements.txt
+	uv sync --dev --frozen --all-extras
 
 fmt: venv lint ## Format and lint code
 	uvx pre-commit install
 	uvx pre-commit run --all-files
 
 ty: install
-	@uvx ty check
+	@uvx ty check book/marimo
 
 lint: venv ## Run ruff linter and formatter
 	@uvx ruff check --fix .
