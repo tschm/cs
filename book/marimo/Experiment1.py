@@ -1,7 +1,7 @@
 import marimo
 
-__generated_with = "0.13.14"
-app = marimo.App(layout_file="layouts/notebook.slides.json")
+__generated_with = "0.13.15"
+app = marimo.App()
 
 
 @app.cell(hide_code=True)
@@ -13,28 +13,34 @@ def _(mo):
 @app.cell
 def _():
     import marimo as mo
-    import pandas as pd
     import numpy as np
-    import plotly.io as pio
+    import pandas as pd
 
-    # Ensure Plotly works with Marimo
-    pio.renderers.default = "plotly_mimetype"
     return mo, np, pd
 
 
 @app.cell
 def _():
+    import plotly.io as pio
+
+    # Ensure Plotly works with Marimo
+    pio.renderers.default = "plotly_mimetype"
+    return
+
+
+@app.cell
+def _():
     # Optional: import simulation modules
-    from cvx.simulator import interpolate, Portfolio
+    from cvx.simulator import Portfolio, interpolate
 
     return Portfolio, interpolate
 
 
 @app.cell
-def _(mo, interpolate, pd):
+def _(interpolate, mo, pd):
     # Load prices
     prices = pd.read_csv(
-        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        mo.notebook_location() / "public" / "Prices_hashed.csv",
         index_col=0,
         parse_dates=True,
     )
@@ -104,9 +110,9 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(
-        r"""Such fundamental flaws are not addressed by **parameter-hacking** or **pimp-my-trading-system** steps (remove the worst performing assets, insane quantity of stop-loss limits, ...)"""
-    )
+    mo.md(r"""Such fundamental flaws are not addressed by **parameter-hacking**
+    or **pimp-my-trading-system** steps (remove the worst performing assets,
+    insane quantity of stop-loss limits, ...)""")
     return
 
 
@@ -127,16 +133,13 @@ def _(pd):
 def _(mo):
     mo.md(
         r"""
-    cvxSimulator can construct portfolio objects. Those objects will expose functionality and attributes supporting all analytics.
-    There are two types of portfolio -- EquityPortfolio and FuturesPortfolio. We start with the FuturesPortfolio. The most simple use-case
+    cvxSimulator can construct portfolio objects. Those objects will
+    expose functionality and attributes supporting all analytics.
+    There are two types of portfolio -- EquityPortfolio and FuturesPortfolio.
+    We start with the FuturesPortfolio. The most simple use-case
     is when we have computed all desirec cash-positions
     """
     )
-    return
-
-
-@app.cell
-def _():
     return
 
 

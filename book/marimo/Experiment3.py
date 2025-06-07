@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.13.15"
-app = marimo.App(layout_file="layouts/notebook.slides.json")
+app = marimo.App()
 
 
 @app.cell(hide_code=True)
@@ -22,8 +22,8 @@ def _():
 @app.cell
 def _():
     import marimo as mo
-    import pandas as pd
     import numpy as np
+    import pandas as pd
     import plotly.io as pio
 
     # Ensure Plotly works with Marimo
@@ -34,7 +34,7 @@ def _():
 @app.cell
 def _():
     # Optional: import simulation modules
-    from cvx.simulator import interpolate, Portfolio
+    from cvx.simulator import Portfolio, interpolate
 
     return Portfolio, interpolate
 
@@ -43,7 +43,7 @@ def _():
 def _(interpolate, mo, pd):
     # Load prices
     prices = pd.read_csv(
-        mo.notebook_location() / "data" / "Prices_hashed.csv",
+        mo.notebook_location() / "public" / "Prices_hashed.csv",
         index_col=0,
         parse_dates=True,
     )
@@ -61,7 +61,9 @@ def _(mo):
     $$\mathrm{CashPosition}=\frac{f(\mathrm{Price})}{\mathrm{Volatility(Returns)}}$$
 
     This is very problematic:
-    * Prices may live on very different scales, hence trying to find a more universal function $f$ is almost impossible. The sign-function was a good choice as the results don't depend on the scale of the argument.
+    * Prices may live on very different scales, hence trying to find a
+    more universal function $f$ is almost impossible. The sign-function was
+    a good choice as the results don't depend on the scale of the argument.
     * Price may come with all sorts of spikes/outliers/problems.
     """
     )
@@ -96,8 +98,10 @@ def _(mo):
     mo.md(
         r"""
     ### Oscillators
-    * All prices are now following a standard arithmetic Brownian motion with std $1$.
-    * What we want is the difference of two moving means (exponentially weighted) to have a constant std regardless of the two lengths.
+    * All prices are now following a standard arithmetic Brownian
+    motion with std $1$.
+    * What we want is the difference of two moving means (exponentially weighted)
+    to have a constant std regardless of the two lengths.
     * An oscillator is the **scaled difference of two moving averages**.
     """
     )
@@ -105,14 +109,14 @@ def _(mo):
 
 
 @app.function
-def osc(prices, fast=32, slow=96, scaling=True):
+def osc(np, prices, fast=32, slow=96, scaling=True):
     diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
     if scaling:
         # attention this formula is forward-looking
-        s = diff.std()
+        # s = diff.std()
         # you may want to use
-        #   f,g = 1 - 1/fast, 1-1/slow
-        #   s = np.sqrt(1.0 / (1 - f * f) - 2.0 / (1 - f * g) + 1.0 / (1 - g * g))
+        f, g = 1 - 1 / fast, 1 - 1 / slow
+        s = np.sqrt(1.0 / (1 - f * f) - 2.0 / (1 - f * g) + 1.0 / (1 - g * g))
         # or a moving std
     else:
         s = 1
@@ -163,9 +167,7 @@ def _(mo):
 
 @app.cell
 def _(Portfolio, f, fast, prices, slow, vola, winsor):
-    pos = 1e5 * f(
-        prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value
-    )
+    pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
     return (portfolio,)
 
