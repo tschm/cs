@@ -31,7 +31,35 @@ jobs:
       - name: "Export notebooks"
         uses: tschm/cradle/actions/marimo@main
         with:
-          command: 'export html-wasm "$file" -o "artifacts/marimo/${filename}/index.html"'
+          command: 'export html-wasm "$file" -o "artifacts/marimo/${filename}/index.html" --mode edit'
+#        run: |
+#           uv run pip install --no-cache-dir marimo
+#
+#           # Find all Python files in book/marimo directory
+#           for notebook in book/marimo/Experiment*.py; do
+#             # Extract the filename without extension
+#             # echo "Detected notebook $notebook"
+#             filename=$(basename "$notebook" .py)
+#             echo "Detected filename $filename"
+#             # Create output
+#             folder=artifacts/notebooks/$filename
+#
+#             mkdir -p $folder
+#             echo "Folder $folder"
+#             # Export as readonly, with code locked
+#             uv run marimo export html-wasm $notebook -o $folder/index.html
+#             echo "Exported $notebook to $folder"
+#           done
+#           ls -all artifacts/notebooks
+#
+#      # Upload the generated HTML files as a GitHub Actions artifact
+#      # This makes the files available for the deployment job
+#      - name: Upload HTML artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: notebooks
+#          path: artifacts/notebooks
+#          retention-days: 1  # Keep artifacts for 1 day to save storage
 
   # Job to build the Jupyter Book documentation
   # This converts Jupyter notebooks to a static website with navigation
