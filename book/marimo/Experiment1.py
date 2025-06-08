@@ -3,6 +3,7 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App()
 
+
 with app.setup:
     import marimo as mo
     import numpy as np
@@ -32,7 +33,6 @@ async def _():
 @app.cell(hide_code=True)
 def _():
     mo.md(r"""# CTA 1.0""")
-    return
 
 
 @app.cell
