@@ -3,35 +3,40 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App()
 
+
 with app.setup:
+    import marimo as mo
     import numpy as np
     import pandas as pd
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""# CTA 1.0""")
-    return
-
-
-@app.cell
-def _():
-    import marimo as mo
-
-    return (mo,)
-
-
-@app.cell
-def _():
     import plotly.io as pio
+
+    # from cvx.simulator import interpolate
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
-    return
 
 
 @app.cell
-def _(mo):
+async def _():
+    try:
+        import sys
+
+        if "pyodide" in sys.modules:
+            import micropip
+
+            await micropip.install("cvxsimulator")
+
+    except ImportError:
+        pass
+
+
+@app.cell(hide_code=True)
+def _():
+    mo.md(r"""# CTA 1.0""")
+
+
+@app.cell
+def _():
     # Load prices
     from cvx.simulator import interpolate
 
@@ -55,7 +60,7 @@ def f(price, fast=32, slow=96):
 
 
 @app.cell
-def _(mo):
+def _():
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast moving average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow moving average")
 
@@ -90,7 +95,7 @@ def _(pos, prices):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(
         r"""
     Results do not look terrible but...
@@ -104,7 +109,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(
         r"""
     Such fundamental flaws are not addressed by **parameter-hacking**
@@ -129,7 +134,7 @@ def _():
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(
         r"""
     cvxSimulator can construct portfolio objects. Those objects will
