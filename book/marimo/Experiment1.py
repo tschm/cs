@@ -4,13 +4,13 @@ __generated_with = "0.13.15"
 app = marimo.App()
 
 with app.setup:
-    import marimo as mo
     import numpy as np
     import pandas as pd
     import plotly.io as pio
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
+
 
 @app.cell(hide_code=True)
 def _(mo):
