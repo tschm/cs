@@ -40,22 +40,6 @@ def _():
     return
 
 
-@app.cell
-def _():
-    from cvxsimulator import interpolate
-
-    # Load prices
-    prices = pd.read_csv(
-        mo.notebook_location() / "public" / "Prices_hashed.csv",
-        index_col=0,
-        parse_dates=True,
-    )
-
-    # interpolate the prices
-    prices = prices.apply(interpolate)
-    return (prices,)
-
-
 @app.function
 def f(price, fast=32, slow=96, volatility=32):
     s = price.ewm(com=slow, min_periods=300).mean()
