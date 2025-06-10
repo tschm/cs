@@ -12,24 +12,11 @@ with app.setup:
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
+    pd.options.plotting.backend = "plotly"
 
     price_file = mo.notebook_location() / "public" / "Prices_hashed.csv"
     prices_pl = pl.read_csv(str(price_file), try_parse_dates=True)
     prices_pd = prices_pl.to_pandas().set_index("date")
-
-
-@app.cell
-async def _():
-    try:
-        import sys
-
-        if "pyodide" in sys.modules:
-            import micropip
-
-            await micropip.install("cvxsimulator")
-
-    except ImportError:
-        pass
 
 
 @app.cell(hide_code=True)
