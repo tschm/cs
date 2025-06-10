@@ -9,6 +9,7 @@ with app.setup:
     import pandas as pd
     import plotly.io as pio
     import polars as pl
+    from cvxsimulator import interpolate
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -28,7 +29,7 @@ def _():
 @app.cell
 def _():
     # this cell should be made obsolete by the Simulator accepting polar frames
-    from cvx.simulator import interpolate
+    # from cvx.simulator import interpolate
     # from cvx.simulator.builder import polars2pandas
 
     # print(prices_pl)
@@ -38,6 +39,7 @@ def _():
     prices = prices_pd.apply(interpolate)
     # print(prices)
     # return
+    return prices
 
 
 @app.function
@@ -59,14 +61,14 @@ def _():
 
 
 @app.cell
-def _(fast, slow):
+def _(fast, slow, prices):
     pos = 5e6 * prices.apply(f, fast=fast.value, slow=slow.value).fillna(0.0)
     return (pos,)
 
 
 @app.cell
-def _(pos):
-    from cvx.simulator import Portfolio
+def _(pos, prices):
+    from cvxsimulator import Portfolio
     # builder = Builder(prices=prices, initial_aum=1e8)
 
     # for t, state in builder:
