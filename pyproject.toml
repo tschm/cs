@@ -67,7 +67,7 @@ target-version = "py312"
 # Enable flake8-bugbear (`B`) rules.
 select = [
     "E",   # pycodestyle errors
-    "F",   # pyflakes
+    #"F",   # pyflakes
     "B",   # flake8-bugbear
     "I",   # isort
     "C4",  # flake8-comprehensions

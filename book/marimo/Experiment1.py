@@ -3,17 +3,19 @@ import marimo
 __generated_with = "0.13.15"
 app = marimo.App()
 
-
 with app.setup:
     import marimo as mo
     import numpy as np
     import pandas as pd
     import plotly.io as pio
-
-    # from cvx.simulator import interpolate
+    import polars as pl
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
+
+    price_file = mo.notebook_location() / "public" / "Prices_hashed.csv"
+    prices_pl = pl.read_csv(str(price_file), try_parse_dates=True)
+    prices_pd = prices_pl.to_pandas().set_index("date")
 
 
 @app.cell
@@ -33,22 +35,22 @@ async def _():
 @app.cell(hide_code=True)
 def _():
     mo.md(r"""# CTA 1.0""")
+    return
 
 
 @app.cell
 def _():
-    # Load prices
+    # this cell should be made obsolete by the Simulator accepting polar frames
     from cvx.simulator import interpolate
+    # from cvx.simulator.builder import polars2pandas
 
-    prices = pd.read_csv(
-        mo.notebook_location() / "public" / "Prices_hashed.csv",
-        index_col=0,
-        parse_dates=True,
-    )
+    # print(prices_pl)
+    # prices = polars2pandas(prices_pl)
 
     # interpolate the prices
-    prices = prices.apply(interpolate)
-    return (prices,)
+    prices = prices_pd.apply(interpolate)
+    # print(prices)
+    # return
 
 
 @app.function
@@ -70,13 +72,13 @@ def _():
 
 
 @app.cell
-def _(fast, prices, slow):
+def _(fast, slow):
     pos = 5e6 * prices.apply(f, fast=fast.value, slow=slow.value).fillna(0.0)
     return (pos,)
 
 
 @app.cell
-def _(pos, prices):
+def _(pos):
     from cvx.simulator import Portfolio
     # builder = Builder(prices=prices, initial_aum=1e8)
 
@@ -89,6 +91,7 @@ def _(pos, prices):
 
     # portfolio = builder.build()
 
+    # interpolate the prices inside here...
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
     print(portfolio.sharpe())
     return (portfolio,)
@@ -124,13 +127,11 @@ def _():
 def _(portfolio):
     fig = portfolio.snapshot()
     fig
-    return
 
 
 @app.cell
 def _():
     pd.set_option("display.precision", 2)
-    return
 
 
 @app.cell(hide_code=True)
