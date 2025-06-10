@@ -93,8 +93,7 @@ def _():
 
 
 @app.function
-def osc(fast=32, slow=96, scaling=True):
-    print(prices)
+def osc(prices, fast=32, slow=96, scaling=True):
     diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
     if scaling:
         # attention this formula is forward-looking
@@ -118,7 +117,7 @@ def _(filter):
         # construct a fake-price, those fake-prices have homescedastic returns
         price_adj = filter(price, volatility=vola, clip=clip)
         # compute mu
-        mu = np.tanh(osc(price_adj, fast=fast, slow=slow))
+        mu = np.tanh(osc(prices=price_adj, fast=fast, slow=slow))
         return mu / price.pct_change().ewm(com=slow, min_periods=300).std()
 
     return (f,)
