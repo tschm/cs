@@ -8,7 +8,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "tinycta==0.7.20",
-    "cvxsimulator==1.3.16",
+    "cvxsimulator>=1.4.0",
     "plotly==6.1.2",
     "pandas==2.2.3",
     "numpy>2.0",
@@ -25,7 +25,6 @@ dev = [
     #"clarabel>=0.9.0",
     "loguru",
     "marimo>=0.13.15",
-    "micropip>=0.9.0"
 ]
 
 # Links to project resources
