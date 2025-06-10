@@ -15,31 +15,20 @@ with app.setup:
     pio.renderers.default = "plotly_mimetype"
     pd.options.plotting.backend = "plotly"
 
-    price_file = mo.notebook_location() / "public" / "Prices_hashed.csv"
-    prices_pl = pl.read_csv(str(price_file), try_parse_dates=True)
-    prices_pd = prices_pl.to_pandas().set_index("date")
+    path = mo.notebook_location() / "public" / "Prices_hashed.csv"
+    date_col = "date"
+
+    dframe = pl.read_csv(str(path), try_parse_dates=True)
+
+    dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
+    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
+    prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
 
 
 @app.cell(hide_code=True)
 def _():
     mo.md(r"""# CTA 1.0""")
     return
-
-
-@app.cell
-def _():
-    # this cell should be made obsolete by the Simulator accepting polar frames
-    # from cvx.simulator import interpolate
-    # from cvx.simulator.builder import polars2pandas
-
-    # print(prices_pl)
-    # prices = polars2pandas(prices_pl)
-
-    # interpolate the prices
-    prices = prices_pd.apply(interpolate)
-    # print(prices)
-    # return
-    return prices
 
 
 @app.function
@@ -61,13 +50,13 @@ def _():
 
 
 @app.cell
-def _(fast, slow, prices):
+def _(fast, slow):
     pos = 5e6 * prices.apply(f, fast=fast.value, slow=slow.value).fillna(0.0)
     return (pos,)
 
 
 @app.cell
-def _(pos, prices):
+def _(pos):
     from cvxsimulator import Portfolio
     # builder = Builder(prices=prices, initial_aum=1e8)
 
@@ -116,11 +105,13 @@ def _():
 def _(portfolio):
     fig = portfolio.snapshot()
     fig
+    return
 
 
 @app.cell
 def _():
     pd.set_option("display.precision", 2)
+    return
 
 
 @app.cell(hide_code=True)

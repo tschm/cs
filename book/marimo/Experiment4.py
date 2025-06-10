@@ -4,12 +4,29 @@ __generated_with = "0.13.15"
 app = marimo.App()
 
 with app.setup:
+    import marimo as mo
     import numpy as np
     import pandas as pd
+    import plotly.io as pio
+    import polars as pl
+    from cvxsimulator import interpolate
+
+    # Ensure Plotly works with Marimo
+    pio.renderers.default = "plotly_mimetype"
+    pd.options.plotting.backend = "plotly"
+
+    path = mo.notebook_location() / "public" / "Prices_hashed.csv"
+    date_col = "date"
+
+    dframe = pl.read_csv(str(path), try_parse_dates=True)
+
+    dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
+    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
+    prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(r"""# CTA 4.0 - Optimization 1.0""")
     return
 
@@ -25,39 +42,13 @@ def _():
 
 @app.cell
 def _():
-    import marimo as mo
-    import plotly.io as pio
-
-    # Ensure Plotly works with Marimo
-    pio.renderers.default = "plotly_mimetype"
-    return mo
-
-
-@app.cell
-def _():
     from tinycta.signal import osc, returns_adjust
 
     return osc, returns_adjust
 
 
 @app.cell
-def _(mo):
-    # Load prices
-    from cvx.simulator import interpolate
-
-    prices = pd.read_csv(
-        mo.notebook_location() / "public" / "Prices_hashed.csv",
-        index_col=0,
-        parse_dates=True,
-    )
-
-    # interpolate the prices
-    prices = prices.apply(interpolate)
-    return (prices,)
-
-
-@app.cell
-def _(mo):
+def _():
     # Create sliders using marimo's UI components
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
@@ -71,8 +62,8 @@ def _(mo):
 
 
 @app.cell
-def _(fast, osc, prices, returns_adjust, slow, vola, winsor):
-    from cvx.simulator import Portfolio
+def _(fast, osc, returns_adjust, slow, vola, winsor):
+    from cvxsimulator import Portfolio
 
     mu = np.tanh(
         prices.apply(returns_adjust, com=vola.value, clip=winsor.value)
