@@ -65,7 +65,7 @@ def f(price, fast=32, slow=96, volatility=32):
 
 
 @app.cell
-def _(mo):
+def _():
     # Create sliders using marimo's UI components
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
@@ -79,7 +79,7 @@ def _(mo):
 
 @app.cell
 def _(f, fast, prices, slow, vola):
-    from cvx.simulator import Portfolio
+    from cvxsimulator import Portfolio
 
     pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, volatility=vola.value)
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
@@ -88,7 +88,7 @@ def _(f, fast, prices, slow, vola):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(
         r"""
     * This is a **univariate** trading system, we map the (real) price of an asset to its (cash)position
@@ -101,7 +101,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(
         r"""
     Results do not look terrible but...
