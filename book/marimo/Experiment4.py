@@ -26,7 +26,7 @@ with app.setup:
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(r"""# CTA 4.0 - Optimization 1.0""")
     return
 
@@ -62,8 +62,8 @@ def _():
 
 
 @app.cell
-def _(fast, osc, prices, returns_adjust, slow, vola, winsor):
-    from cvx.simulator import Portfolio
+def _(fast, osc, returns_adjust, slow, vola, winsor):
+    from cvxsimulator import Portfolio
 
     mu = np.tanh(
         prices.apply(returns_adjust, com=vola.value, clip=winsor.value)

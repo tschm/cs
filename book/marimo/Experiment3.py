@@ -26,7 +26,7 @@ with app.setup:
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(r"""# CTA 3.0""")
     return
 
@@ -40,35 +40,8 @@ def _():
     return
 
 
-@app.cell
-def _():
-    import marimo as mo
-    import plotly.io as pio
-
-    # Ensure Plotly works with Marimo
-    pio.renderers.default = "plotly_mimetype"
-    return mo
-
-
-@app.cell
-def _(mo):
-    from cvx.simulator import interpolate
-
-    # Load prices
-    prices = pd.read_csv(
-        mo.notebook_location() / "public" / "Prices_hashed.csv",
-        index_col=0,
-        parse_dates=True,
-    )
-
-    # interpolate the prices
-    prices = prices.apply(interpolate)
-    print(prices)
-    return (prices,)
-
-
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(
         r"""
     We use the system:
@@ -85,7 +58,7 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(
         r"""
     We need a simple price filter process
@@ -105,7 +78,7 @@ def filter(price, volatility=32, clip=4.2, min_periods=300):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(
         r"""
     ### Oscillators
@@ -120,7 +93,7 @@ def _(mo):
 
 
 @app.function
-def osc(prices, fast=32, slow=96, scaling=True):
+def osc(fast=32, slow=96, scaling=True):
     print(prices)
     diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
     if scaling:
@@ -152,7 +125,7 @@ def _(filter):
 
 
 @app.cell
-def _(mo):
+def _():
     # Create sliders using marimo's UI components
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
@@ -167,7 +140,7 @@ def _(mo):
 
 @app.cell
 def _(f, fast, prices, slow, vola, winsor):
-    from cvx.simulator import Portfolio
+    from cvxsimulator import Portfolio
 
     pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)

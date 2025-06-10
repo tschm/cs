@@ -42,17 +42,7 @@ def _():
 
 @app.cell
 def _():
-    import marimo as mo
-    import plotly.io as pio
-
-    # Ensure Plotly works with Marimo
-    pio.renderers.default = "plotly_mimetype"
-    return mo
-
-
-@app.cell
-def _(mo):
-    from cvx.simulator import interpolate
+    from cvxsimulator import interpolate
 
     # Load prices
     prices = pd.read_csv(
