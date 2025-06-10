@@ -24,8 +24,6 @@ with app.setup:
     dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
     prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
 
-    print(prices)
-
 
 @app.cell(hide_code=True)
 def _():
