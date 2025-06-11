@@ -21,7 +21,9 @@ with app.setup:
     dframe = pl.read_csv(str(path), try_parse_dates=True)
 
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
-    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
+    dframe = dframe.with_columns(
+        [pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col]
+    )
     prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
 
 
@@ -104,7 +106,18 @@ def _():
 @app.cell
 def _(portfolio):
     fig = portfolio.snapshot()
+    # import urllib
+
+    ## Convert figure to HTML and encode for URL
+    # plot_html = fig.to_html()
+    # urllib.parse.quote(plot_html)
     fig
+    return
+
+
+@app.cell
+def _():
+    # Create HTML link to open in new tab
     return
 
 
