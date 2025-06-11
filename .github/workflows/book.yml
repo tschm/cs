@@ -62,6 +62,7 @@ jobs:
         with:
           name: marimo
           path: artifacts/marimo
+          if-no-files-found: 'error'
           retention-days: 1  # Keep artifacts for 1 day to save storage
 
   # Job to build the Jupyter Book documentation
