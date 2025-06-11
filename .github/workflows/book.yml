@@ -69,7 +69,9 @@ jobs:
   jupyter:
     runs-on: "ubuntu-latest"
     steps:
-
+      # Check out the repository code
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
 
       # Build the Jupyter Book using a reusable action
       # This action handles the book building process including configuration
