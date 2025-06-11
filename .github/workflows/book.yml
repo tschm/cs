@@ -47,12 +47,13 @@ jobs:
             mkdir -p artifacts/marimo/$filename
 
             # Export in edit mode to allow users to modify the notebook
-            uvx marimo export html-wasm $notebook -o artifacts/marimo/$filename/index.html --sandbox --mode edit
+            uvx marimo export html-wasm --sandbox $notebook -o artifacts/marimo/$filename/index.html --mode edit
           done
 
           # List all exported notebooks
           echo "Exported notebooks:"
           ls -la artifacts/marimo/
+          tree artifacts/marimo
         working-directory: book/marimo
 
       # Upload the generated HTML-WASM files as a GitHub Actions artifact
