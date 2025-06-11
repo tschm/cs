@@ -5,7 +5,7 @@
 #     "numpy==2.3.0",
 #     "pandas==2.3.0",
 #     "plotly==6.1.2",
-#     "polars==1.3.0",
+#     "polars==1.30.0",
 #     "cvxsimulator==1.4.3"
 # ]
 # ///

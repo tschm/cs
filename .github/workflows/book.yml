@@ -58,7 +58,6 @@ jobs:
       # Upload the generated HTML-WASM files as a GitHub Actions artifact
       # This makes the files available for the deployment job
       - name: Upload HTML artifacts
-        # Note: This conditional is commented out but would skip upload when running locally with act
         uses: actions/upload-artifact@v4
         with:
           name: marimo
