@@ -38,7 +38,7 @@ jobs:
           mkdir -p artifacts/marimo
 
           # Find all Python files in the notebooks directory and export them to HTML-WASM
-          for notebook in notebooks/*.py; do
+          for notebook in *.py; do
             # Extract the filename without extension
             filename=$(basename "$notebook" .py)
             echo "Exporting $notebook to HTML-WASM..."
@@ -53,6 +53,7 @@ jobs:
           # List all exported notebooks
           echo "Exported notebooks:"
           ls -la artifacts/marimo/
+        working-directory: book/marimo
 
       # Upload the generated HTML-WASM files as a GitHub Actions artifact
       # This makes the files available for the deployment job
