@@ -1,3 +1,14 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "marimo==0.13.15",
+#     "numpy==2.3.0",
+#     "pandas==2.3.0",
+#     "plotly==6.1.2",
+#     "polars==1.3.0",
+#     "cvxsimulator==1.4.3"
+# ]
+# ///
 import marimo
 
 __generated_with = "0.13.15"
@@ -21,7 +32,9 @@ with app.setup:
     dframe = pl.read_csv(str(path), try_parse_dates=True)
 
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
-    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
+    dframe = dframe.with_columns(
+        [pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col]
+    )
     prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
 
 
@@ -141,7 +154,9 @@ def _():
 def _(f, fast, prices, slow, vola, winsor):
     from cvxsimulator import Portfolio
 
-    pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
+    pos = 1e5 * f(
+        prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value
+    )
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
     print(portfolio.sharpe())
     return (portfolio,)
