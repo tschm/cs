@@ -21,55 +21,55 @@ jobs:
   marimo:
     runs-on: ubuntu-latest
     steps:
-      # Set up the Python virtual environment with all required dependencies
-      # This uses a reusable action from the cradle repository
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+      # Check out the repository code
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
 
-      # Find all Experiment*.py files in the book/marimo directory and export them to HTML
-      # This creates static HTML versions of the interactive notebooks
-      - name: "Export notebooks"
-        uses: tschm/cradle/actions/marimo@main
+      - name: Install the latest version of uv and set the python version
+        uses: astral-sh/setup-uv@v6
         with:
-          command: 'export html-wasm "$file" -o "artifacts/marimo/${filename}/index.html" --mode edit'
-#        run: |
-#           uv run pip install --no-cache-dir marimo
-#
-#           # Find all Python files in book/marimo directory
-#           for notebook in book/marimo/Experiment*.py; do
-#             # Extract the filename without extension
-#             # echo "Detected notebook $notebook"
-#             filename=$(basename "$notebook" .py)
-#             echo "Detected filename $filename"
-#             # Create output
-#             folder=artifacts/notebooks/$filename
-#
-#             mkdir -p $folder
-#             echo "Folder $folder"
-#             # Export as readonly, with code locked
-#             uv run marimo export html-wasm $notebook -o $folder/index.html
-#             echo "Exported $notebook to $folder"
-#           done
-#           ls -all artifacts/notebooks
-#
-#      # Upload the generated HTML files as a GitHub Actions artifact
-#      # This makes the files available for the deployment job
-#      - name: Upload HTML artifacts
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: notebooks
-#          path: artifacts/notebooks
-#          retention-days: 1  # Keep artifacts for 1 day to save storage
+          python-version: 3.13
+
+      # Convert all Marimo notebooks to HTML-WASM format
+      # The WASM format allows for interactive elements to work in the browser
+      - name: Convert notebooks to HTML-WASM
+        run: |
+          # uv run pip install --no-cache-dir marimo
+          mkdir -p artifacts/marimo
+
+          # Find all Python files in the notebooks directory and export them to HTML-WASM
+          for notebook in notebooks/*.py; do
+            # Extract the filename without extension
+            filename=$(basename "$notebook" .py)
+            echo "Exporting $notebook to HTML-WASM..."
+
+            # Create output directory for this notebook
+            mkdir -p artifacts/marimo/$filename
+
+            # Export in edit mode to allow users to modify the notebook
+            uvx marimo export html-wasm $notebook -o artifacts/marimo/$filename/index.html --sandbox --mode edit
+          done
+
+          # List all exported notebooks
+          echo "Exported notebooks:"
+          ls -la artifacts/marimo/
+
+      # Upload the generated HTML-WASM files as a GitHub Actions artifact
+      # This makes the files available for the deployment job
+      - name: Upload HTML artifacts
+        # Note: This conditional is commented out but would skip upload when running locally with act
+        uses: actions/upload-artifact@v4
+        with:
+          name: marimo
+          path: artifacts/marimo
+          retention-days: 1  # Keep artifacts for 1 day to save storage
 
   # Job to build the Jupyter Book documentation
   # This converts Jupyter notebooks to a static website with navigation
   jupyter:
     runs-on: "ubuntu-latest"
     steps:
-      # Set up the Python virtual environment with all required dependencies
-      # This uses a reusable action from the cradle repository
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+
 
       # Build the Jupyter Book using a reusable action
       # This action handles the book building process including configuration

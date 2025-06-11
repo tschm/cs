@@ -17,17 +17,18 @@ jobs:
       notebooks: ${{ steps.set-notebooks.outputs.notebooks }}
 
     steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+      # Check out the repository code
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
 
       - name: List notebooks
         id: set-notebooks
         run: |
-          cd book/marimo
           # Get all .py files, excluding directories
           NOTEBOOKS=$(ls -p | grep -v / | grep '\.py$' | jq -R -s -c 'split("\n") | map(select(length > 0))')
           echo "notebooks=$NOTEBOOKS" >> $GITHUB_OUTPUT
           echo "Found notebooks: $NOTEBOOKS"
+        working-directory: book/marimo
 
   run-notebook:
     name: Run ${{ matrix.notebook }}
@@ -38,14 +39,19 @@ jobs:
       matrix:
         notebook: ${{ fromJson(needs.list-notebooks.outputs.notebooks) }}
 
-    steps:
-      - name: "Build the virtual environment for ${{ github.repository }}"
-        uses: tschm/cradle/actions/environment@v0.1.72
+    steps:      # Check out the repository code
+      - name: Checkout [${{ github.repository }}]
+        uses: actions/checkout@v4
+
+      - name: Install the latest version of uv and set the python version
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: 3.13
 
       - name: Run notebook
         run: |
-          uv pip install --no-cache-dir marimo
-
-          cd book/marimo
-          echo "Processing ${{ matrix.notebook }}"
-          uv run python "${{ matrix.notebook }}"
+          uvx marimo run "${{ matrix.notebook }}" --sandbox --no-browser &
+          pid=$!
+          sleep 1
+          kill $pid
+        working-directory: book/marimo

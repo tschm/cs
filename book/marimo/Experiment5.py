@@ -1,3 +1,14 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "marimo==0.13.15",
+#     "numpy==2.3.0",
+#     "pandas==2.3.0",
+#     "plotly==6.1.2",
+#     "polars==1.3.0",
+#     "cvxsimulator==1.4.3"
+# ]
+# ///
 import marimo
 
 __generated_with = "0.13.15"
@@ -21,7 +32,9 @@ with app.setup:
     dframe = pl.read_csv(str(path), try_parse_dates=True)
 
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
-    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
+    dframe = dframe.with_columns(
+        [pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col]
+    )
     prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
 
 
@@ -92,7 +105,9 @@ def _(
 
     for n, (t, state) in enumerate(builder):
         mask = state.mask
-        matrix = shrink2id(cor.loc[t[-1]].values, lamb=shrinkage.value)[mask, :][:, mask]
+        matrix = shrink2id(cor.loc[t[-1]].values, lamb=shrinkage.value)[mask, :][
+            :, mask
+        ]
         expected_mu = np.nan_to_num(mu[n][mask])
         expected_vo = np.nan_to_num(vo[n][mask])
         risk_position = solve(matrix, expected_mu) / inv_a_norm(expected_mu, matrix)
