@@ -8,22 +8,17 @@
 .PHONY: venv fmt clean help test marimo lint
 
 # Create a virtual environment using uv with Python 3.12
-venv:
+uv:
 	curl -LsSf https://astral.sh/uv/install.sh | sh
-	uv venv --python='3.12'
 
-#install: venv ## Install dependencies and setup environment
-#	uv pip install --upgrade pip
-#	uv sync --dev --frozen --all-extras
-
-fmt: venv lint ## Format and lint code
+fmt: uv ## Format and lint code
 	uvx pre-commit install
 	uvx pre-commit run --all-files
 
-ty: install
+ty: uv
 	@uvx ty check book/marimo
 
-lint: venv ## Run ruff linter and formatter
+lint: uv ## Run ruff linter and formatter
 	@uvx ruff check --fix .
 	@uvx ruff format .
 
@@ -38,5 +33,5 @@ help: ## Show this help message
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 # Run marimo for interactive notebook development
-marimo: venv ## Start a Marimo server
+marimo: uv ## Start a Marimo server
 	@uvx marimo edit --sandbox book/marimo/$(NOTEBOOK)  # Start marimo server in edit mode for the book/marimo directory
