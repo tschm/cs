@@ -1,6 +1,6 @@
 name: "Marimo Notebooks"
 # Workflow for running marimo notebooks
-# This workflow runs all marimo notebooks in the book/marimo directory in parallel
+# This workflow runs all marimo notebooks in the notebooks directory in parallel
 # to ensure they execute without errors.
 
 on:
@@ -10,48 +10,7 @@ permissions:
   contents: read  # Read-only access to repository contents
 
 jobs:
-  list-notebooks:
-    name: List Marimo Notebooks
-    runs-on: ubuntu-latest
-    outputs:
-      notebooks: ${{ steps.set-notebooks.outputs.notebooks }}
-
-    steps:
-      # Check out the repository code
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
-
-      - name: List notebooks
-        id: set-notebooks
-        run: |
-          # Get all .py files, excluding directories
-          NOTEBOOKS=$(ls -p | grep -v / | grep '\.py$' | jq -R -s -c 'split("\n") | map(select(length > 0))')
-          echo "notebooks=$NOTEBOOKS" >> $GITHUB_OUTPUT
-          echo "Found notebooks: $NOTEBOOKS"
-        working-directory: book/marimo
-
-  run-notebook:
-    name: Run ${{ matrix.notebook }}
-    needs: list-notebooks
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false  # Continue with other notebooks even if one fails
-      matrix:
-        notebook: ${{ fromJson(needs.list-notebooks.outputs.notebooks) }}
-
-    steps:      # Check out the repository code
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
-
-      - name: Install the latest version of uv and set the python version
-        uses: astral-sh/setup-uv@v6
-        with:
-          python-version: 3.13
-
-      - name: Run notebook
-        run: |
-          uvx marimo run "${{ matrix.notebook }}" --sandbox --no-browser &
-          pid=$!
-          sleep 1
-          kill $pid
-        working-directory: book/marimo
+  test:
+    uses: tschm/marimushka/.github/workflows/test.yml@main
+    with:
+      notebook-dir: 'book/marimo'
