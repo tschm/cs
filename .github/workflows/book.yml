@@ -21,7 +21,7 @@ jobs:
   marimo:
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
     steps:
-      - uses: tschm/marimushka/actions/export@v0.0.8
+      - uses: tschm/marimushka/actions/export@v0.0.10
         with:
           notebooks: book/marimo
 
