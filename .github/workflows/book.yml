@@ -19,51 +19,11 @@ jobs:
   # Job to build Marimo interactive notebooks and export them to HTML
   # This converts Python files in the book/marimo directory to interactive web pages
   marimo:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
     steps:
-      # Check out the repository code
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
-
-      - name: Install the latest version of uv and set the python version
-        uses: astral-sh/setup-uv@v6
+      - uses: tschm/marimushka/actions/export@v0.0.8
         with:
-          python-version: 3.13
-
-      # Convert all Marimo notebooks to HTML-WASM format
-      # The WASM format allows for interactive elements to work in the browser
-      - name: Convert notebooks to HTML-WASM
-        run: |
-          # uv run pip install --no-cache-dir marimo
-          mkdir -p artifacts/marimo
-
-          # Find all Python files in the notebooks directory and export them to HTML-WASM
-          for notebook in book/marimo/*.py; do
-            # Extract the filename without extension
-            filename=$(basename "$notebook" .py)
-            echo "Exporting $notebook to HTML-WASM..."
-
-            # Create output directory for this notebook
-            mkdir -p artifacts/marimo/$filename
-
-            # Export in edit mode to allow users to modify the notebook
-            uvx marimo export html-wasm --sandbox $notebook -o artifacts/marimo/$filename/index.html --mode edit
-          done
-
-          # List all exported notebooks
-          echo "Exported notebooks:"
-          ls -la artifacts/marimo/
-          tree artifacts/marimo
-
-      # Upload the generated HTML-WASM files as a GitHub Actions artifact
-      # This makes the files available for the deployment job
-      - name: Upload HTML artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: marimo
-          path: artifacts/marimo
-          if-no-files-found: 'error'
-          retention-days: 1  # Keep artifacts for 1 day to save storage
+          notebooks: book/marimo
 
   # Job to build the Jupyter Book documentation
   # This converts Jupyter notebooks to a static website with navigation
