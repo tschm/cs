@@ -11,6 +11,6 @@ permissions:
 
 jobs:
   test:
-    uses: tschm/marimushka/.github/workflows/test.yml@main
+    uses: tschm/marimushka/.github/workflows/test.yml@v0.0.8
     with:
       notebook-dir: 'book/marimo'
