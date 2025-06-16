@@ -4,15 +4,15 @@ format: jb-book
 root: docs/index
 chapters:
     - file: docs/notebooks/Strategies
-    - url: https://tschm.github.io/cs/marimo/Experiment1/index.html
+    - url: https://tschm.github.io/cs/marimo/notebooks/Experiment1.html
       title: Experiment1
-    - url: https://tschm.github.io/cs/marimo/Experiment2/index.html
+    - url: https://tschm.github.io/cs/marimo/notebooks/Experiment2.html
       title: Experiment2
-    - url: https://tschm.github.io/cs/marimo/Experiment3/index.html
+    - url: https://tschm.github.io/cs/marimo/notebooks/Experiment3.html
       title: Experiment3
     - file: docs/notebooks/Optimization
-    - url: https://tschm.github.io/cs/marimo/Experiment4/index.html
+    - url: https://tschm.github.io/cs/marimo/notebooks/Experiment4.html
       title: Experiment4
-    - url: https://tschm.github.io/cs/marimo/Experiment5/index.html
+    - url: https://tschm.github.io/cs/marimo/notebooks/Experiment5.html
       title: Experiment5
     - file: docs/notebooks/Danke

@@ -21,9 +21,10 @@ jobs:
   marimo:
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
     steps:
-      - uses: tschm/marimushka/actions/export@v0.0.13
+      - uses: tschm/marimushka/actions/export@v0.0.16
         with:
           notebooks: book/marimo
+          publish: 'false'
 
   # Job to build the Jupyter Book documentation
   # This converts Jupyter notebooks to a static website with navigation
