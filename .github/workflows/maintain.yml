@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Run pre-commit checks using the cradle action
-      - uses: tschm/cradle/actions/pre-commit@v0.1.72
+      - uses: tschm/cradle/actions/pre-commit@v0.1.73
 
   test:
     uses: jebel-quant/marimushka/.github/workflows/test.yml@v0.1.2
