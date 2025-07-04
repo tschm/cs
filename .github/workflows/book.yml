@@ -25,19 +25,6 @@ jobs:
         with:
           notebooks: book/marimo
 
-  # Job to build the Jupyter Book documentation
-  # This converts Jupyter notebooks to a static website with navigation
-  jupyter:
-    runs-on: "ubuntu-latest"
-    steps:
-      # Check out the repository code
-      - name: Checkout [${{ github.repository }}]
-        uses: actions/checkout@v4
-
-      # Build the Jupyter Book using a reusable action
-      # This action handles the book building process including configuration
-      - uses: tschm/cradle/actions/jupyter@v0.1.80
-
   # Job to combine all artifacts and prepare them for deployment
   # This job runs after both jupyter and marimo jobs have completed
   build:
@@ -45,7 +32,7 @@ jobs:
       pages: write            # Permission to deploy to Pages
       id-token: write         # Permission to verify deployment origin
     runs-on: ubuntu-latest
-    needs: [jupyter, marimo]  # This job depends on both jupyter and marimo jobs
+    needs: [marimo]  # This job depends on both jupyter and marimo jobs
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -53,3 +40,9 @@ jobs:
       - name: Publish book
         id: deployment
         uses: tschm/cradle/actions/book@v0.1.80
+        with:
+          title: "cs talk"
+          links: |
+            {
+               "Notebooks":"./marimushka/index.html"
+            }
