@@ -36,7 +36,7 @@ jobs:
 
       # Build the Jupyter Book using a reusable action
       # This action handles the book building process including configuration
-      - uses: tschm/cradle/actions/jupyter@v0.1.73
+      - uses: tschm/cradle/actions/jupyter@v0.1.80
 
   # Job to combine all artifacts and prepare them for deployment
   # This job runs after both jupyter and marimo jobs have completed
@@ -52,4 +52,4 @@ jobs:
     steps:
       - name: Publish book
         id: deployment
-        uses: tschm/cradle/actions/book@v0.1.73
+        uses: tschm/cradle/actions/book@v0.1.80
