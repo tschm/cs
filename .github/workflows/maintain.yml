@@ -18,6 +18,6 @@ jobs:
       - uses: tschm/cradle/actions/pre-commit@v0.1.81
 
   test:
-    uses: jebel-quant/marimushka/.github/workflows/test.yml@v0.1.3
+    uses: jebel-quant/marimushka/.github/workflows/test.yml@v0.1.4
     with:
       notebook-dir: book/marimo
