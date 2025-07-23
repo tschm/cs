@@ -39,7 +39,7 @@ jobs:
     steps:
       - name: Publish book
         id: deployment
-        uses: tschm/cradle/actions/book@v0.3.01
+        uses: tschm/cradle/actions/book@v0.3.04
         with:
           title: "cs talk"
           links: |
