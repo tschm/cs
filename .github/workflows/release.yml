@@ -26,7 +26,7 @@ jobs:
       # This automatically determines the next version number based on commit messages
       # The build_package parameter is set to false to prevent building a package
       - name: Generate Tag
-        uses: tschm/cradle/actions/tag@v0.3.04
+        uses: tschm/cradle/actions/tag@v0.3.06
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           build_package: 'false'  # Explicitly disable package building
