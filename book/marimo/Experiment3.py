@@ -9,6 +9,14 @@
 #     "cvxsimulator==1.4.3"
 # ]
 # ///
+
+"""Experiment 3: Advanced CTA strategy with price filtering and oscillators.
+
+This module implements a more sophisticated trend-following strategy that
+incorporates price filtering to handle outliers and oscillators with proper
+scaling for more consistent signal generation across different assets.
+"""
+
 import marimo
 
 __generated_with = "0.13.15"
@@ -32,9 +40,7 @@ with app.setup:
     dframe = pl.read_csv(str(path), try_parse_dates=True)
 
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
-    dframe = dframe.with_columns(
-        [pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col]
-    )
+    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
     prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
 
 
@@ -84,6 +90,17 @@ def _():
 
 @app.function
 def filter(price, volatility=32, clip=4.2, min_periods=300):
+    """Filter price series to handle outliers and normalize volatility.
+
+    Args:
+        price: Price series data
+        volatility: Lookback period for volatility calculation (default: 32)
+        clip: Maximum absolute value for volatility-adjusted returns (default: 4.2)
+        min_periods: Minimum number of observations required for volatility calculation (default: 300)
+
+    Returns:
+        Filtered price series with normalized volatility and clipped extreme values
+    """
     r = np.log(price).diff()
     vola = r.ewm(com=volatility, min_periods=min_periods).std()
     price_adj = (r / vola).clip(-clip, clip).cumsum()
@@ -107,6 +124,18 @@ def _():
 
 @app.function
 def osc(prices, fast=32, slow=96, scaling=True):
+    """Calculate a properly scaled oscillator based on the difference of two moving averages.
+
+    Args:
+        prices: Price series data
+        fast: Fast moving average period (default: 32)
+        slow: Slow moving average period (default: 96)
+        scaling: Whether to apply theoretical scaling to normalize the oscillator (default: True)
+
+    Returns:
+        Oscillator series with consistent statistical properties regardless of
+        the moving average parameters when scaling is enabled
+    """
     diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
     if scaling:
         # attention this formula is forward-looking
@@ -154,9 +183,7 @@ def _():
 def _(f, fast, prices, slow, vola, winsor):
     from cvxsimulator import Portfolio
 
-    pos = 1e5 * f(
-        prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value
-    )
+    pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
     print(portfolio.sharpe())
     return (portfolio,)
