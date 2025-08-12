@@ -1,37 +1,32 @@
-# Makefile for the cs (computer science) project
-# This file contains commands for setting up the environment, formatting code,
-# building the book, and other maintenance tasks.
+# Colors for pretty output
+BLUE := \033[36m
+BOLD := \033[1m
+GREEN := \033[32m
+RESET := \033[0m
 
 .DEFAULT_GOAL := help
 
-# Define all phony targets (targets that don't create files with the same name)
-.PHONY: venv fmt clean help test marimo lint
+.PHONY: build clean book check
 
-# Create a virtual environment using uv with Python 3.12
-uv:
-	curl -LsSf https://astral.sh/uv/install.sh | sh
+install: ## install
+	task build:install
 
-fmt: uv ## Format and lint code
-	uvx pre-commit install
-	uvx pre-commit run --all-files
+clean: ## clean
+	task cleanup:clean
 
-ty: uv
-	@uvx ty check book/marimo
+test: install ## run all tests
+	task docs:test
 
-lint: uv ## Run ruff linter and formatter
-	@uvx ruff check --fix .
-	@uvx ruff format .
+book: test ## compile the companion book
+	task docs:docs
+	task docs:marimushka
+	task docs:book
 
-clean: ## Clean build artifacts and stale branches
-	git clean -X -d -f
-	git branch -v | grep "\[gone\]" | cut -f 3 -d ' ' | xargs git branch -D
+check: install ## check the pre-commit hooks, the linting and deptry
+	task quality:check
 
-help: ## Show this help message
-	@echo "Usage: make [target]"
-	@echo ""
-	@echo "Targets:"
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-
-# Run marimo for interactive notebook development
-marimo: uv ## Start a Marimo server
-	@uvx marimo edit --sandbox book/marimo/$(NOTEBOOK)  # Start marimo server in edit mode for the book/marimo directory
+help: ## Display this help message
+	@printf "$(BOLD)Usage:$(RESET)\n"
+	@printf "  make $(BLUE)<target>$(RESET)\n\n"
+	@printf "$(BOLD)Targets:$(RESET)\n"
+	@awk 'BEGIN {FS = ":.*##"; printf ""} /^[a-zA-Z_-]+:.*?##/ { printf "  $(BLUE)%-15s$(RESET) %s\n", $$1, $$2 } /^##@/ { printf "\n$(BOLD)%s$(RESET)\n", substr($$0, 5) }' $(MAKEFILE_LIST)
