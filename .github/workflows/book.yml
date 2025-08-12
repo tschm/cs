@@ -1,48 +1,89 @@
-# Workflow for building and deploying the Jupyter Book documentation
-# This workflow is triggered on push events and performs the following tasks:
-# 1. Builds Marimo notebooks and exports them to HTML
-# 2. Builds Jupyter notebooks into a book
-# 3. Combines all artifacts and deploys them to GitHub Pages
+# This file is part of the tschm/.config-templates repository
+# (https://github.com/tschm/.config-templates).
+#
+# Workflow: Book
+# Purpose: This workflow builds and deploys comprehensive documentation for the project.
+#          It combines API documentation, test coverage reports, test results, and
+#          interactive notebooks into a single GitHub Pages site.
+#
+# Trigger: This workflow runs on every push to the main branch
+#
+# Components:
+#   - 📚 Parse .env file for configuration
+#   - 📓 Process Marimo notebooks
+#   - 📖 Generate API documentation with pdoc
+#   - 🧪 Run tests and generate coverage reports
+#   - 🚀 Deploy combined documentation to GitHub Pages
 
-name: deploy-book
+name: "BOOK"
 
-# Trigger the workflow on push events
-# This ensures the documentation is automatically updated whenever code changes are pushed
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
-
-# This workflow contains multiple jobs that run in parallel and sequentially
 jobs:
-  # Job to build Marimo interactive notebooks and export them to HTML
-  # This converts Python files in the book/marimo directory to interactive web pages
-  marimo:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
-    steps:
-      - uses: jebel-quant/marimushka@v0.1.4
-        with:
-          notebooks: book/marimo
+  book:
+    runs-on: "ubuntu-latest"
 
-  # Job to combine all artifacts and prepare them for deployment
-  # This job runs after both jupyter and marimo jobs have completed
-  build:
+    environment:
+      name: github-pages  # 👈 this is the critical missing piece
+
     permissions:
+      contents: read
       pages: write            # Permission to deploy to Pages
       id-token: write         # Permission to verify deployment origin
-    runs-on: ubuntu-latest
-    needs: [marimo]  # This job depends on both jupyter and marimo jobs
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - name: Publish book
-        id: deployment
-        uses: tschm/cradle/actions/book@v0.3.06
+      # Check out the repository code
+      - uses: actions/checkout@v5
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
         with:
-          title: "cs talk"
-          links: |
-            {
-               "Notebooks":"./marimushka/index.html"
-            }
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Make the docs"
+        run: |
+          task docs:docs
+
+      - name: "Make the tests"
+        run: |
+          task docs:test
+
+      - name: "Make the notebooks"
+        run: |
+          task docs:marimushka
+
+      - name: "Make the book"
+        run: |
+          task docs:book
+
+      # Step 4: Display the structure of the artifacts directory
+      # This helps with debugging by showing what files were generated
+      - name: Inspect artifacts
+        shell: bash
+        run: |
+          # Check if tree is installed, otherwise use find/ls as fallback
+          if command -v tree &> /dev/null; then
+            tree _book  # Show directory structure in tree format
+          else
+            echo "tree command not found, using fallback:"
+            find _book -type f | sort
+          fi
+
+      # Step 5: Package all artifacts for GitHub Pages deployment
+      # This prepares the combined outputs for deployment by creating a single artifact
+      - name: Upload static files as artifact
+        uses: actions/upload-pages-artifact@v3  # Official GitHub Pages artifact upload action
+        with:
+          path: _book/  # Path to the directory containing all artifacts to deploy
+
+      # Step 6: Deploy the packaged artifacts to GitHub Pages
+      # This step publishes the content to GitHub Pages
+      - name: Deploy to GitHub Pages
+        if: ${{ !github.event.repository.fork }}
+        uses: actions/deploy-pages@v4  # Official GitHub Pages deployment action

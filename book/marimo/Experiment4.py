@@ -9,6 +9,14 @@
 #     "cvxsimulator==1.4.3"
 # ]
 # ///
+
+"""Experiment 4: CTA strategy with optimization and risk scaling.
+
+This module demonstrates a more advanced trend-following strategy that
+incorporates portfolio optimization techniques and risk scaling to
+improve performance and risk-adjusted returns.
+"""
+
 import marimo
 
 __generated_with = "0.13.15"
@@ -32,9 +40,7 @@ with app.setup:
     dframe = pl.read_csv(str(path), try_parse_dates=True)
 
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
-    dframe = dframe.with_columns(
-        [pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col]
-    )
+    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
     prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
 
 

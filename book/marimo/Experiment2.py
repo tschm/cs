@@ -9,6 +9,13 @@
 #     "cvxsimulator==1.4.3"
 # ]
 # ///
+
+"""Experiment 2: Improved CTA strategy with volatility scaling.
+
+This module enhances the basic trend-following strategy by incorporating
+volatility scaling to adjust position sizes based on market conditions.
+"""
+
 import marimo
 
 __generated_with = "0.13.15"
@@ -32,9 +39,7 @@ with app.setup:
     dframe = pl.read_csv(str(path), try_parse_dates=True)
 
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
-    dframe = dframe.with_columns(
-        [pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col]
-    )
+    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
     prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
 
 
@@ -55,6 +60,19 @@ def _():
 
 @app.function
 def f(price, fast=32, slow=96, volatility=32):
+    """Calculate volatility-scaled trading signals based on moving averages.
+
+    Args:
+        price: Price series data
+        fast: Fast moving average period (default: 32)
+        slow: Slow moving average period (default: 96)
+        volatility: Lookback period for volatility calculation (default: 32)
+
+    Returns:
+        Series of trading signals scaled by inverse volatility, providing
+        larger positions during low volatility periods and smaller positions
+        during high volatility periods
+    """
     s = price.ewm(com=slow, min_periods=300).mean()
     f = price.ewm(com=fast, min_periods=300).mean()
     std = price.pct_change().ewm(com=volatility, min_periods=300).std()

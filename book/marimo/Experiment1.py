@@ -9,6 +9,13 @@
 #     "cvxsimulator==1.4.3"
 # ]
 # ///
+
+"""Experiment 1: Basic CTA strategy implementation using moving averages.
+
+This module demonstrates a simple trend-following strategy using exponential
+moving averages with different lookback periods.
+"""
+
 import marimo
 
 __generated_with = "0.13.15"
@@ -32,9 +39,7 @@ with app.setup:
     dframe = pl.read_csv(str(path), try_parse_dates=True)
 
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
-    dframe = dframe.with_columns(
-        [pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col]
-    )
+    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
     prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
 
 
@@ -45,8 +50,18 @@ def _():
 
 
 @app.function
-# take two moving averages and apply sign-functiond
 def f(price, fast=32, slow=96):
+    """Calculate trading signals based on the difference between fast and slow moving averages.
+
+    Args:
+        price: Price series data
+        fast: Fast moving average period (default: 32)
+        slow: Slow moving average period (default: 96)
+
+    Returns:
+        Series of trading signals (-1, 0, or 1) based on the sign of the difference
+        between fast and slow moving averages
+    """
     s = price.ewm(com=slow, min_periods=100).mean()
     f = price.ewm(com=fast, min_periods=100).mean()
     return np.sign(f - s)
