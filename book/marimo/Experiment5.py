@@ -6,7 +6,8 @@
 #     "pandas==2.3.0",
 #     "plotly==6.1.2",
 #     "polars==1.30.0",
-#     "cvxsimulator==1.4.3"
+#     "cvxsimulator==1.4.3",
+#     "tinycta==0.7.21"
 # ]
 # ///
 
