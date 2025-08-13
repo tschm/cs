@@ -23,7 +23,7 @@ app = marimo.App()
 
 with app.setup:
     from pathlib import Path
-    
+
     import marimo as mo
     import numpy as np
     import pandas as pd
@@ -36,9 +36,9 @@ with app.setup:
     pd.options.plotting.backend = "plotly"
 
     path = Path(__file__).parent / "public" / "Prices_hashed.csv"
-    
-    #path = mo.notebook_location() / "public" / "Prices_hashed.csv"
-    
+
+    # path = mo.notebook_location() / "public" / "Prices_hashed.csv"
+
     date_col = "date"
 
     dframe = pl.read_csv(str(path), try_parse_dates=True)
