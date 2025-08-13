@@ -37,8 +37,6 @@ with app.setup:
 
     path = Path(__file__).parent / "public" / "Prices_hashed.csv"
 
-    # path = mo.notebook_location() / "public" / "Prices_hashed.csv"
-
     date_col = "date"
 
     dframe = pl.read_csv(str(path), try_parse_dates=True)
