@@ -1,6 +1,7 @@
 ### Python template
 
 /_tests
+/_book
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
