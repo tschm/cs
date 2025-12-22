@@ -16,12 +16,14 @@
 .github/scripts/marimushka.sh
 .github/scripts/release.sh
 .github/scripts/update-readme-help.sh
+.github/template.yml
 .github/workflows/book.yml
 .github/workflows/ci.yml
 .github/workflows/deptry.yml
 .github/workflows/marimo.yml
 .github/workflows/pre-commit.yml
 .github/workflows/release.yml
+.github/workflows/rhiza.yml
 .github/workflows/scripts/version_matrix.py
 .github/workflows/scripts/version_max.py
 .github/workflows/sync.yml
