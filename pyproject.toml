@@ -6,6 +6,9 @@ readme = "README.md"
 requires-python = ">=3.12"
 authors = [{ name = "Thomas Schmelzer" }]
 license = { file = "LICENSE" }
+dependencies = [
+    "packaging>=25.0",
+]
 
 [project.urls]
 Homepage = "https://tschm.github.io/cs"
