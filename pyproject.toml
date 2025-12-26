@@ -1,0 +1,11 @@
+[project]
+name = "cs"
+version = "0.0.0"
+description = "Companion materials for the Computational Statistics project."
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "Thomas Schmelzer" }]
+license = { file = "LICENSE" }
+
+[project.urls]
+Homepage = "https://tschm.github.io/cs"
