@@ -8,10 +8,12 @@ authors = [{ name = "Thomas Schmelzer" }]
 license = { file = "LICENSE" }
 dependencies = [
     "cvxsimulator>=1.4.5",
+    "marimo>=0.18.4",
     "numpy>=2.4.0",
     "packaging>=25.0",
     "pandas>=2.3.3",
     "plotly>=6.5.0",
+    "polars>=1.36.1",
     "tinycta>=0.8.4",
 ]
 
