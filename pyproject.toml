@@ -16,6 +16,16 @@ dependencies = [
     "polars>=1.36.1",
     "tinycta>=0.8.4",
 ]
+[project.optional-dependencies]
+dev = [
+    "pytest-cov>=7.0.0",
+    "pytest-html>=4.1.1",
+    "pytest==9.0.2",
+    "pre-commit==4.5.1",
+    "marimo==0.18.4",
+    "pdoc>=16.0.0",
+    "python-dotenv==1.2.1"
+]
 
 [project.urls]
 Homepage = "https://tschm.github.io/cs"
