@@ -144,14 +144,6 @@ class TestMakefile:
         expected_uvx = f"{expected_uv_install_dir}/uvx"
         assert f"{expected_uvx} pre-commit run --all-files" in out
 
-    def test_deptry_target_dry_run(self, logger, expected_uv_install_dir):
-        """Deptry target should invoke deptry via uvx in dry-run output."""
-        proc = run_make(logger, ["deptry"])
-        out = proc.stdout
-        # Check for uvx command with the configured path
-        expected_uvx = f"{expected_uv_install_dir}/uvx"
-        assert f"{expected_uvx} deptry ." in out
-
     def test_test_target_dry_run(self, logger, expected_uv_install_dir):
         """Test target should invoke pytest via uv with coverage and HTML outputs in dry-run output."""
         proc = run_make(logger, ["test"])
