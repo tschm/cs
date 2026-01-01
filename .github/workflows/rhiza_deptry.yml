@@ -35,9 +35,10 @@ jobs:
       - name: Run deptry
         run: |
           set -euo pipefail
-          if [ -d "src" ]; then
-            SOURCE_FOLDER="src"
-          else
-            SOURCE_FOLDER="."
+          if [ -d ${SOURCE_FOLDER} ]; then
+            uvx deptry "${SOURCE_FOLDER}"
           fi
-          uvx deptry "$SOURCE_FOLDER"
+
+          if [ -f ${MARIMO_FOLDER} ]; then
+            uvx deptry "${MARIMO_FOLDER}"
+          fi

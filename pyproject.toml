@@ -16,6 +16,7 @@ dependencies = [
     "polars>=1.36.1",
     "tinycta>=0.8.4",
 ]
+
 [project.optional-dependencies]
 dev = [
     "pytest-cov>=7.0.0",
