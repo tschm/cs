@@ -34,4 +34,7 @@ jobs:
 
       - name: Run deptry
         run: make deptry
-
+        # NOTE: make deptry is good style because it encapsulates the folders to check
+        # (e.g. src and book/marimo) and keeps CI in sync with local development.
+        # Since we use a 'uv' container, the Makefile is optimized to use the
+        # pre-installed 'uv' and 'uvx' from the system PATH.

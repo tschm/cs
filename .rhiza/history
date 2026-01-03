@@ -5,13 +5,10 @@
 #
 # Files under template control:
 .editorconfig
-.github/dependabot.yml
 .github/workflows/rhiza_book.yml
 .github/workflows/rhiza_ci.yml
 .github/workflows/rhiza_codeql.yml
 .github/workflows/rhiza_deptry.yml
-.github/workflows/rhiza_devcontainer.yml
-.github/workflows/rhiza_docker.yml
 .github/workflows/rhiza_marimo.yml
 .github/workflows/rhiza_pre-commit.yml
 .github/workflows/rhiza_release.yml
@@ -21,16 +18,21 @@
 .pre-commit-config.yaml
 .rhiza/docs/CONFIG.md
 .rhiza/docs/TOKEN_SETUP.md
+.rhiza/requirements/README.md
+.rhiza/requirements/docs.txt
+.rhiza/requirements/marimo.txt
+.rhiza/requirements/tests.txt
+.rhiza/requirements/tools.txt
 .rhiza/scripts/book.sh
 .rhiza/scripts/bump.sh
 .rhiza/scripts/customisations/build-extras.sh
 .rhiza/scripts/customisations/post-release.sh
 .rhiza/scripts/generate-coverage-badge.sh
+.rhiza/scripts/install-dev-deps.sh
 .rhiza/scripts/marimushka.sh
 .rhiza/scripts/release.sh
 .rhiza/scripts/update-readme-help.sh
 .rhiza/utils/version_matrix.py
-.rhiza/utils/version_max.py
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
 Makefile
@@ -58,5 +60,6 @@ tests/test_rhiza/test_marimushka_script.py
 tests/test_rhiza/test_notebooks.py
 tests/test_rhiza/test_readme.py
 tests/test_rhiza/test_release_script.py
+tests/test_rhiza/test_requirements_folder.py
 tests/test_rhiza/test_structure.py
 tests/test_rhiza/test_updatereadme_script.py
