@@ -55,11 +55,6 @@ dependencies = [
     { name = "plotly" },
 ]
 
-[package.dev-dependencies]
-dev = [
-    { name = "marimo" },
-]
-
 [package.metadata]
 requires-dist = [
     { name = "marimo", specifier = ">=0.18.4" },
@@ -67,9 +62,6 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "plotly", specifier = ">=6.5.0" },
 ]
-
-[package.metadata.requires-dev]
-dev = [{ name = "marimo", specifier = "==0.19.6" }]
 
 [[package]]
 name = "docutils"
