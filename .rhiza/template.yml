@@ -2,7 +2,6 @@ template-repository: jebel-quant/rhiza
 template-branch: main
 include:
 - .github/workflows
-- tests
 - .editorconfig
 - .gitignore
 - .pre-commit-config.yaml
@@ -10,10 +9,14 @@ include:
 - CONTRIBUTING.md
 - Makefile
 - ruff.toml
-- pytest.ini
 - .rhiza
 - book
 - renovate.json
 exclude:
 - .github/workflows/rhiza_docker.yml
 - .github/workflows/rhiza_devcontainer.yml
+- .github/workflows/rhiza_ci.yml
+- .github/workflows/rhiza_security.yml
+- .github/dependabot.yml
+- .rhiza/docs
+

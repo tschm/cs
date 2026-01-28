@@ -13,10 +13,8 @@ dependencies = [
     "plotly>=6.5.0",
 ]
 
-[dependency-groups]
-dev = [
-    "marimo==0.19.6",
-]
-
 [project.urls]
 Homepage = "https://tschm.github.io/cs"
+
+[tool.deptry]
+package_module_name_map = { marimo = "marimo", numpy = "numpy", pandas = "pandas", plotly = "plotly" }
