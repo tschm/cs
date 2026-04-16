@@ -16,7 +16,6 @@ opens the door to deeper insights into the strategy.
 - 💰 Implement a hedge fund strategy in just 10 lines of code
 - 📊 Boost the Sharpe Ratio through optimization techniques
 - 📉 Control both Kurtosis and trading costs
-- 📚 Comprehensive documentation in a Jupyter Book format
 
 ## 🛠️ Getting Started
 
