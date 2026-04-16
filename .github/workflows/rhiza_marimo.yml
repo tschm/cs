@@ -95,6 +95,7 @@ jobs:
         id: artefact-folder
         env:
           UV_EXTRA_INDEX_URL: ${{ secrets.UV_EXTRA_INDEX_URL }}
+          UV_INDEX_STRATEGY: unsafe-best-match
         run: |
           notebook="${{ matrix.notebook }}"
           notebook_stem="$(basename "$notebook" .py)"
