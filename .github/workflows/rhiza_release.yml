@@ -7,11 +7,19 @@
 #
 # 📋 Pipeline Phases:
 #   1. 🔍 Validate Tag - Check tag format and ensure release doesn't already exist
-#   2. 🏗️ Build - Build Python package with Hatch (if [build-system] is defined in pyproject.toml
-#   3. 📝 Draft Release - Create draft GitHub release with build artifacts
-#   4. 🚀 Publish to PyPI - Publish package using OIDC or custom feed
-#   5. 🐳 Publish Devcontainer - Build and publish devcontainer image (conditional)
-#   6. ✅ Finalize Release - Publish the GitHub release with links
+#   2. 🏗️ Build - Build Python package with Hatch (if [build-system] is defined in pyproject.toml)
+#   3. 📦 Generate SBOM - Create Software Bill of Materials (CycloneDX format)
+#   4. 📝 Draft Release - Create draft GitHub release with build artifacts and SBOM
+#   5. 🚀 Publish to PyPI - Publish package using OIDC or custom feed
+#   6. 🐳 Publish Devcontainer - Build and publish devcontainer image (conditional)
+#   7. ✅ Finalize Release - Publish the GitHub release with links
+#
+# 📦 SBOM Generation:
+#   - Generated using CycloneDX format (industry standard for software supply chain security)
+#   - Creates both JSON and XML formats for maximum compatibility
+#   - SBOM attestations are created and stored (public repos only)
+#   - Attached to GitHub releases for transparency and compliance
+#   - Skipped if pyproject.toml doesn't exist
 #
 # 🐳 Devcontainer Publishing:
 #   - Only occurs when PUBLISH_DEVCONTAINER repository variable is set to "true"
@@ -33,7 +41,8 @@
 #   - No PyPI credentials stored; relies on Trusted Publishing via GitHub OIDC
 #   - For custom feeds, PYPI_TOKEN secret is used with default username __token__
 #   - Container registry uses GITHUB_TOKEN for authentication
-#   - SLSA provenance attestations generated for build artifacts (supply chain security)
+#   - SLSA provenance attestations generated for build artifacts (public repos only)
+#   - SBOM attestations generated for supply chain transparency (public repos only)
 #
 # 📄 Requirements:
 #   - pyproject.toml with top-level version field (for Python packages)
@@ -65,7 +74,7 @@ permissions:
   contents: write       # Needed to create releases
   id-token: write       # Needed for OIDC authentication with PyPI
   packages: write       # Needed to publish devcontainer image
-  attestations: write   # Needed for SLSA provenance attestations
+  attestations: write   # Needed for SLSA provenance attestations (public repos only)
 
 jobs:
   tag:
@@ -75,7 +84,7 @@ jobs:
       tag: ${{ steps.set_tag.outputs.tag }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
@@ -106,21 +115,19 @@ jobs:
     needs: tag
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v8.0.0
         with:
-          version: "0.9.27"
+          version: "0.11.6"
 
-      - name: "Sync the virtual environment for ${{ github.repository }}"
-        shell: bash
-        run: |
-          export UV_EXTRA_INDEX_URL="${{ secrets.uv-extra-index-url }}"
-          # will just use .python-version?
-          uv sync --all-extras --all-groups --frozen
+      - name: Configure git auth for private packages
+        uses: ./.github/actions/configure-git-auth
+        with:
+          token: ${{ secrets.GH_PAT }}
 
       - name: Verify version matches tag
         if: hashFiles('pyproject.toml') != ''
@@ -129,11 +136,16 @@ jobs:
           TAG_VERSION=${TAG_VERSION#v}
           PROJECT_VERSION=$(uv version --short)
 
-          if [[ "$PROJECT_VERSION" != "$TAG_VERSION" ]]; then
-            echo "::error::Version mismatch: pyproject.toml has '$PROJECT_VERSION' but tag is '$TAG_VERSION'"
+          # Normalize tag version to PEP 440 format for comparison.
+          # Tags use semver format (e.g., 0.11.1-beta.1) while uv version --short
+          # returns PEP 440 normalized format (e.g., 0.11.1b1).
+          NORMALIZED_TAG=$(uv run --with packaging --no-project python3 -c "from packaging.version import Version; print(Version('$TAG_VERSION'))")
+
+          if [[ "$PROJECT_VERSION" != "$NORMALIZED_TAG" ]]; then
+            echo "::error::Version mismatch: pyproject.toml has '$PROJECT_VERSION' but tag is '$NORMALIZED_TAG' (from tag '$TAG_VERSION')"
             exit 1
           fi
-          echo "Version verified: $PROJECT_VERSION matches tag"
+          echo "Version verified: $PROJECT_VERSION matches tag (normalized: $NORMALIZED_TAG)"
 
       - name: Detect buildable Python package
         id: buildable
@@ -148,17 +160,58 @@ jobs:
         if: steps.buildable.outputs.buildable == 'true'
         run: |
           printf "[INFO] Building package...\n"
-          uvx hatch build
+          uv build
+
+      - name: Install Python for SBOM generation
+        if: hashFiles('pyproject.toml') != ''
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version-file: .python-version
+
+      - name: Sync environment for SBOM generation
+        if: hashFiles('pyproject.toml') != ''
+        run: |
+          export UV_EXTRA_INDEX_URL="${{ secrets.UV_EXTRA_INDEX_URL }}"
+          uv sync --all-extras --all-groups --frozen
+
+      - name: Generate SBOM (CycloneDX)
+        if: hashFiles('pyproject.toml') != ''
+        run: |
+          printf "[INFO] Generating SBOM in CycloneDX format...\n"
+          # Note: uvx caches the tool environment, so the second call is fast
+          uvx --from 'cyclonedx-bom>=7.0.0' cyclonedx-py environment --pyproject pyproject.toml --of JSON -o sbom.cdx.json
+          uvx --from 'cyclonedx-bom>=7.0.0' cyclonedx-py environment --pyproject pyproject.toml --of XML -o sbom.cdx.xml
+          printf "[INFO] SBOM generation complete\n"
+          printf "Generated files:\n"
+          ls -lh sbom.cdx.*
+
+      - name: Attest SBOM
+        # Attest only the JSON format as it's the canonical machine-readable format.
+        # The XML format is provided for compatibility but doesn't need separate attestation.
+        if: hashFiles('pyproject.toml') != '' && github.event.repository.private == false
+        uses: actions/attest@v4.1.0
+        with:
+          subject-path: sbom.cdx.json
+          sbom-path: sbom.cdx.json
+
+      - name: Upload SBOM artifacts
+        if: hashFiles('pyproject.toml') != ''
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: sbom
+          path: |
+            sbom.cdx.json
+            sbom.cdx.xml
 
       - name: Generate SLSA provenance attestations
-        if: steps.buildable.outputs.buildable == 'true'
-        uses: actions/attest-build-provenance@v3
+        if: steps.buildable.outputs.buildable == 'true' && github.event.repository.private == false
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: dist/*
 
       - name: Upload dist artifact
         if: steps.buildable.outputs.buildable == 'true'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: dist
           path: dist
@@ -170,13 +223,34 @@ jobs:
     needs: [tag, build]
 
     steps:
-      - name: Create GitHub Release with artifacts
-        uses: softprops/action-gh-release@v2.5.0
+      - name: Checkout Code
+        uses: actions/checkout@v6.0.2
         with:
-          tag_name: ${{ needs.tag.outputs.tag }}
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.0.0
+
+      - name: Generate release notes with git-cliff
+        run: uvx git-cliff --latest --output RELEASE_NOTES.md
+
+      - name: Download SBOM artifact
+        # Downloads sbom.cdx.json and sbom.cdx.xml into sbom/ directory
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: sbom
+          path: sbom
+        continue-on-error: true
+
+      - name: Create GitHub Release with artifacts
+        uses: ncipollo/release-action@v1.21.0
+        with:
+          tag: ${{ needs.tag.outputs.tag }}
           name: ${{ needs.tag.outputs.tag }}
-          generate_release_notes: true
+          bodyFile: RELEASE_NOTES.md
           draft: true
+          allowUpdates: true
+          artifacts: "sbom/*"
 
   # Decide at step-level whether to publish
   pypi:
@@ -189,12 +263,12 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
       - name: Download dist artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8.0.1
         with:
           name: dist
           path: dist
@@ -237,7 +311,7 @@ jobs:
       image_name: ${{ steps.image_name.outputs.image_name }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
@@ -266,7 +340,7 @@ jobs:
 
       - name: Login to Container Registry
         if: steps.check_publish.outputs.should_publish == 'true'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4.1.0
         with:
           registry: ${{ steps.registry.outputs.registry }}
           username: ${{ github.repository_owner }}
@@ -322,24 +396,24 @@ jobs:
     if: needs.pypi.result == 'success' || needs.devcontainer.result == 'success'
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v8.0.0
         with:
-          version: "0.9.27"
+          version: "0.11.6"
 
       - name: "Sync the virtual environment for ${{ github.repository }}"
         shell: bash
         run: |
-          export UV_EXTRA_INDEX_URL="${{ secrets.uv-extra-index-url }}"
+          export UV_EXTRA_INDEX_URL="${{ secrets.uv_extra_index_url }}"
           # will just use .python-version?
           uv sync --all-extras --all-groups --frozen
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v6.2.0
 
       - name: Generate Devcontainer Link
         id: devcontainer_link
@@ -358,7 +432,7 @@ jobs:
         id: pypi_link
         if: needs.pypi.outputs.should_publish == 'true' && needs.pypi.result == 'success'
         run: |
-          PACKAGE_NAME=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['name'])")
+          PACKAGE_NAME=$(uv run python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['name'])")
           VERSION="${{ needs.tag.outputs.tag }}"
           VERSION=${VERSION#v}
 
@@ -380,12 +454,21 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Publish Release
-        uses: softprops/action-gh-release@v2.5.0
-        with:
-          tag_name: ${{ needs.tag.outputs.tag }}
-          draft: false
-          append_body: true
-          body: |
-            ${{ steps.devcontainer_link.outputs.message }}
-            ${{ steps.pypi_link.outputs.message }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ needs.tag.outputs.tag }}
+          DEVCONTAINER_MSG: ${{ steps.devcontainer_link.outputs.message }}
+          PYPI_MSG: ${{ steps.pypi_link.outputs.message }}
+        run: |
+          # Get existing auto-generated release notes (gracefully handle missing release)
+          EXISTING=$(gh release view "$TAG" --json body --jq '.body // ""' 2>/dev/null || echo "")
+
+          # Append links to release body
+          {
+            printf '%s' "$EXISTING"
+            [ -n "$DEVCONTAINER_MSG" ] && printf '\n\n%s' "$DEVCONTAINER_MSG"
+            [ -n "$PYPI_MSG" ] && printf '\n\n%s' "$PYPI_MSG"
+          } > /tmp/notes.md
+
+          gh release edit "$TAG" --draft=false --notes-file /tmp/notes.md
 
