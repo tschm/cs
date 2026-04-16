@@ -1,0 +1,13 @@
+INHERIT: docs/mkdocs-base.yml
+
+site_name: Computational Statistics
+site_url: https://tschm.github.io/cs/
+repo_url: https://github.com/tschm/cs
+repo_name: tschm/cs
+
+docs_dir: docs
+
+nav:
+  - Home: index.md
+  - Development:
+      - Marimo: development/MARIMO.md
