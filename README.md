@@ -59,6 +59,11 @@ The views stated are his own and do not necessarily represent
 the views of neither ADIA nor Stanford University. The opinion expressed
 is based on the prevailing market trends and is subject to change.
 
+## 🔗 Infrastructure
+
+This project relies on the [Rhiza](https://jebel-quant.github.io/rhiza-education/) system
+for its underlying infrastructure and tooling.
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
