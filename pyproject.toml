@@ -11,6 +11,7 @@ dependencies = [
     "numpy>=2.4.4",
     "pandas>=3.0.2",
     "plotly>=6.7.0",
+    "cvxsimulator>=1.4.6",
 ]
 classifiers = [
     "Private :: Do Not Upload",
