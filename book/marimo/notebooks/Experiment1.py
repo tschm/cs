@@ -6,7 +6,8 @@
 #     "pandas==3.0.2",
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
-#     "cvxsimulator==1.4.6"
+#     "cvxsimulator==1.4.6",
+#     "jquantstats==0.6.5"
 # ]
 # ///
 

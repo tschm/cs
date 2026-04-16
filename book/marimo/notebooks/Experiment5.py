@@ -7,6 +7,7 @@
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
 #     "cvxsimulator==1.4.6",
+#     "jquantstats==0.6.5",
 #     "tinycta==0.9.5"
 # ]
 # ///
