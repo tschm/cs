@@ -31,7 +31,7 @@ with app.setup:
     import pandas as pd
     import plotly.io as pio
     import polars as pl
-    from cvxsimulator import interpolate
+    from cvx.simulator import interpolate
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -86,7 +86,7 @@ def _():
 
 @app.cell
 def _(fast, osc, returns_adjust, slow, vola, winsor):
-    from cvxsimulator import Portfolio
+    from cvx.simulator import Portfolio
 
     mu = np.tanh(
         prices.apply(returns_adjust, com=vola.value, clip=winsor.value)

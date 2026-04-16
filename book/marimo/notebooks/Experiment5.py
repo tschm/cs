@@ -31,7 +31,7 @@ with app.setup:
     import pandas as pd
     import plotly.io as pio
     import polars as pl
-    from cvxsimulator import interpolate
+    from cvx.simulator import interpolate
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -99,7 +99,7 @@ def _(
     vola,
     winsor,
 ):
-    from cvxsimulator import Builder
+    from cvx.simulator import Builder
 
     correlation = corr.value
 

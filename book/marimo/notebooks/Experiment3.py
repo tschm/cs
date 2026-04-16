@@ -30,7 +30,7 @@ with app.setup:
     import pandas as pd
     import plotly.io as pio
     import polars as pl
-    from cvxsimulator import interpolate
+    from cvx.simulator import interpolate
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -184,7 +184,7 @@ def _():
 
 @app.cell
 def _(f, fast, prices, slow, vola, winsor):
-    from cvxsimulator import Portfolio
+    from cvx.simulator import Portfolio
 
     pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)

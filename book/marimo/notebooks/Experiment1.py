@@ -29,7 +29,7 @@ with app.setup:
     import pandas as pd
     import plotly.io as pio
     import polars as pl
-    from cvxsimulator import interpolate
+    from cvx.simulator import interpolate
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -88,7 +88,7 @@ def _(fast, slow):
 
 @app.cell
 def _(pos):
-    from cvxsimulator import Portfolio
+    from cvx.simulator import Portfolio
     # builder = Builder(prices=prices, initial_aum=1e8)
 
     # for t, state in builder:
