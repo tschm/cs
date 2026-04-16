@@ -7,10 +7,10 @@ requires-python = ">=3.12"
 authors = [{ name = "Thomas Schmelzer" }]
 license = { file = "LICENSE" }
 dependencies = [
-    "marimo>=0.18.4",
-    "numpy>=2.4.0",
-    "pandas>=2.3.3",
-    "plotly>=6.5.0",
+    "marimo>=0.23.1",
+    "numpy>=2.4.4",
+    "pandas>=3.0.2",
+    "plotly>=6.7.0",
 ]
 classifiers = [
     "Private :: Do Not Upload",
