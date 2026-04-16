@@ -11,3 +11,4 @@ nav:
   - Home: index.md
   - Development:
       - Marimo: development/MARIMO.md
+  - Notebooks: notebooks.md
