@@ -1,0 +1,1 @@
+Implement a hedge fund strategy in 10 lines.
