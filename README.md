@@ -23,7 +23,6 @@ opens the door to deeper insights into the strategy.
 ### 📋 Prerequisites
 
 - Python 3.12+
-- Dependencies listed in `requirements.txt`
 
 ### 🔧 Installation
 
