@@ -1,12 +1,12 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "marimo==0.13.15",
-#     "numpy==2.3.0",
-#     "pandas==2.3.0",
-#     "plotly==6.1.2",
-#     "polars==1.30.0",
-#     "cvxsimulator==1.4.3"
+#     "marimo==0.23.1",
+#     "numpy==2.4.4",
+#     "pandas==3.0.2",
+#     "plotly==6.7.0",
+#     "polars==1.39.3",
+#     "cvxsimulator==1.4.6"
 # ]
 # ///
 
@@ -18,7 +18,7 @@ moving averages with different lookback periods.
 
 import marimo
 
-__generated_with = "0.13.15"
+__generated_with = "0.23.1"
 app = marimo.App()
 
 with app.setup:
