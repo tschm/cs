@@ -2,6 +2,10 @@
 .idea
 .venv
 .ruff_cache
+.ty_cache
+
+# HTML outputs from docstring examples (e.g. report.save("output/..."))
+output/
 
 ### Don't expose API keys, etc.
 .env
@@ -11,9 +15,23 @@ __marimo__
 _tests
 _book
 _pdoc
+docs/notebooks/*.html
+docs/reports
+docs/notebooks.md
+docs/reports.md
 _marimushka
+_mkdocs
 _benchmarks
 _jupyter
+_site
+
+# LaTeX build artifacts
+docs/paper/*.aux
+docs/paper/*.fdb_latexmk
+docs/paper/*.fls
+docs/paper/*.log
+docs/paper/*.out
+docs/paper/*.toc
 
 # temp file used by Junie
 .output.txt
@@ -74,8 +92,12 @@ coverage.json
 *.cover
 *.py,cover
 .hypothesis/
+.benchmarks/
 .pytest_cache/
 cover/
+
+# Security scanning baselines (regenerate as needed)
+.bandit-baseline.json
 
 # Translations
 *.mo
@@ -96,4 +118,6 @@ cython_debug/
 
 # Makefile
 local.mk
+
+.bandit-baseline.json
 

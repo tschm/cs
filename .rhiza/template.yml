@@ -1,22 +1,17 @@
-template-repository: jebel-quant/rhiza
-template-branch: main
-include:
-- .github/workflows
-- .editorconfig
-- .gitignore
-- .pre-commit-config.yaml
-- CODE_OF_CONDUCT.md
-- CONTRIBUTING.md
-- Makefile
-- ruff.toml
-- .rhiza
-- book
-- renovate.json
-exclude:
-- .github/workflows/rhiza_docker.yml
-- .github/workflows/rhiza_devcontainer.yml
-- .github/workflows/rhiza_ci.yml
-- .github/workflows/rhiza_security.yml
-- .github/dependabot.yml
-- .rhiza/docs
+template-repository: "jebel-quant/rhiza"
+template-branch: "v0.9.5"
 
+templates:
+  - github
+  - marimo
+
+exclude:
+  - .rhiza/docs/
+  - .rhiza/make.d/agentic.mk
+  - .rhiza/make.d/gh-aw.mk
+  - .rhiza/make.d/github.mk
+  - .rhiza/make.d/custom-env.mk
+  - .rhiza/make.d/custom-task.mk
+  - .rhiza/make.d/README.md
+  - .github/agents/
+  - docs/adr
