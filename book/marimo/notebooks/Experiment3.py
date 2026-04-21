@@ -6,7 +6,8 @@
 #     "pandas==3.0.2",
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
-#     "cvxsimulator==1.4.6"
+#     "pyarrow==23.0.1",
+#     "cvxsimulator==1.5.1"
 # ]
 # ///
 
@@ -30,7 +31,23 @@ with app.setup:
     import pandas as pd
     import plotly.io as pio
     import polars as pl
-    from cvxsimulator import interpolate
+
+    # Compatibility shim: cvxsimulator imports from private jquantstats API
+    # that doesn't exist in public jquantstats. Patch sys.modules before
+    # importing cvx.simulator so portfolio.py can resolve these imports.
+    import sys
+    import types
+    import jquantstats.data as _jqs_data_mod
+
+    _fake_jqs_data = types.ModuleType("jquantstats._data")
+    _fake_jqs_data.Data = _jqs_data_mod.Data
+    sys.modules["jquantstats._data"] = _fake_jqs_data
+
+    _fake_jqs_api = types.ModuleType("jquantstats.api")
+    _fake_jqs_api.build_data = lambda returns: _jqs_data_mod.Data.from_returns(returns=returns.reset_index())
+    sys.modules["jquantstats.api"] = _fake_jqs_api
+
+    from cvx.simulator import interpolate
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -184,7 +201,7 @@ def _():
 
 @app.cell
 def _(f, fast, prices, slow, vola, winsor):
-    from cvxsimulator import Portfolio
+    from cvx.simulator import Portfolio
 
     pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
     portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)

@@ -32,5 +32,8 @@ classifiers = [
 [project.urls]
 Homepage = "https://tschm.github.io/cs"
 
+[tool.uv]
+index-strategy = "unsafe-best-match"
+
 [tool.deptry]
 package_module_name_map = { marimo = "marimo", numpy = "numpy", pandas = "pandas", plotly = "plotly" }
