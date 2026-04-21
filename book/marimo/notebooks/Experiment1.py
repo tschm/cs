@@ -1,12 +1,13 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "marimo==0.13.15",
-#     "numpy==2.3.0",
-#     "pandas==2.3.0",
-#     "plotly==6.1.2",
-#     "polars==1.30.0",
-#     "cvxsimulator==1.4.3"
+#     "marimo==0.23.1",
+#     "numpy==2.4.4",
+#     "pandas==3.0.2",
+#     "plotly==6.7.0",
+#     "polars==1.39.3",
+#     "pyarrow==23.0.1",
+#     "cvxsimulator==1.5.1"
 # ]
 # ///
 
@@ -18,7 +19,7 @@ moving averages with different lookback periods.
 
 import marimo
 
-__generated_with = "0.13.15"
+__generated_with = "0.23.1"
 app = marimo.App()
 
 with app.setup:
@@ -29,7 +30,23 @@ with app.setup:
     import pandas as pd
     import plotly.io as pio
     import polars as pl
-    from cvxsimulator import interpolate
+
+    # Compatibility shim: cvxsimulator imports from private jquantstats API
+    # that doesn't exist in public jquantstats. Patch sys.modules before
+    # importing cvx.simulator so portfolio.py can resolve these imports.
+    import sys
+    import types
+    import jquantstats.data as _jqs_data_mod
+
+    _fake_jqs_data = types.ModuleType("jquantstats._data")
+    _fake_jqs_data.Data = _jqs_data_mod.Data
+    sys.modules["jquantstats._data"] = _fake_jqs_data
+
+    _fake_jqs_api = types.ModuleType("jquantstats.api")
+    _fake_jqs_api.build_data = lambda returns: _jqs_data_mod.Data.from_returns(returns=returns.reset_index())
+    sys.modules["jquantstats.api"] = _fake_jqs_api
+
+    from cvx.simulator import interpolate
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -88,7 +105,7 @@ def _(fast, slow):
 
 @app.cell
 def _(pos):
-    from cvxsimulator import Portfolio
+    from cvx.simulator import Portfolio
     # builder = Builder(prices=prices, initial_aum=1e8)
 
     # for t, state in builder:

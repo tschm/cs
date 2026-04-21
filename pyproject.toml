@@ -11,6 +11,7 @@ dependencies = [
     "numpy>=2.4.4",
     "pandas>=3.0.2",
     "plotly>=6.7.0",
+    "cvxsimulator>=1.4.6",
 ]
 classifiers = [
     "Private :: Do Not Upload",
@@ -30,6 +31,9 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://tschm.github.io/cs"
+
+[tool.uv]
+index-strategy = "unsafe-best-match"
 
 [tool.deptry]
 package_module_name_map = { marimo = "marimo", numpy = "numpy", pandas = "pandas", plotly = "plotly" }
