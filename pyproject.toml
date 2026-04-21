@@ -7,11 +7,11 @@ requires-python = ">=3.12"
 authors = [{ name = "Thomas Schmelzer" }]
 license = { file = "LICENSE" }
 dependencies = [
-    "marimo>=0.23.1",
+    "marimo>=0.23.2",
     "numpy>=2.4.4",
     "pandas>=3.0.2",
     "plotly>=6.7.0",
-    "cvxsimulator>=1.4.6",
+    "cvxsimulator>=1.5.1",
 ]
 classifiers = [
     "Private :: Do Not Upload",
