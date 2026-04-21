@@ -7,7 +7,7 @@
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
 #     "pyarrow==23.0.1",
-#     "cvxsimulator==1.4.6",
+#     "cvxsimulator==1.5.1",
 #     "tinycta==0.9.5"
 # ]
 # ///
