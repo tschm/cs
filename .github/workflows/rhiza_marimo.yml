@@ -95,6 +95,7 @@ jobs:
         id: artefact-folder
         env:
           UV_EXTRA_INDEX_URL: ${{ secrets.UV_EXTRA_INDEX_URL }}
+          UV_INDEX_STRATEGY: unsafe-best-match
         run: |
           notebook="${{ matrix.notebook }}"
           notebook_stem="$(basename "$notebook" .py)"
@@ -102,7 +103,7 @@ jobs:
           mkdir -p "${artefact_folder}"
           echo "name=${notebook_stem}" >> "$GITHUB_OUTPUT"
           export NOTEBOOK_OUTPUT_FOLDER="${artefact_folder}"
-          uv run --script "$notebook"  # builds env from the notebook's inline /// script header
+          uv run --script "$notebook"  # builds env from the notebook’s inline /// script header
         shell: bash
 
       - name: Upload notebook artefacts

@@ -16,14 +16,12 @@ opens the door to deeper insights into the strategy.
 - 💰 Implement a hedge fund strategy in just 10 lines of code
 - 📊 Boost the Sharpe Ratio through optimization techniques
 - 📉 Control both Kurtosis and trading costs
-- 📚 Comprehensive documentation in a Jupyter Book format
 
 ## 🛠️ Getting Started
 
 ### 📋 Prerequisites
 
 - Python 3.12+
-- Dependencies listed in `requirements.txt`
 
 ### 🔧 Installation
 
@@ -59,6 +57,11 @@ Dr. Thomas Schmelzer created all material in his personal capacity.
 The views stated are his own and do not necessarily represent
 the views of neither ADIA nor Stanford University. The opinion expressed
 is based on the prevailing market trends and is subject to change.
+
+## 🔗 Infrastructure
+
+This project relies on the [Rhiza](https://jebel-quant.github.io/rhiza-education/) system
+for its underlying infrastructure and tooling.
 
 ## 📄 License
 

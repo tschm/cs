@@ -7,10 +7,11 @@ requires-python = ">=3.12"
 authors = [{ name = "Thomas Schmelzer" }]
 license = { file = "LICENSE" }
 dependencies = [
-    "marimo>=0.18.4",
-    "numpy>=2.4.0",
-    "pandas>=2.3.3",
-    "plotly>=6.5.0",
+    "marimo>=0.23.2",
+    "numpy>=2.4.4",
+    "pandas>=3.0.2",
+    "plotly>=6.7.0",
+    "cvxsimulator>=1.5.1",
 ]
 classifiers = [
     "Private :: Do Not Upload",
@@ -30,6 +31,9 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://tschm.github.io/cs"
+
+[tool.uv]
+index-strategy = "unsafe-best-match"
 
 [tool.deptry]
 package_module_name_map = { marimo = "marimo", numpy = "numpy", pandas = "pandas", plotly = "plotly" }
