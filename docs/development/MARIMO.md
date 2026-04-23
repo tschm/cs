@@ -2,7 +2,7 @@
 
 This repository contains interactive [Marimo](https://marimo.io/) notebooks.
 
-## Available Notebooks
+## Features
 
 Notebooks live in `book/marimo/notebooks/` (configured via `MARIMO_FOLDER` in `.rhiza/.env`):
 

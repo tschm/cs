@@ -11,4 +11,9 @@ nav:
   - Home: index.md
   - Development:
       - Marimo: development/MARIMO.md
-  - Notebooks: notebooks.md
+  - Notebooks:
+      - Experiment1: notebooks/Experiment1.html
+      - Experiment2: notebooks/Experiment2.html
+      - Experiment3: notebooks/Experiment3.html
+      - Experiment4: notebooks/Experiment4.html
+      - Experiment5: notebooks/Experiment5.html

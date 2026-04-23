@@ -1,7 +1,7 @@
-sha: dccf929ce3bcbaf01ddf1240ac16354e0cf76bb1
+sha: ea7baa29f491ef74b76882bd75c1ae0551ccad0d
 repo: jebel-quant/rhiza
 host: github
-ref: v0.9.5
+ref: v0.10.2
 include: []
 exclude:
 - .rhiza/docs/
@@ -17,25 +17,19 @@ templates:
 - github
 - marimo
 files:
+- .bandit
 - .editorconfig
 - .github/DISCUSSION_TEMPLATE/q-and-a.yml
 - .github/ISSUE_TEMPLATE/bug_report.yml
 - .github/ISSUE_TEMPLATE/feature_request.yml
 - .github/actions/configure-git-auth/README.md
 - .github/actions/configure-git-auth/action.yml
-- .github/copilot-instructions.md
 - .github/dependabot.yml
-- .github/hooks/hooks.json
-- .github/hooks/session-end.sh
-- .github/hooks/session-start.sh
 - .github/secret_scanning.yml
-- .github/semgrep.yml
-- .github/workflows/copilot-setup-steps.yml
 - .github/workflows/rhiza_book.yml
 - .github/workflows/rhiza_marimo.yml
 - .github/workflows/rhiza_release.yml
 - .github/workflows/rhiza_sync.yml
-- .github/workflows/rhiza_weekly.yml
 - .gitignore
 - .pre-commit-config.yaml
 - .python-version
@@ -60,5 +54,5 @@ files:
 - docs/index.md
 - docs/mkdocs-base.yml
 - ruff.toml
-synced_at: '2026-04-16T02:49:17Z'
+synced_at: '2026-04-23T14:09:05Z'
 strategy: merge

@@ -83,7 +83,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v8.1.0
         with:
-          version: "0.11.6"
+          version: "0.11.7"
 
       - name: Configure git auth for private packages
         uses: ./.github/actions/configure-git-auth
@@ -103,9 +103,7 @@ jobs:
           mkdir -p "${artefact_folder}"
           echo "name=${notebook_stem}" >> "$GITHUB_OUTPUT"
           export NOTEBOOK_OUTPUT_FOLDER="${artefact_folder}"
-          uv run --no-project "$notebook"
-          # --no-project → ignore pyproject.toml; use only the notebook’s
-          # inline # /// script dependencies for a true isolated smoke test.
+          uv run --script "$notebook"  # builds env from the notebook’s inline /// script header
         shell: bash
 
       - name: Upload notebook artefacts
