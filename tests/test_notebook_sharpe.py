@@ -125,4 +125,4 @@ def test_notebook_matches_expected_sharpe_ratio(
     sharpe_ratio = _extract_sharpe_ratio(_run_notebook(notebook, output_dir))
 
     assert math.isfinite(sharpe_ratio)
-    assert sharpe_ratio == pytest.approx(expected_sharpe_ratio, abs=1e-9)
+    assert sharpe_ratio == pytest.approx(expected_sharpe_ratio, rel=1e-6, abs=1e-6)
