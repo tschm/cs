@@ -17,7 +17,7 @@ FLOAT_PATTERN = re.compile(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?")
 NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("*.py"))
 NOTEBOOK_TIMEOUT = 600
 QUEUE_TIMEOUT = 10
-PROCESS_START_METHOD = "spawn" if os.name == "nt" else multiprocessing.get_start_method()
+PROCESS_START_METHOD = "spawn"
 
 
 def _run_notebook_worker(notebook: str, output_dir: str, queue: multiprocessing.Queue) -> None:
@@ -57,11 +57,14 @@ def _run_notebook(notebook: Path, output_dir: Path) -> str:
 
     if process.is_alive():
         process.terminate()
-        process.join()
+        process.join(timeout=QUEUE_TIMEOUT)
+        if process.is_alive():
+            process.kill()
+            process.join(timeout=QUEUE_TIMEOUT)
         pytest.fail(f"Notebook execution timed out after {NOTEBOOK_TIMEOUT}s: {notebook}")
 
     try:
-        result = queue.get(timeout=min(NOTEBOOK_TIMEOUT, QUEUE_TIMEOUT))
+        result = queue.get(timeout=QUEUE_TIMEOUT)
     except Empty:
         pytest.fail(f"Notebook exited without output: {notebook}")
 
