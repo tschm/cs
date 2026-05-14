@@ -18,6 +18,7 @@ NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("*.py"))
 NOTEBOOK_TIMEOUT = 600
 QUEUE_TIMEOUT = 10
 PROCESS_CLEANUP_TIMEOUT = 10
+PROCESS_KILL_TIMEOUT = 1
 PROCESS_START_METHOD = "spawn"
 
 
@@ -49,7 +50,12 @@ def _run_notebook_worker(notebook: str, output_dir: str, queue: multiprocessing.
 
 
 def _run_notebook(notebook: Path, output_dir: Path) -> str:
-    """Execute a notebook in a child process and return its stdout."""
+    """Execute a notebook in a child process and return its stdout.
+
+    The repository test environment installs the notebook runtime dependencies,
+    so the generated Python script can be executed directly without relying on
+    uv's inline script metadata handling during the test itself.
+    """
     ctx = multiprocessing.get_context(PROCESS_START_METHOD)
     queue = ctx.Queue()
     process = ctx.Process(target=_run_notebook_worker, args=(str(notebook), str(output_dir), queue))
@@ -61,7 +67,7 @@ def _run_notebook(notebook: Path, output_dir: Path) -> str:
         process.join(timeout=PROCESS_CLEANUP_TIMEOUT)
         if process.exitcode is None:
             process.kill()
-            process.join(timeout=PROCESS_CLEANUP_TIMEOUT)
+            process.join(timeout=PROCESS_KILL_TIMEOUT)
         pytest.fail(f"Notebook execution timed out after {NOTEBOOK_TIMEOUT}s: {notebook}")
 
     try:
