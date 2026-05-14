@@ -1,8 +1,9 @@
 import math
-import os
 import re
-import shutil
-import subprocess  # nosec B404 - tests invoke trusted, repo-local notebooks via uv
+import runpy
+import signal
+from contextlib import redirect_stderr, redirect_stdout
+from io import StringIO
 from pathlib import Path
 
 import pytest
@@ -14,6 +15,30 @@ NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("*.py"))
 NOTEBOOK_TIMEOUT = 600
 
 
+def _run_notebook(notebook: Path) -> str:
+    """Execute a notebook in-process and return its stdout."""
+    stdout = StringIO()
+    stderr = StringIO()
+
+    def _timeout_handler(_signum: int, _frame: object) -> None:
+        msg = f"Notebook execution timed out after {NOTEBOOK_TIMEOUT}s: {notebook}"
+        raise TimeoutError(msg)
+
+    previous = signal.signal(signal.SIGALRM, _timeout_handler)
+    signal.alarm(NOTEBOOK_TIMEOUT)
+    try:
+        with redirect_stdout(stdout), redirect_stderr(stderr):
+            runpy.run_path(str(notebook), run_name="__main__")
+    except Exception as exc:
+        message = stderr.getvalue() or str(exc)
+        pytest.fail(f"Notebook failed: {notebook}\n{message}")
+    finally:
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, previous)
+
+    return stdout.getvalue()
+
+
 def _extract_sharpe_ratio(output: str) -> float:
     """Return the final numeric value printed by a notebook as its Sharpe ratio."""
     matches = FLOAT_PATTERN.findall(output)
@@ -23,7 +48,7 @@ def _extract_sharpe_ratio(output: str) -> float:
 
 
 def _trusted_notebook_path(notebook: Path) -> Path:
-    """Return a validated repo-local notebook path for subprocess execution."""
+    """Return a validated repo-local notebook path for in-process execution."""
     notebook = notebook.resolve()
     if not notebook.is_relative_to(NOTEBOOK_DIR):
         msg = f"Notebook must be within {NOTEBOOK_DIR}: {notebook}"
@@ -35,29 +60,17 @@ def _trusted_notebook_path(notebook: Path) -> Path:
 
 
 @pytest.mark.parametrize("notebook", NOTEBOOKS, ids=lambda path: path.stem)
-def test_notebook_computes_finite_sharpe_ratio(notebook: Path, tmp_path: Path) -> None:
-    uv_bin = shutil.which("uv")
-    if uv_bin is None:
-        pytest.skip("uv is required to execute Marimo notebooks")
-
+def test_notebook_computes_finite_sharpe_ratio(
+    notebook: Path,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    pytest.importorskip("marimo")
     notebook = _trusted_notebook_path(notebook)
     output_dir = tmp_path / notebook.stem
-    env = {
-        **os.environ,
-        "NOTEBOOK_OUTPUT_FOLDER": str(output_dir),
-    }
-    result = subprocess.run(  # nosec B603 - argv is fixed and notebook path is validated above
-        [uv_bin, "run", "--script", str(notebook)],
-        capture_output=True,
-        check=False,
-        cwd=ROOT,
-        env=env,
-        text=True,
-        timeout=NOTEBOOK_TIMEOUT,
-    )
+    monkeypatch.chdir(ROOT)
+    monkeypatch.setenv("NOTEBOOK_OUTPUT_FOLDER", str(output_dir))
 
-    assert result.returncode == 0, result.stderr
-
-    sharpe_ratio = _extract_sharpe_ratio(result.stdout)
+    sharpe_ratio = _extract_sharpe_ratio(_run_notebook(notebook))
 
     assert math.isfinite(sharpe_ratio)
