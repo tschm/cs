@@ -12,6 +12,7 @@ dependencies = [
     "polars>=1.39.3",
     "plotly>=6.7.0",
     "jquantstats>=0.8.2",
+    "tinycta==0.9.5",
 ]
 classifiers = [
     "Private :: Do Not Upload",
