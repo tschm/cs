@@ -112,6 +112,10 @@ def _trusted_notebook_path(notebook: Path) -> Path:
     return notebook
 
 
+def test_expected_sharpe_ratio_baselines_cover_all_notebooks() -> None:
+    assert set(EXPECTED_SHARPE_RATIOS) == {notebook.stem for notebook in NOTEBOOKS}
+
+
 @pytest.mark.parametrize("notebook", NOTEBOOKS, ids=lambda path: path.stem)
 def test_notebook_matches_expected_sharpe_ratio(
     notebook: Path,
