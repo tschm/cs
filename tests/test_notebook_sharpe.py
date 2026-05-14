@@ -15,6 +15,13 @@ ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_DIR = (ROOT / "book" / "marimo" / "notebooks").resolve()
 FLOAT_PATTERN = re.compile(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?")
 NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("*.py"))
+EXPECTED_SHARPE_RATIOS = {
+    "Experiment1": 0.7819474087813011,
+    "Experiment2": 1.1260755020625202,
+    "Experiment3": 1.127579694747821,
+    "Experiment4": 1.1358730785064524,
+    "Experiment5": 1.3807276232244459,
+}
 NOTEBOOK_TIMEOUT = 600
 # Queue read grace period after the child has exited and should have published a result.
 QUEUE_TIMEOUT = 10
@@ -106,14 +113,16 @@ def _trusted_notebook_path(notebook: Path) -> Path:
 
 
 @pytest.mark.parametrize("notebook", NOTEBOOKS, ids=lambda path: path.stem)
-def test_notebook_computes_finite_sharpe_ratio(
+def test_notebook_matches_expected_sharpe_ratio(
     notebook: Path,
     tmp_path: Path,
 ) -> None:
     pytest.importorskip("marimo", reason="Marimo notebooks import marimo at module import time")
     notebook = _trusted_notebook_path(notebook)
     output_dir = tmp_path / notebook.stem
+    expected_sharpe_ratio = EXPECTED_SHARPE_RATIOS[notebook.stem]
 
     sharpe_ratio = _extract_sharpe_ratio(_run_notebook(notebook, output_dir))
 
     assert math.isfinite(sharpe_ratio)
+    assert sharpe_ratio == pytest.approx(expected_sharpe_ratio, abs=1e-9)
