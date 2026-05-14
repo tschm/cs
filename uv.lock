@@ -107,19 +107,21 @@ version = "1.0.0"
 source = { virtual = "." }
 dependencies = [
     { name = "cvxsimulator" },
+    { name = "jquantstats" },
     { name = "marimo" },
     { name = "numpy" },
-    { name = "polars" },
     { name = "plotly" },
+    { name = "polars" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "cvxsimulator", specifier = ">=1.5.1" },
+    { name = "jquantstats", specifier = ">=0.8.2" },
     { name = "marimo", specifier = ">=0.23.6" },
     { name = "numpy", specifier = ">=2.4.4" },
-    { name = "polars", specifier = ">=1.39.3" },
     { name = "plotly", specifier = ">=6.7.0" },
+    { name = "polars", specifier = ">=1.39.3" },
 ]
 
 [[package]]
@@ -200,7 +202,7 @@ wheels = [
 
 [[package]]
 name = "jquantstats"
-version = "0.6.5"
+version = "0.8.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
@@ -210,9 +212,9 @@ dependencies = [
     { name = "polars" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/04/55/6c8874fe3cf697bb2a29d93490447f788b8d86d4d96e88ce4309d8091ab1/jquantstats-0.6.5.tar.gz", hash = "sha256:10dfbc2b2259414e40abcce0a03a9730ac92bdf7c0afe212998758e1339d3e22", size = 92104, upload-time = "2026-04-14T13:38:22.596Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/83/62/f0acbaa44d288a32fd522f392ce25d87f71bc0c9de7e8f85de9fafb34122/jquantstats-0.8.2.tar.gz", hash = "sha256:0fa75ec19fa679abe1912086416143ca23a6dc76212390457da5ffc2b5bc55d5", size = 93005, upload-time = "2026-05-14T07:46:25.592Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/92/fc/e41877f951704d210b9f0181ccfc026ca7984fbc2bf3914a7dd8083af745/jquantstats-0.6.5-py3-none-any.whl", hash = "sha256:ade8e8f48cd06c18878bf0b430dafc9c4dcba4ba4b625bc9c62d9b6d9d96ec88", size = 104390, upload-time = "2026-04-14T13:38:21.23Z" },
+    { url = "https://files.pythonhosted.org/packages/4a/41/68d500440b9ca44a628896743e0e28bdf25bb0c4db9a6ecc5dffba5b37b6/jquantstats-0.8.2-py3-none-any.whl", hash = "sha256:11bb555e1c63af90b8fa46e3baa24bc16b297519016d4b7fddddfa4065d8c531", size = 107105, upload-time = "2026-05-14T07:46:23.86Z" },
 ]
 
 [[package]]

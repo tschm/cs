@@ -12,6 +12,7 @@ dependencies = [
     "polars>=1.39.3",
     "plotly>=6.7.0",
     "cvxsimulator>=1.5.1",
+    "jquantstats>=0.8.2",
 ]
 classifiers = [
     "Private :: Do Not Upload",
