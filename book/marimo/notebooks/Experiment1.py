@@ -3,7 +3,6 @@
 # dependencies = [
 #     "marimo==0.23.1",
 #     "numpy==2.4.4",
-#     "pandas==3.0.2",
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
 #     "pyarrow==23.0.1",
@@ -27,7 +26,6 @@ with app.setup:
 
     import marimo as mo
     import numpy as np
-    import pandas as pd
     import plotly.io as pio
     import polars as pl
 
@@ -50,7 +48,6 @@ with app.setup:
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
-    pd.options.plotting.backend = "plotly"
 
     path = Path(__file__).parent / "public" / "Prices_hashed.csv"
 
@@ -169,7 +166,6 @@ def _():
 
 @app.cell
 def _():
-    pd.set_option("display.precision", 2)
     return
 
 

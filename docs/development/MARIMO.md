@@ -69,7 +69,7 @@ Each notebook includes inline metadata that specifies its dependencies:
 # dependencies = [
 #     "marimo==0.13.15",
 #     "numpy==2.3.0",
-#     "pandas==2.3.0",
+#     "polars==1.39.3",
 #     "plotly==6.1.2",
 #     "cvxsimulator==1.4.3"
 # ]
