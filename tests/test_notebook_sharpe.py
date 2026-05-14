@@ -22,6 +22,8 @@ EXPECTED_SHARPE_RATIOS = {
     "Experiment4": 1.1358730785064524,
     "Experiment5": 1.3807276232244459,
 }
+SHARPE_RATIO_REL_TOLERANCE = 1e-6
+SHARPE_RATIO_ABS_TOLERANCE = 1e-6
 NOTEBOOK_TIMEOUT = 600
 # Queue read grace period after the child has exited and should have published a result.
 QUEUE_TIMEOUT = 10
@@ -129,4 +131,8 @@ def test_notebook_matches_expected_sharpe_ratio(
     sharpe_ratio = _extract_sharpe_ratio(_run_notebook(notebook, output_dir))
 
     assert math.isfinite(sharpe_ratio)
-    assert sharpe_ratio == pytest.approx(expected_sharpe_ratio, rel=1e-6, abs=1e-6)
+    assert sharpe_ratio == pytest.approx(
+        expected_sharpe_ratio,
+        rel=SHARPE_RATIO_REL_TOLERANCE,
+        abs=SHARPE_RATIO_ABS_TOLERANCE,
+    )
