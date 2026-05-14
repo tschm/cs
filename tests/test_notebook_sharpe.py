@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_DIR = ROOT / "book" / "marimo" / "notebooks"
 FLOAT_PATTERN = re.compile(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?")
 NOTEBOOKS = sorted(NOTEBOOK_DIR.glob("*.py"))
+NOTEBOOK_TIMEOUT = 600
 
 
 def _extract_sharpe_ratio(output: str) -> float:
@@ -38,7 +39,7 @@ def test_notebook_computes_finite_sharpe_ratio(notebook: Path, tmp_path: Path) -
         cwd=ROOT,
         env=env,
         text=True,
-        timeout=600,
+        timeout=NOTEBOOK_TIMEOUT,
     )
 
     assert result.returncode == 0, result.stderr
