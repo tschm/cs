@@ -15,6 +15,7 @@ NOTEBOOK_TIMEOUT = 600
 
 
 def _extract_sharpe_ratio(output: str) -> float:
+    """Return the final numeric value printed by a notebook as its Sharpe ratio."""
     matches = FLOAT_PATTERN.findall(output)
     if not matches:
         pytest.fail(f"Notebook output did not contain a Sharpe ratio:\n{output}")
