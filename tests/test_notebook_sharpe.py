@@ -16,10 +16,16 @@ NOTEBOOK_DIR = (ROOT / "book" / "marimo" / "notebooks").resolve()
 FLOAT_PATTERN = re.compile(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?")
 NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("*.py"))
 NOTEBOOK_TIMEOUT = 600
+QUEUE_TIMEOUT = 10
+PROCESS_START_METHOD = "spawn" if os.name == "nt" else multiprocessing.get_start_method()
 
 
 def _run_notebook_worker(notebook: str, output_dir: str, queue: multiprocessing.Queue) -> None:
-    """Execute a notebook and report its outcome through a multiprocessing queue."""
+    """Execute a notebook and report its outcome through a multiprocessing queue.
+
+    This runs in a child process, so changing its cwd or environment does not
+    affect the parent pytest process.
+    """
     stdout = StringIO()
     stderr = StringIO()
     try:
@@ -43,7 +49,7 @@ def _run_notebook_worker(notebook: str, output_dir: str, queue: multiprocessing.
 
 def _run_notebook(notebook: Path, output_dir: Path) -> str:
     """Execute a notebook in a child process and return its stdout."""
-    ctx = multiprocessing.get_context()
+    ctx = multiprocessing.get_context(PROCESS_START_METHOD)
     queue = ctx.Queue()
     process = ctx.Process(target=_run_notebook_worker, args=(str(notebook), str(output_dir), queue))
     process.start()
@@ -55,7 +61,7 @@ def _run_notebook(notebook: Path, output_dir: Path) -> str:
         pytest.fail(f"Notebook execution timed out after {NOTEBOOK_TIMEOUT}s: {notebook}")
 
     try:
-        result = queue.get(timeout=min(NOTEBOOK_TIMEOUT, 10))
+        result = queue.get(timeout=min(NOTEBOOK_TIMEOUT, QUEUE_TIMEOUT))
     except Empty:
         pytest.fail(f"Notebook exited without output: {notebook}")
 
