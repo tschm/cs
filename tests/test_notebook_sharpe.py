@@ -17,6 +17,7 @@ FLOAT_PATTERN = re.compile(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?")
 NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("*.py"))
 NOTEBOOK_TIMEOUT = 600
 QUEUE_TIMEOUT = 10
+PROCESS_CLEANUP_TIMEOUT = 10
 PROCESS_START_METHOD = "spawn"
 
 
@@ -55,12 +56,12 @@ def _run_notebook(notebook: Path, output_dir: Path) -> str:
     process.start()
     process.join(timeout=NOTEBOOK_TIMEOUT)
 
-    if process.is_alive():
+    if process.exitcode is None:
         process.terminate()
-        process.join(timeout=QUEUE_TIMEOUT)
-        if process.is_alive():
+        process.join(timeout=PROCESS_CLEANUP_TIMEOUT)
+        if process.exitcode is None:
             process.kill()
-            process.join(timeout=QUEUE_TIMEOUT)
+            process.join(timeout=PROCESS_CLEANUP_TIMEOUT)
         pytest.fail(f"Notebook execution timed out after {NOTEBOOK_TIMEOUT}s: {notebook}")
 
     try:
@@ -100,7 +101,7 @@ def test_notebook_computes_finite_sharpe_ratio(
     notebook: Path,
     tmp_path: Path,
 ) -> None:
-    pytest.importorskip("marimo")
+    pytest.importorskip("marimo", reason="Marimo notebooks import marimo at module import time")
     notebook = _trusted_notebook_path(notebook)
     output_dir = tmp_path / notebook.stem
 
