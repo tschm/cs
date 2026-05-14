@@ -1,10 +1,13 @@
 import math
+import multiprocessing
+import os
 import re
 import runpy
-import signal
+import traceback
 from contextlib import redirect_stderr, redirect_stdout
 from io import StringIO
 from pathlib import Path
+from queue import Empty
 
 import pytest
 
@@ -15,28 +18,52 @@ NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("*.py"))
 NOTEBOOK_TIMEOUT = 600
 
 
-def _run_notebook(notebook: Path) -> str:
-    """Execute a notebook in-process and return its stdout."""
+def _run_notebook_worker(notebook: str, output_dir: str, queue: multiprocessing.Queue) -> None:
+    """Execute a notebook and report its outcome through a multiprocessing queue."""
     stdout = StringIO()
     stderr = StringIO()
-
-    def _timeout_handler(_signum: int, _frame: object) -> None:
-        msg = f"Notebook execution timed out after {NOTEBOOK_TIMEOUT}s: {notebook}"
-        raise TimeoutError(msg)
-
-    previous = signal.signal(signal.SIGALRM, _timeout_handler)
-    signal.alarm(NOTEBOOK_TIMEOUT)
     try:
+        os.chdir(ROOT)
+        os.environ["NOTEBOOK_OUTPUT_FOLDER"] = output_dir
         with redirect_stdout(stdout), redirect_stderr(stderr):
-            runpy.run_path(str(notebook), run_name="__main__")
+            runpy.run_path(notebook, run_name="__main__")
     except Exception as exc:
-        message = stderr.getvalue() or str(exc)
-        pytest.fail(f"Notebook failed: {notebook}\n{message}")
-    finally:
-        signal.alarm(0)
-        signal.signal(signal.SIGALRM, previous)
+        queue.put(
+            {
+                "stdout": stdout.getvalue(),
+                "stderr": stderr.getvalue(),
+                "error": str(exc),
+                "traceback": traceback.format_exc(),
+            }
+        )
+        return
 
-    return stdout.getvalue()
+    queue.put({"stdout": stdout.getvalue(), "stderr": stderr.getvalue(), "error": None, "traceback": None})
+
+
+def _run_notebook(notebook: Path, output_dir: Path) -> str:
+    """Execute a notebook in a child process and return its stdout."""
+    ctx = multiprocessing.get_context("spawn")
+    queue = ctx.Queue()
+    process = ctx.Process(target=_run_notebook_worker, args=(str(notebook), str(output_dir), queue))
+    process.start()
+    process.join(timeout=NOTEBOOK_TIMEOUT)
+
+    if process.is_alive():
+        process.terminate()
+        process.join()
+        pytest.fail(f"Notebook execution timed out after {NOTEBOOK_TIMEOUT}s: {notebook}")
+
+    try:
+        result = queue.get(timeout=1)
+    except Empty:
+        pytest.fail(f"Notebook exited without output: {notebook}")
+
+    if result["error"] is not None:
+        message = result["stderr"] or result["error"]
+        pytest.fail(f"Notebook failed: {notebook}\n{message}\n{result['traceback']}")
+
+    return result["stdout"]
 
 
 def _extract_sharpe_ratio(output: str) -> float:
@@ -63,14 +90,11 @@ def _trusted_notebook_path(notebook: Path) -> Path:
 def test_notebook_computes_finite_sharpe_ratio(
     notebook: Path,
     tmp_path: Path,
-    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     pytest.importorskip("marimo")
     notebook = _trusted_notebook_path(notebook)
     output_dir = tmp_path / notebook.stem
-    monkeypatch.chdir(ROOT)
-    monkeypatch.setenv("NOTEBOOK_OUTPUT_FOLDER", str(output_dir))
 
-    sharpe_ratio = _extract_sharpe_ratio(_run_notebook(notebook))
+    sharpe_ratio = _extract_sharpe_ratio(_run_notebook(notebook, output_dir))
 
     assert math.isfinite(sharpe_ratio)
