@@ -11,6 +11,8 @@ dependencies = [
     "numpy>=2.4.4",
     "polars>=1.39.3",
     "plotly>=6.7.0",
+    "pyarrow>=23.0.1",
+    "tinycta>=0.9.5",
     "cvxsimulator>=1.5.1",
 ]
 classifiers = [
