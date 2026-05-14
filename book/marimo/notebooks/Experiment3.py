@@ -5,8 +5,7 @@
 #     "numpy==2.4.4",
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
-#     "pyarrow==23.0.1",
-#     "cvxsimulator==1.5.1"
+#     "jquantstats==0.8.2"
 # ]
 # ///
 
@@ -30,22 +29,7 @@ with app.setup:
     import plotly.io as pio
     import polars as pl
 
-    # Compatibility shim: cvxsimulator imports from private jquantstats API
-    # that doesn't exist in public jquantstats. Patch sys.modules before
-    # importing cvx.simulator so portfolio.py can resolve these imports.
-    import sys
-    import types
-    import jquantstats.data as _jqs_data_mod
-
-    _fake_jqs_data = types.ModuleType("jquantstats._data")
-    _fake_jqs_data.Data = _jqs_data_mod.Data
-    sys.modules["jquantstats._data"] = _fake_jqs_data
-
-    _fake_jqs_api = types.ModuleType("jquantstats.api")
-    _fake_jqs_api.build_data = lambda returns: _jqs_data_mod.Data.from_returns(returns=returns.reset_index())
-    sys.modules["jquantstats.api"] = _fake_jqs_api
-
-    from cvx.simulator import interpolate
+    from jquantstats import Portfolio, interpolate
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -58,7 +42,7 @@ with app.setup:
 
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
     dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
-    prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
+    prices = interpolate(dframe)
 
 
 @app.cell(hide_code=True)
@@ -110,7 +94,7 @@ def filter(price, volatility=32, clip=4.2, min_periods=300):
     """Filter price series to handle outliers and normalize volatility.
 
     Args:
-        price: Price series data
+        price: Polars Series of price data
         volatility: Lookback period for volatility calculation (default: 32)
         clip: Maximum absolute value for volatility-adjusted returns (default: 4.2)
         min_periods: Minimum number of observations required for volatility calculation (default: 300)
@@ -118,9 +102,9 @@ def filter(price, volatility=32, clip=4.2, min_periods=300):
     Returns:
         Filtered price series with normalized volatility and clipped extreme values
     """
-    r = np.log(price).diff()
-    vola = r.ewm(com=volatility, min_periods=min_periods).std()
-    price_adj = (r / vola).clip(-clip, clip).cumsum()
+    r = price.log(base=np.e).diff()
+    vola = r.ewm_std(com=volatility, min_samples=min_periods)
+    price_adj = (r / vola).clip(lower_bound=-clip, upper_bound=clip).cum_sum()
     return price_adj
 
 
@@ -144,7 +128,7 @@ def osc(prices, fast=32, slow=96, scaling=True):
     """Calculate a properly scaled oscillator based on the difference of two moving averages.
 
     Args:
-        prices: Price series data
+        prices: Polars Series of price data
         fast: Fast moving average period (default: 32)
         slow: Slow moving average period (default: 96)
         scaling: Whether to apply theoretical scaling to normalize the oscillator (default: True)
@@ -153,7 +137,7 @@ def osc(prices, fast=32, slow=96, scaling=True):
         Oscillator series with consistent statistical properties regardless of
         the moving average parameters when scaling is enabled
     """
-    diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
+    diff = prices.ewm_mean(com=fast - 1) - prices.ewm_mean(com=slow - 1)
     if scaling:
         # attention this formula is forward-looking
         # s = diff.std()
@@ -177,7 +161,7 @@ def _(filter):
         price_adj = filter(price, volatility=vola, clip=clip)
         # compute mu
         mu = np.tanh(osc(prices=price_adj, fast=fast, slow=slow))
-        return mu / price.pct_change().ewm(com=slow, min_periods=300).std()
+        return mu / price.pct_change().ewm_std(com=slow, min_samples=300)
 
     return (f,)
 
@@ -197,18 +181,20 @@ def _():
 
 
 @app.cell
-def _(f, fast, prices, slow, vola, winsor):
-    from cvx.simulator import Portfolio
-
-    pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
-    portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
-    print(portfolio.sharpe())
+def _(f, fast, slow, vola, winsor):
+    assets = [c for c in prices.columns if c != date_col]
+    pos = prices.with_columns([
+        (1e5 * f(prices[asset], fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value).fill_null(0.0)).alias(asset)
+        for asset in assets
+    ])
+    portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
+    print(portfolio.stats.sharpe()["returns"])
     return (portfolio,)
 
 
 @app.cell
 def _(portfolio):
-    fig = portfolio.snapshot()
+    fig = portfolio.plots.snapshot()
     fig
     return
 

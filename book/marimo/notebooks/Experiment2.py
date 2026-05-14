@@ -5,8 +5,7 @@
 #     "numpy==2.4.4",
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
-#     "pyarrow==23.0.1",
-#     "cvxsimulator==1.5.1"
+#     "jquantstats==0.8.2"
 # ]
 # ///
 
@@ -29,22 +28,7 @@ with app.setup:
     import plotly.io as pio
     import polars as pl
 
-    # Compatibility shim: cvxsimulator imports from private jquantstats API
-    # that doesn't exist in public jquantstats. Patch sys.modules before
-    # importing cvx.simulator so portfolio.py can resolve these imports.
-    import sys
-    import types
-    import jquantstats.data as _jqs_data_mod
-
-    _fake_jqs_data = types.ModuleType("jquantstats._data")
-    _fake_jqs_data.Data = _jqs_data_mod.Data
-    sys.modules["jquantstats._data"] = _fake_jqs_data
-
-    _fake_jqs_api = types.ModuleType("jquantstats.api")
-    _fake_jqs_api.build_data = lambda returns: _jqs_data_mod.Data.from_returns(returns=returns.reset_index())
-    sys.modules["jquantstats.api"] = _fake_jqs_api
-
-    from cvx.simulator import interpolate
+    from jquantstats import Portfolio, interpolate
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -57,7 +41,7 @@ with app.setup:
 
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
     dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
-    prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
+    prices = interpolate(dframe)
 
 
 @app.cell(hide_code=True)
@@ -80,7 +64,7 @@ def f(price, fast=32, slow=96, volatility=32):
     """Calculate volatility-scaled trading signals based on moving averages.
 
     Args:
-        price: Price series data
+        price: Polars Series of price data
         fast: Fast moving average period (default: 32)
         slow: Slow moving average period (default: 96)
         volatility: Lookback period for volatility calculation (default: 32)
@@ -90,10 +74,10 @@ def f(price, fast=32, slow=96, volatility=32):
         larger positions during low volatility periods and smaller positions
         during high volatility periods
     """
-    s = price.ewm(com=slow, min_periods=300).mean()
-    f = price.ewm(com=fast, min_periods=300).mean()
-    std = price.pct_change().ewm(com=volatility, min_periods=300).std()
-    return np.sign(f - s) / std
+    s = price.ewm_mean(com=slow, min_samples=300)
+    fast_ma = price.ewm_mean(com=fast, min_samples=300)
+    std = price.pct_change().ewm_std(com=volatility, min_samples=300)
+    return (fast_ma - s).sign() / std
 
 
 @app.cell
@@ -110,12 +94,14 @@ def _():
 
 
 @app.cell
-def _(f, fast, prices, slow, vola):
-    from cvx.simulator import Portfolio
-
-    pos = 1e5 * f(prices, fast=fast.value, slow=slow.value, volatility=vola.value)
-    portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
-    print(portfolio.sharpe())
+def _(fast, slow, vola):
+    assets = [c for c in prices.columns if c != date_col]
+    pos = prices.with_columns([
+        (1e5 * f(prices[asset], fast=fast.value, slow=slow.value, volatility=vola.value).fill_null(0.0)).alias(asset)
+        for asset in assets
+    ])
+    portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
+    print(portfolio.stats.sharpe()["returns"])
     return (portfolio,)
 
 
@@ -148,7 +134,7 @@ def _():
 
 @app.cell
 def _(portfolio):
-    portfolio.snapshot()
+    portfolio.plots.snapshot()
     return
 
 
