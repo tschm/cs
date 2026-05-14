@@ -16,8 +16,11 @@ NOTEBOOK_DIR = (ROOT / "book" / "marimo" / "notebooks").resolve()
 FLOAT_PATTERN = re.compile(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?")
 NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("*.py"))
 NOTEBOOK_TIMEOUT = 600
+# Queue read grace period after the child has exited and should have published a result.
 QUEUE_TIMEOUT = 10
+# Grace period for a timed-out child to exit after terminate() before escalating to kill().
 PROCESS_CLEANUP_TIMEOUT = 10
+# Short wait for a kill()ed child to disappear before failing the test.
 PROCESS_KILL_TIMEOUT = 1
 PROCESS_START_METHOD = "spawn"
 
@@ -76,7 +79,7 @@ def _run_notebook(notebook: Path, output_dir: Path) -> str:
         pytest.fail(f"Notebook exited without output: {notebook}")
 
     if result["error"] is not None:
-        message = result["stderr"] or result["error"]
+        message = f"{result['stderr']}\n{result['error']}" if result["stderr"] else result["error"]
         pytest.fail(f"Notebook failed: {notebook}\n{message}\n{result['traceback']}")
 
     return result["stdout"]
