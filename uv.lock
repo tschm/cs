@@ -109,7 +109,7 @@ dependencies = [
     { name = "cvxsimulator" },
     { name = "marimo" },
     { name = "numpy" },
-    { name = "pandas" },
+    { name = "polars" },
     { name = "plotly" },
 ]
 
@@ -118,7 +118,7 @@ requires-dist = [
     { name = "cvxsimulator", specifier = ">=1.5.1" },
     { name = "marimo", specifier = ">=0.23.6" },
     { name = "numpy", specifier = ">=2.4.4" },
-    { name = "pandas", specifier = ">=3.0.3" },
+    { name = "polars", specifier = ">=1.39.3" },
     { name = "plotly", specifier = ">=6.7.0" },
 ]
 

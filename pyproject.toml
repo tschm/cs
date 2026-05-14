@@ -9,7 +9,7 @@ license = { file = "LICENSE" }
 dependencies = [
     "marimo>=0.23.6",
     "numpy>=2.4.4",
-    "pandas>=3.0.3",
+    "polars>=1.39.3",
     "plotly>=6.7.0",
     "cvxsimulator>=1.5.1",
 ]
@@ -36,4 +36,4 @@ Homepage = "https://tschm.github.io/cs"
 index-strategy = "unsafe-best-match"
 
 [tool.deptry]
-package_module_name_map = { marimo = "marimo", numpy = "numpy", pandas = "pandas", plotly = "plotly" }
+package_module_name_map = { marimo = "marimo", numpy = "numpy", polars = "polars", plotly = "plotly" }
