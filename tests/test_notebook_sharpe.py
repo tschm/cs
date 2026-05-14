@@ -43,7 +43,7 @@ def _run_notebook_worker(notebook: str, output_dir: str, queue: multiprocessing.
 
 def _run_notebook(notebook: Path, output_dir: Path) -> str:
     """Execute a notebook in a child process and return its stdout."""
-    ctx = multiprocessing.get_context("spawn")
+    ctx = multiprocessing.get_context()
     queue = ctx.Queue()
     process = ctx.Process(target=_run_notebook_worker, args=(str(notebook), str(output_dir), queue))
     process.start()
@@ -55,7 +55,7 @@ def _run_notebook(notebook: Path, output_dir: Path) -> str:
         pytest.fail(f"Notebook execution timed out after {NOTEBOOK_TIMEOUT}s: {notebook}")
 
     try:
-        result = queue.get(timeout=1)
+        result = queue.get(timeout=min(NOTEBOOK_TIMEOUT, 10))
     except Empty:
         pytest.fail(f"Notebook exited without output: {notebook}")
 
@@ -75,7 +75,7 @@ def _extract_sharpe_ratio(output: str) -> float:
 
 
 def _trusted_notebook_path(notebook: Path) -> Path:
-    """Return a validated repo-local notebook path for in-process execution."""
+    """Return a validated repo-local notebook path for child-process execution."""
     notebook = notebook.resolve()
     if not notebook.is_relative_to(NOTEBOOK_DIR):
         msg = f"Notebook must be within {NOTEBOOK_DIR}: {notebook}"
