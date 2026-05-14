@@ -25,7 +25,11 @@ def _extract_sharpe_ratio(output: str) -> float:
 def _trusted_notebook_path(notebook: Path) -> Path:
     """Return a validated repo-local notebook path for subprocess execution."""
     notebook = notebook.resolve()
-    notebook.relative_to(NOTEBOOK_DIR)
+    try:
+        notebook.relative_to(NOTEBOOK_DIR)
+    except ValueError as exc:
+        msg = f"Notebook must be within {NOTEBOOK_DIR}: {notebook}"
+        raise ValueError(msg) from exc
     if notebook.suffix != ".py":
         msg = f"Unexpected notebook path: {notebook}"
         raise ValueError(msg)
