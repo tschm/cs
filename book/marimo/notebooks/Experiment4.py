@@ -6,7 +6,7 @@
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
 #     "jquantstats==0.8.2",
-#     "tinycta==0.9.5"
+#     "tinycta==0.12.0"
 # ]
 # ///
 
@@ -63,9 +63,18 @@ def _():
 
 @app.cell
 def _():
-    from tinycta.signal import osc, returns_adjust
+    import pandas as pd
 
-    return osc, returns_adjust
+    def returns_adjust(price, com=32, min_periods=300, clip=4.2):
+        r = price.apply(np.log).diff()
+        return (r / r.ewm(com=com, min_periods=min_periods).std()).clip(-clip, +clip)
+
+    def osc_fn(prices, fast=32, slow=96):
+        diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
+        s = diff.std()
+        return diff / s
+
+    return osc_fn, pd, returns_adjust
 
 
 @app.cell
@@ -83,9 +92,7 @@ def _():
 
 
 @app.cell
-def _(fast, osc, returns_adjust, slow, vola, winsor):
-    import pandas as pd
-
+def _(fast, osc_fn, pd, returns_adjust, slow, vola, winsor):
     assets = [c for c in prices.columns if c != date_col]
     prices_pd = pd.DataFrame(
         prices.drop(date_col).to_numpy(allow_copy=True),
@@ -96,23 +103,21 @@ def _(fast, osc, returns_adjust, slow, vola, winsor):
     mu = np.tanh(
         prices_pd.apply(returns_adjust, com=vola.value, clip=winsor.value)
         .cumsum()
-        .apply(osc, fast=fast.value, slow=slow.value)
+        .apply(osc_fn, fast=fast.value, slow=slow.value)
     )
     volax = prices_pd.pct_change().ewm(com=vola.value, min_periods=vola.value).std()
 
-    # compute the series of Euclidean norms by compute the sum of squares for each row
     euclid_norm = np.sqrt((mu * mu).sum(axis=1))
-
-    # Divide each column of mu by the Euclidean norm
     risk_scaled = mu.apply(lambda x: x / euclid_norm, axis=0)
 
-    pos_pd = 5e5 * risk_scaled / volax
+    pos_np = np.nan_to_num((5e5 * risk_scaled / volax).values, nan=0.0)
     pos = pl.DataFrame(
         {date_col: prices[date_col]}
-        | {col: pos_pd[col].fillna(0.0).to_list() for col in assets}
+        | {col: pos_np[:, i].tolist() for i, col in enumerate(assets)}
     )
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
-    print(portfolio.stats.sharpe()["returns"])
+    _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
+    print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
     return (portfolio,)
 
 

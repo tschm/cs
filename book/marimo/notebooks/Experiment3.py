@@ -94,7 +94,7 @@ def filter(price, volatility=32, clip=4.2, min_periods=300):
     """Filter price series to handle outliers and normalize volatility.
 
     Args:
-        price: Polars Series of price data
+        price: pandas Series or DataFrame of price data
         volatility: Lookback period for volatility calculation (default: 32)
         clip: Maximum absolute value for volatility-adjusted returns (default: 4.2)
         min_periods: Minimum number of observations required for volatility calculation (default: 300)
@@ -102,9 +102,9 @@ def filter(price, volatility=32, clip=4.2, min_periods=300):
     Returns:
         Filtered price series with normalized volatility and clipped extreme values
     """
-    r = price.log(base=np.e).diff()
-    vola = r.ewm_std(com=volatility, min_samples=min_periods)
-    price_adj = (r / vola).clip(lower_bound=-clip, upper_bound=clip).cum_sum()
+    r = np.log(price).diff()
+    vola = r.ewm(com=volatility, min_periods=min_periods).std()
+    price_adj = (r / vola).clip(-clip, clip).cumsum()
     return price_adj
 
 
@@ -128,7 +128,7 @@ def osc(prices, fast=32, slow=96, scaling=True):
     """Calculate a properly scaled oscillator based on the difference of two moving averages.
 
     Args:
-        prices: Polars Series of price data
+        prices: pandas Series or DataFrame of price data
         fast: Fast moving average period (default: 32)
         slow: Slow moving average period (default: 96)
         scaling: Whether to apply theoretical scaling to normalize the oscillator (default: True)
@@ -137,7 +137,7 @@ def osc(prices, fast=32, slow=96, scaling=True):
         Oscillator series with consistent statistical properties regardless of
         the moving average parameters when scaling is enabled
     """
-    diff = prices.ewm_mean(com=fast - 1) - prices.ewm_mean(com=slow - 1)
+    diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
     if scaling:
         # attention this formula is forward-looking
         # s = diff.std()
@@ -161,7 +161,7 @@ def _(filter):
         price_adj = filter(price, volatility=vola, clip=clip)
         # compute mu
         mu = np.tanh(osc(prices=price_adj, fast=fast, slow=slow))
-        return mu / price.pct_change().ewm_std(com=slow, min_samples=300)
+        return mu / price.pct_change().ewm(com=slow, min_periods=300).std()
 
     return (f,)
 
@@ -182,11 +182,19 @@ def _():
 
 @app.cell
 def _(f, fast, slow, vola, winsor):
+    import pandas as pd
+
     assets = [c for c in prices.columns if c != date_col]
-    pos = prices.with_columns([
-        (1e5 * f(prices[asset], fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value).fill_null(0.0)).alias(asset)
-        for asset in assets
-    ])
+    prices_pd = pd.DataFrame(
+        prices.drop(date_col).to_numpy(allow_copy=True),
+        index=prices[date_col].to_list(),
+        columns=assets,
+    )
+    pos_pd = 1e5 * f(prices_pd, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
+    pos = pl.DataFrame(
+        {date_col: prices[date_col]}
+        | {col: pos_pd[col].fillna(0.0).tolist() for col in assets}
+    )
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
     print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
