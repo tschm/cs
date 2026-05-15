@@ -68,10 +68,11 @@ def _():
 
 @app.cell
 def _(fast, slow, vola):
-    pos = prices.with_columns(
-        f(pl.all().exclude(date_col), fast=fast.value, slow=slow.value, volatility=vola.value).fill_null(0.0) * 1e5
+    portfolio = Portfolio.from_cash_position(
+        prices=prices,
+        cash_position=f(pl.all().exclude(date_col), fast=fast.value, slow=slow.value, volatility=vola.value).fill_null(0.0) * 1e5,
+        aum=1e8,
     )
-    portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
     print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
     return (portfolio,)
