@@ -70,7 +70,15 @@ def _():
 def _(fast, slow, vola):
     portfolio = Portfolio.from_cash_position(
         prices=prices,
-        cash_position=f(pl.all().exclude(date_col), fast=fast.value, slow=slow.value, volatility=vola.value).fill_null(0.0) * 1e5,
+        cash_position=(
+            f(
+                pl.all().exclude(date_col),
+                fast=fast.value,
+                slow=slow.value,
+                volatility=vola.value,
+            ).fill_null(0.0)
+            * 1e5
+        ),
         aum=1e8,
     )
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
