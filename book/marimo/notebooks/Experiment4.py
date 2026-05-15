@@ -26,13 +26,16 @@ with app.setup:
     import sys
     from pathlib import Path
 
-    sys.path.insert(0, str(Path(__file__).parent))
-
+    import marimo as mo
     import numpy as np
-
-    from preamble import Portfolio, interpolate, load_prices, mo, pio, pl
+    import polars as pl
+    from jquantstats import Portfolio
     from tinycta.osc import osc
     from tinycta.util import vol_adj
+
+    sys.path.insert(0, str(Path(__file__).parent))
+
+    from preamble import date_col, load_prices
 
     prices = load_prices(__file__)
 

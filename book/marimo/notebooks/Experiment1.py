@@ -24,13 +24,14 @@ with app.setup:
     import sys
     from pathlib import Path
 
-    import polars as pl
     import marimo as mo
-    from jquantstats import Portfolio, interpolate
+    import polars as pl
+    from jquantstats import Portfolio
 
     sys.path.insert(0, str(Path(__file__).parent))
 
-    from preamble import load_prices
+    from preamble import date_col, load_prices
+
     prices = load_prices(__file__)
 
 
