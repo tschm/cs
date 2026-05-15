@@ -118,14 +118,13 @@ def _():
 
 
 @app.function
-def osc(prices: "pl.DataFrame", fast=32, slow=96, scaling=True):
+def osc(prices: "pl.DataFrame", fast=32, slow=96):
     """Calculate a properly scaled oscillator based on the difference of two moving averages.
 
     Args:
         prices: polars DataFrame of price data (numeric columns only)
         fast: Fast moving average period (default: 32)
         slow: Slow moving average period (default: 96)
-        scaling: Whether to apply theoretical scaling to normalize the oscillator (default: True)
 
     Returns:
         Oscillator DataFrame with consistent statistical properties regardless of
@@ -135,23 +134,15 @@ def osc(prices: "pl.DataFrame", fast=32, slow=96, scaling=True):
     fast_ma = prices.with_columns([pl.col(c).ewm_mean(com=fast - 1) for c in cols])
     slow_ma = prices.with_columns([pl.col(c).ewm_mean(com=slow - 1) for c in cols])
     diff = pl.DataFrame({c: fast_ma[c] - slow_ma[c] for c in cols})
-    if scaling:
-        # attention this formula is forward-looking
-        # s = diff.std()
-        # you may want to use
-        f, g = 1 - 1 / fast, 1 - 1 / slow
-        s = np.sqrt(1.0 / (1 - f * f) - 2.0 / (1 - f * g) + 1.0 / (1 - g * g))
-        # or a moving std
-    else:
-        s = 1
+
+    f, g = 1 - 1 / fast, 1 - 1 / slow
+    s = np.sqrt(1.0 / (1 - f * f) - 2.0 / (1 - f * g) + 1.0 / (1 - g * g))
 
     return pl.DataFrame({c: diff[c] / s for c in cols})
 
 
 @app.cell
 def _(filter):
-    # from pycta.signal import osc
-
     # take two moving averages and apply tanh
     def f(price: "pl.DataFrame", slow=96, fast=32, vola=96, clip=3):
         # construct a fake-price, those fake-prices have homescedastic returns
