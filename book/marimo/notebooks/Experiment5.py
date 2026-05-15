@@ -6,7 +6,7 @@
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
 #     "jquantstats==0.8.2",
-#     "tinycta==0.9.5"
+#     "tinycta==0.12.0"
 # ]
 # ///
 
@@ -64,9 +64,18 @@ def _():
 @app.cell
 def _():
     from tinycta.linalg import inv_a_norm, solve
-    from tinycta.signal import osc, returns_adjust, shrink2id
+    from tinycta.signal import shrink2id
 
-    return inv_a_norm, osc, returns_adjust, shrink2id, solve
+    def returns_adjust(price, com=32, min_periods=300, clip=4.2):
+        r = price.apply(np.log).diff()
+        return (r / r.ewm(com=com, min_periods=min_periods).std()).clip(-clip, +clip)
+
+    def osc_fn(prices, fast=32, slow=96):
+        diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
+        s = diff.std()
+        return diff / s
+
+    return inv_a_norm, osc_fn, returns_adjust, shrink2id, solve
 
 
 @app.cell
@@ -89,7 +98,7 @@ def _():
 def _(
     corr,
     inv_a_norm,
-    osc,
+    osc_fn,
     returns_adjust,
     shrink2id,
     shrinkage,
@@ -100,51 +109,49 @@ def _(
     import pandas as pd
 
     assets = [c for c in prices.columns if c != date_col]
+
+    correlation = corr.value
+
     prices_pd = pd.DataFrame(
         prices.drop(date_col).to_numpy(allow_copy=True),
         index=prices[date_col].to_list(),
         columns=assets,
     )
 
-    correlation = corr.value
-
     returns_adj = prices_pd.apply(returns_adjust, com=vola.value, clip=winsor.value)
 
     # DCC by Engle
     cor = returns_adj.ewm(com=correlation, min_periods=correlation).corr()
 
-    mu = np.tanh(returns_adj.cumsum().apply(osc)).values
+    mu = np.tanh(returns_adj.cumsum().apply(osc_fn)).values
     vo = prices_pd.pct_change().ewm(com=vola.value, min_periods=vola.value).std().values
 
     pos_matrix = np.zeros((len(prices_pd), len(assets)))
 
     for n in range(len(prices_pd)):
         t = prices_pd.index[n]
-        mask = (
-            ~np.isnan(prices_pd.iloc[n].values)
-            & ~np.isnan(mu[n])
-            & ~np.isnan(vo[n])
-        )
+        # Use prices-only mask (matching cvxsimulator state.mask behavior)
+        mask = np.isfinite(prices_pd.iloc[n].values)
         if mask.sum() == 0:
             continue
-        corr_vals = cor.loc[t].values
-        if np.isnan(corr_vals).any():
-            continue
-        matrix = shrink2id(corr_vals, lamb=shrinkage.value)[mask, :][:, mask]
+        # Shrink full matrix first, then extract submatrix for available assets
+        full_shrunk = shrink2id(cor.loc[t].values, lamb=shrinkage.value)
+        matrix = full_shrunk[mask, :][:, mask]
         expected_mu = np.nan_to_num(mu[n][mask])
         expected_vo = np.nan_to_num(vo[n][mask])
         norm = inv_a_norm(expected_mu, matrix)
-        if norm == 0:
+        if norm == 0 or np.isnan(norm):
             continue
         risk_pos = solve(matrix, expected_mu) / norm
-        pos_matrix[n, mask] = 1e6 * risk_pos / expected_vo
+        pos_matrix[n, mask] = np.nan_to_num(1e6 * risk_pos / expected_vo, nan=0.0)
 
     pos = pl.DataFrame(
         {date_col: prices[date_col]}
         | {col: pos_matrix[:, i].tolist() for i, col in enumerate(assets)}
     )
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
-    print(portfolio.stats.sharpe()["returns"])
+    _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
+    print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
     return (portfolio,)
 
 
