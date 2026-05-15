@@ -98,16 +98,12 @@ def _():
     return
 
 
-@app.cell
-def _():
-    # take two moving averages and apply tanh
-    def f(price: "pl.DataFrame", slow=96, fast=32, vola=96, clip=3):
-        price_adj = price.with_columns(vol_adj(pl.all(), vola=vola, clip=clip, min_samples=300).cum_sum())
-        mu = price_adj.with_columns(osc(pl.all(), fast=fast, slow=slow).tanh())
-        vol = price.select(pl.all().pct_change().ewm_std(com=slow, min_samples=300))
-        return mu.with_columns([pl.col(c) / vol[c] for c in price.columns])
-
-    return (f,)
+@app.function
+def f(price: "pl.Expr", slow=96, fast=32, vola=96, clip=3) -> "pl.Expr":
+    price_adj = vol_adj(price, vola=vola, clip=clip, min_samples=300).cum_sum()
+    mu = osc(price_adj, fast=fast, slow=slow).tanh()
+    vol = price.pct_change().ewm_std(com=slow, min_samples=300)
+    return mu / vol
 
 
 @app.cell
@@ -125,13 +121,14 @@ def _():
 
 
 @app.cell
-def _(f, fast, slow, vola, winsor):
-    assets = [c for c in prices.columns if c != date_col]
+def _(fast, slow, vola, winsor):
     prices_only = prices.drop(date_col)
-    pos_values = f(prices_only, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
     pos = pl.concat([
         prices.select(date_col),
-        pos_values.select((pl.all() * 1e5).fill_nan(0.0).fill_null(0.0))
+        prices_only.select(
+            (f(pl.all(), fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value) * 1e5)
+            .fill_nan(0.0).fill_null(0.0)
+        )
     ], how="horizontal")
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()

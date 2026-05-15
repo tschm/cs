@@ -80,11 +80,9 @@ def _():
 
 @app.cell
 def _(fast, slow):
-    assets = [c for c in prices.columns if c != date_col]
-    pos = prices.with_columns([
-        (5e6 * f(prices[asset], fast=fast.value, slow=slow.value).fill_null(0.0)).alias(asset)
-        for asset in assets
-    ])
+    pos = prices.with_columns(
+        f(pl.all().exclude(date_col), fast=fast.value, slow=slow.value).fill_null(0.0) * 5e6
+    )
     return (pos,)
 
 

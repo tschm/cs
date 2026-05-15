@@ -80,13 +80,13 @@ def _(corr, shrinkage, vola, winsor):
     n_rows = len(prices_only)
     correlation = corr.value
 
-    returns_adj = prices_only.with_columns([vol_adj(pl.col(c), vola=vola.value, clip=winsor.value, min_samples=300) for c in assets])
+    returns_adj = prices_only.with_columns(vol_adj(pl.all(), vola=vola.value, clip=winsor.value, min_samples=300))
 
     # EWM correlation (DCC by Engle)
     # cov_t(i,j) = ewm_t(r_i * r_j) - ewm_t(r_i) * ewm_t(r_j)
-    ewm_means_np = returns_adj.select([
-        pl.col(c).ewm_mean(com=correlation, min_samples=int(correlation)) for c in assets
-    ]).to_numpy()
+    ewm_means_np = returns_adj.select(
+        pl.all().ewm_mean(com=correlation, min_samples=int(correlation))
+    ).to_numpy()
 
     pair_indices = [(i, j) for i in range(n_assets) for j in range(i, n_assets)]
     ewm_prod_np = returns_adj.select([
@@ -109,13 +109,10 @@ def _(corr, shrinkage, vola, winsor):
     for _k in range(n_assets):
         cor_3d[_var[:, _k] > 0, _k, _k] = 1.0
 
-    adj_cs = returns_adj.with_columns([pl.col(c).cum_sum() for c in assets])
-    osc_df = adj_cs.with_columns([osc(pl.col(c), fast=32, slow=96) for c in assets])
-    mu = osc_df.with_columns([pl.col(c).tanh() for c in osc_df.columns]).to_numpy()
-    vo = prices_only.with_columns([
-        pl.col(c).fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=int(vola.value))
-        for c in assets
-    ]).to_numpy()
+    mu = returns_adj.with_columns(pl.all().cum_sum()).with_columns(osc(pl.all(), fast=32, slow=96).tanh()).to_numpy()
+    vo = prices_only.select(
+        pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=int(vola.value))
+    ).to_numpy()
 
     prices_np = prices_only.to_numpy()
     pos_matrix = np.zeros((n_rows, n_assets))
@@ -134,10 +131,10 @@ def _(corr, shrinkage, vola, winsor):
         _risk_pos = solve(_matrix, _expected_mu) / _norm
         pos_matrix[_n, _mask] = np.nan_to_num(1e6 * _risk_pos / _expected_vo, nan=0.0)
 
-    pos = pl.DataFrame(
-        {date_col: prices[date_col]}
-        | {col: pos_matrix[:, i].tolist() for i, col in enumerate(assets)}
-    )
+    pos = pl.concat([
+        prices.select(date_col),
+        pl.from_numpy(pos_matrix, schema={col: pl.Float64 for col in assets})
+    ], how="horizontal")
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
     print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))

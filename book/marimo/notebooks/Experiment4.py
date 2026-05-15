@@ -72,16 +72,10 @@ def _():
 def _(fast, slow, vola, winsor):
     assets = [c for c in prices.columns if c != date_col]
     prices_only = prices.drop(date_col)
-    cols = prices_only.columns
 
-    adj_cs = prices_only.with_columns([vol_adj(pl.col(c), vola=vola.value, clip=winsor.value, min_samples=300).cum_sum() for c in cols])
-    osc_df = adj_cs.with_columns([osc(pl.col(c), fast=fast.value, slow=slow.value) for c in cols])
-    mu = osc_df.with_columns([pl.col(c).tanh() for c in osc_df.columns])
-
-    volax = prices_only.with_columns([
-        pl.col(c).fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value)
-        for c in prices_only.columns
-    ])
+    adj_cs = prices_only.with_columns(vol_adj(pl.all(), vola=vola.value, clip=winsor.value, min_samples=300).cum_sum())
+    mu = adj_cs.with_columns(osc(pl.all(), fast=fast.value, slow=slow.value).tanh())
+    volax = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value))
 
     mu_np = mu.to_numpy()
     volax_np = volax.to_numpy()
@@ -92,10 +86,10 @@ def _(fast, slow, vola, winsor):
     risk_scaled_np = mu_np / euclid_norm
 
     pos_np = np.nan_to_num(5e5 * risk_scaled_np / volax_np, nan=0.0)
-    pos = pl.DataFrame(
-        {date_col: prices[date_col]}
-        | {col: pos_np[:, i].tolist() for i, col in enumerate(assets)}
-    )
+    pos = pl.concat([
+        prices.select(date_col),
+        pl.from_numpy(pos_np, schema={col: pl.Float64 for col in assets})
+    ], how="horizontal")
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
     print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
