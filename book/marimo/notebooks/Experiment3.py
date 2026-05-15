@@ -6,7 +6,6 @@
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
 #     "jquantstats==0.8.2",
-#     "pandas==3.0"
 # ]
 # ///
 
@@ -52,15 +51,6 @@ def _():
     return
 
 
-@app.cell
-def _():
-    import warnings
-
-    # Suppress noisy warnings
-    warnings.simplefilter(action="ignore", category=FutureWarning)
-    return
-
-
 @app.cell(hide_code=True)
 def _():
     mo.md(
@@ -91,22 +81,25 @@ def _():
 
 
 @app.function
-def filter(price, volatility=32, clip=4.2, min_periods=300):
+def filter(price: "pl.DataFrame", volatility=32, clip=4.2, min_periods=300):
     """Filter price series to handle outliers and normalize volatility.
 
     Args:
-        price: pandas Series or DataFrame of price data
+        price: polars DataFrame of price data (numeric columns only)
         volatility: Lookback period for volatility calculation (default: 32)
         clip: Maximum absolute value for volatility-adjusted returns (default: 4.2)
         min_periods: Minimum number of observations required for volatility calculation (default: 300)
 
     Returns:
-        Filtered price series with normalized volatility and clipped extreme values
+        Filtered price DataFrame with normalized volatility and clipped extreme values
     """
-    r = np.log(price).diff()
-    vola = r.ewm(com=volatility, min_periods=min_periods).std()
-    price_adj = (r / vola).clip(-clip, clip).cumsum()
-    return price_adj
+    cols = price.columns
+    r = price.with_columns([pl.col(c).log().diff() for c in cols])
+    vola = r.with_columns([pl.col(c).ewm_std(com=volatility, min_samples=min_periods) for c in cols])
+    return pl.DataFrame({
+        c: (r[c] / vola[c]).clip(-clip, clip).cum_sum()
+        for c in cols
+    })
 
 
 @app.cell(hide_code=True)
@@ -125,20 +118,23 @@ def _():
 
 
 @app.function
-def osc(prices, fast=32, slow=96, scaling=True):
+def osc(prices: "pl.DataFrame", fast=32, slow=96, scaling=True):
     """Calculate a properly scaled oscillator based on the difference of two moving averages.
 
     Args:
-        prices: pandas Series or DataFrame of price data
+        prices: polars DataFrame of price data (numeric columns only)
         fast: Fast moving average period (default: 32)
         slow: Slow moving average period (default: 96)
         scaling: Whether to apply theoretical scaling to normalize the oscillator (default: True)
 
     Returns:
-        Oscillator series with consistent statistical properties regardless of
+        Oscillator DataFrame with consistent statistical properties regardless of
         the moving average parameters when scaling is enabled
     """
-    diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
+    cols = prices.columns
+    fast_ma = prices.with_columns([pl.col(c).ewm_mean(com=fast - 1) for c in cols])
+    slow_ma = prices.with_columns([pl.col(c).ewm_mean(com=slow - 1) for c in cols])
+    diff = pl.DataFrame({c: fast_ma[c] - slow_ma[c] for c in cols})
     if scaling:
         # attention this formula is forward-looking
         # s = diff.std()
@@ -149,7 +145,7 @@ def osc(prices, fast=32, slow=96, scaling=True):
     else:
         s = 1
 
-    return diff / s
+    return pl.DataFrame({c: diff[c] / s for c in cols})
 
 
 @app.cell
@@ -157,12 +153,16 @@ def _(filter):
     # from pycta.signal import osc
 
     # take two moving averages and apply tanh
-    def f(price, slow=96, fast=32, vola=96, clip=3):
+    def f(price: "pl.DataFrame", slow=96, fast=32, vola=96, clip=3):
         # construct a fake-price, those fake-prices have homescedastic returns
         price_adj = filter(price, volatility=vola, clip=clip)
         # compute mu
-        mu = np.tanh(osc(prices=price_adj, fast=fast, slow=slow))
-        return mu / price.pct_change().ewm(com=slow, min_periods=300).std()
+        osc_df = osc(prices=price_adj, fast=fast, slow=slow)
+        mu = osc_df.with_columns([pl.col(c).tanh() for c in osc_df.columns])
+        vol = price.with_columns([
+            pl.col(c).pct_change().ewm_std(com=slow, min_samples=300) for c in price.columns
+        ])
+        return pl.DataFrame({c: mu[c] / vol[c] for c in price.columns})
 
     return (f,)
 
@@ -183,18 +183,12 @@ def _():
 
 @app.cell
 def _(f, fast, slow, vola, winsor):
-    import pandas as pd
-
     assets = [c for c in prices.columns if c != date_col]
-    prices_pd = pd.DataFrame(
-        prices.drop(date_col).to_numpy(allow_copy=True),
-        index=prices[date_col].to_list(),
-        columns=assets,
-    )
-    pos_pd = 1e5 * f(prices_pd, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
+    prices_only = prices.drop(date_col)
+    pos_values = f(prices_only, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
     pos = pl.DataFrame(
         {date_col: prices[date_col]}
-        | {col: pos_pd[col].fillna(0.0).tolist() for col in assets}
+        | {col: (pos_values[col] * 1e5).fill_nan(0.0).fill_null(0.0).to_list() for col in assets}
     )
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
