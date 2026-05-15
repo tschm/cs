@@ -24,7 +24,6 @@ with app.setup:
     from pathlib import Path
 
     import marimo as mo
-    import numpy as np
     import plotly.io as pio
     import polars as pl
 
@@ -45,49 +44,23 @@ with app.setup:
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(r"""# CTA 2.0""")
     return
 
 
-@app.cell
-def _():
-    import warnings
-
-    # Suppress noisy warnings
-    warnings.simplefilter(action="ignore", category=FutureWarning)
-    return
-
 
 @app.function
-def f(price, fast=32, slow=96, volatility=32):
-    """Calculate volatility-scaled trading signals based on moving averages.
-
-    Args:
-        price: Polars Series of price data
-        fast: Fast moving average period (default: 32)
-        slow: Slow moving average period (default: 96)
-        volatility: Lookback period for volatility calculation (default: 32)
-
-    Returns:
-        Series of trading signals scaled by inverse volatility, providing
-        larger positions during low volatility periods and smaller positions
-        during high volatility periods
-    """
-    s = price.ewm_mean(com=slow, min_samples=300)
-    fast_ma = price.ewm_mean(com=fast, min_samples=300)
-    std = price.pct_change().ewm_std(com=volatility, min_samples=300)
-    return (fast_ma - s).sign() / std
+def f(price: "pl.Expr", fast=32, slow=96, volatility=32) -> "pl.Expr":
+    return (price.ewm_mean(com=fast, min_samples=300) - price.ewm_mean(com=slow, min_samples=300)).sign() / price.pct_change().ewm_std(com=volatility, min_samples=300)
 
 
 @app.cell
 def _():
-    # Create sliders using marimo's UI components
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
     vola = mo.ui.slider(4, 192, step=4, value=32, label="Volatility")
 
-    # Display the sliders in a vertical stack
     mo.vstack([fast, slow, vola])
 
     return fast, slow, vola
@@ -95,11 +68,9 @@ def _():
 
 @app.cell
 def _(fast, slow, vola):
-    assets = [c for c in prices.columns if c != date_col]
-    pos = prices.with_columns([
-        (1e5 * f(prices[asset], fast=fast.value, slow=slow.value, volatility=vola.value).fill_null(0.0)).alias(asset)
-        for asset in assets
-    ])
+    pos = prices.with_columns(
+        f(pl.all().exclude(date_col), fast=fast.value, slow=slow.value, volatility=vola.value).fill_null(0.0) * 1e5
+    )
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
     print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
@@ -112,7 +83,6 @@ def _():
         r"""
     * This is a **univariate** trading system, we map the (real) price of an asset to its (cash)position
     * Only 3 **free parameters** used here.
-    * Only 4 lines of code
     * Scaling the bet-size by volatility has improved the situation.
     """
     )

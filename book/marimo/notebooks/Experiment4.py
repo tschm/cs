@@ -54,15 +54,18 @@ def _():
     return
 
 
+@app.function
+def f(price: "pl.Expr", fast=32, slow=96, vola=32, clip=4.2) -> "pl.Expr":
+    return osc(vol_adj(price, vola=vola, clip=clip, min_samples=300).cum_sum(), fast=fast, slow=slow).tanh()
+
+
 @app.cell
 def _():
-    # Create sliders using marimo's UI components
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
     vola = mo.ui.slider(4, 192, step=4, value=32, label="Volatility")
     winsor = mo.ui.slider(1.0, 6.0, step=0.1, value=4.2, label="Winsorizing")
 
-    # Display the sliders in a vertical stack
     mo.vstack([fast, slow, vola, winsor])
 
     return fast, slow, vola, winsor
@@ -72,30 +75,18 @@ def _():
 def _(fast, slow, vola, winsor):
     assets = [c for c in prices.columns if c != date_col]
     prices_only = prices.drop(date_col)
-    cols = prices_only.columns
 
-    adj_cs = prices_only.with_columns([vol_adj(pl.col(c), vola=vola.value, clip=winsor.value, min_samples=300).cum_sum() for c in cols])
-    osc_df = adj_cs.with_columns([osc(pl.col(c), fast=fast.value, slow=slow.value) for c in cols])
-    mu = osc_df.with_columns([pl.col(c).tanh() for c in osc_df.columns])
-
-    volax = prices_only.with_columns([
-        pl.col(c).fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value)
-        for c in prices_only.columns
-    ])
-
-    mu_np = mu.to_numpy()
-    volax_np = volax.to_numpy()
-    # nansum matches pandas DataFrame.sum(axis=1, skipna=True): assets with no data
-    # for a given row contribute 0 rather than propagating NaN into the norm
+    mu_np = prices_only.select(f(pl.all(), fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)).to_numpy()
+    volax_np = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value)).to_numpy()
     euclid_norm = np.sqrt(np.nansum(mu_np ** 2, axis=1, keepdims=True))
     euclid_norm[euclid_norm == 0] = np.nan
     risk_scaled_np = mu_np / euclid_norm
 
     pos_np = np.nan_to_num(5e5 * risk_scaled_np / volax_np, nan=0.0)
-    pos = pl.DataFrame(
-        {date_col: prices[date_col]}
-        | {col: pos_np[:, i].tolist() for i, col in enumerate(assets)}
-    )
+    pos = pl.concat([
+        prices.select(date_col),
+        pl.from_numpy(pos_np, schema={col: pl.Float64 for col in assets})
+    ], how="horizontal")
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
     print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))

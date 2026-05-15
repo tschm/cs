@@ -24,7 +24,6 @@ with app.setup:
     from pathlib import Path
 
     import marimo as mo
-    import numpy as np
     import plotly.io as pio
     import polars as pl
 
@@ -51,21 +50,8 @@ def _():
 
 
 @app.function
-def f(price, fast=32, slow=96):
-    """Calculate trading signals based on the difference between fast and slow moving averages.
-
-    Args:
-        price: Polars Series of price data
-        fast: Fast moving average period (default: 32)
-        slow: Slow moving average period (default: 96)
-
-    Returns:
-        Series of trading signals (-1, 0, or 1) based on the sign of the difference
-        between fast and slow moving averages
-    """
-    s = price.ewm_mean(com=slow, min_samples=100)
-    fast_ma = price.ewm_mean(com=fast, min_samples=100)
-    return (fast_ma - s).sign()
+def f(price: "pl.Expr", fast=32, slow=96) -> "pl.Expr":
+    return (price.ewm_mean(com=fast, min_samples=100) - price.ewm_mean(com=slow, min_samples=100)).sign()
 
 
 @app.cell
@@ -80,11 +66,9 @@ def _():
 
 @app.cell
 def _(fast, slow):
-    assets = [c for c in prices.columns if c != date_col]
-    pos = prices.with_columns([
-        (5e6 * f(prices[asset], fast=fast.value, slow=slow.value).fill_null(0.0)).alias(asset)
-        for asset in assets
-    ])
+    pos = prices.with_columns(
+        f(pl.all().exclude(date_col), fast=fast.value, slow=slow.value).fill_null(0.0) * 5e6
+    )
     return (pos,)
 
 
@@ -128,19 +112,6 @@ def _(portfolio):
     fig
     return
 
-
-@app.cell(hide_code=True)
-def _():
-    mo.md(
-        r"""
-    cvxSimulator can construct portfolio objects. Those objects will
-    expose functionality and attributes supporting all analytics.
-    There are two types of portfolio -- EquityPortfolio and FuturesPortfolio.
-    We start with the FuturesPortfolio. The most simple use-case
-    is when we have computed all desirec cash-positions
-    """
-    )
-    return
 
 
 if __name__ == "__main__":
