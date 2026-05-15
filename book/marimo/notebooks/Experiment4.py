@@ -67,7 +67,9 @@ def _():
         fast_ma = prices.with_columns([pl.col(c).ewm_mean(com=fast - 1) for c in cols])
         slow_ma = prices.with_columns([pl.col(c).ewm_mean(com=slow - 1) for c in cols])
         diff = pl.DataFrame({c: (fast_ma[c] - slow_ma[c]).fill_nan(None) for c in cols})
-        return pl.DataFrame({c: diff[c] / diff[c].std() for c in cols})
+        f, g = 1 - 1 / fast, 1 - 1 / slow
+        s = np.sqrt(1.0 / (1 - f * f) - 2.0 / (1 - f * g) + 1.0 / (1 - g * g))
+        return pl.DataFrame({c: diff[c] / s for c in cols})
 
     return osc_fn, returns_adjust
 
