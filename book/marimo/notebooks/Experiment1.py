@@ -33,6 +33,7 @@ with app.setup:
     from preamble import date_col, load_prices
 
     prices = load_prices(__file__)
+    prices_only = prices.drop(date_col)
 
 
 @app.cell(hide_code=True)
@@ -58,14 +59,15 @@ def _():
 
 @app.cell
 def _(fast, slow):
-    portfolio = Portfolio.from_cash_position(
-        prices=prices,
-        cash_position=f(pl.all().exclude(date_col), fast=fast.value, slow=slow.value).fill_null(0.0) * 5e6,
-        aum=1e8,
-    )
+    signals = prices_only.select(f(pl.all(), fast=fast.value, slow=slow.value).fill_null(0.0) * 5e6)
+    portfolio = Portfolio.from_cash_position(prices=prices, cash_position=signals, aum=1e8)
+    return (portfolio,)
+
+
+@app.cell
+def _(portfolio):
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
     print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
-    return (portfolio,)
 
 
 @app.cell(hide_code=True)

@@ -38,6 +38,8 @@ with app.setup:
     from preamble import date_col, load_prices
 
     prices = load_prices(__file__)
+    prices_only = prices.drop(date_col)
+    assets = prices_only.columns
 
 
 @app.cell(hide_code=True)
@@ -65,9 +67,6 @@ def _():
 
 @app.cell
 def _(fast, slow, vola, winsor):
-    assets = [c for c in prices.columns if c != date_col]
-    prices_only = prices.drop(date_col)
-
     mu_np = prices_only.select(f(pl.all(), fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)).to_numpy()
     volax_np = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value)).to_numpy()
     euclid_norm = np.sqrt(np.nansum(mu_np ** 2, axis=1, keepdims=True))
@@ -79,13 +78,17 @@ def _(fast, slow, vola, winsor):
         prices=prices,
         cash_position=pl.concat([
             prices.select(date_col),
-            pl.from_numpy(pos_np, schema={col: pl.Float64 for col in assets})
+            pl.from_numpy(pos_np, schema=dict.fromkeys(assets, pl.Float64))
         ], how="horizontal"),
         aum=1e8,
     )
+    return (portfolio,)
+
+
+@app.cell
+def _(portfolio):
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
     print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
-    return (portfolio,)
 
 
 @app.cell
