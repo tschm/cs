@@ -31,6 +31,8 @@ with app.setup:
     import polars as pl
 
     from jquantstats import Portfolio, interpolate
+    from tinycta.osc import osc
+    from tinycta.util import vol_adj
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -54,28 +56,6 @@ def _():
 
 @app.cell
 def _():
-    def returns_adjust(price: "pl.DataFrame", com=32, min_periods=300, clip=4.2) -> "pl.DataFrame":
-        cols = price.columns
-        # fill_nan converts float NaN (e.g. from log of negative prices) to null
-        # so that ewm_std and cum_sum treat them as missing rather than propagating NaN
-        r = price.with_columns([pl.col(c).log().diff().fill_nan(None) for c in cols])
-        std = r.with_columns([pl.col(c).ewm_std(com=com, min_samples=min_periods) for c in cols])
-        return pl.DataFrame({c: (r[c] / std[c]).fill_nan(None).clip(-clip, clip) for c in cols})
-
-    def osc_fn(prices: "pl.DataFrame", fast=32, slow=96) -> "pl.DataFrame":
-        cols = prices.columns
-        fast_ma = prices.with_columns([pl.col(c).ewm_mean(com=fast - 1) for c in cols])
-        slow_ma = prices.with_columns([pl.col(c).ewm_mean(com=slow - 1) for c in cols])
-        diff = pl.DataFrame({c: (fast_ma[c] - slow_ma[c]).fill_nan(None) for c in cols})
-        f, g = 1 - 1 / fast, 1 - 1 / slow
-        s = np.sqrt(1.0 / (1 - f * f) - 2.0 / (1 - f * g) + 1.0 / (1 - g * g))
-        return pl.DataFrame({c: diff[c] / s for c in cols})
-
-    return osc_fn, returns_adjust
-
-
-@app.cell
-def _():
     # Create sliders using marimo's UI components
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
@@ -89,14 +69,14 @@ def _():
 
 
 @app.cell
-def _(fast, osc_fn, returns_adjust, slow, vola, winsor):
+def _(fast, slow, vola, winsor):
     assets = [c for c in prices.columns if c != date_col]
     prices_only = prices.drop(date_col)
+    cols = prices_only.columns
 
-    adj = returns_adjust(prices_only, com=vola.value, clip=winsor.value)
-    adj_cs = adj.with_columns([pl.col(c).fill_nan(None).cum_sum() for c in adj.columns])
-    osc_df = osc_fn(adj_cs, fast=fast.value, slow=slow.value)
-    mu = osc_df.with_columns([pl.col(c).fill_nan(None).tanh() for c in osc_df.columns])
+    adj_cs = prices_only.with_columns([vol_adj(pl.col(c), vola=vola.value, clip=winsor.value, min_samples=300).cum_sum() for c in cols])
+    osc_df = adj_cs.with_columns([osc(pl.col(c), fast=fast.value, slow=slow.value) for c in cols])
+    mu = osc_df.with_columns([pl.col(c).tanh() for c in osc_df.columns])
 
     volax = prices_only.with_columns([
         pl.col(c).fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value)
