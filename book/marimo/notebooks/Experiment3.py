@@ -102,16 +102,10 @@ def _():
 def _():
     # take two moving averages and apply tanh
     def f(price: "pl.DataFrame", slow=96, fast=32, vola=96, clip=3):
-        cols = price.columns
-        # construct a fake-price with homoscedastic returns using vol_adj from TinyCTA
-        price_adj = price.with_columns([vol_adj(pl.col(c), vola=vola, clip=clip, min_samples=300).cum_sum() for c in cols])
-        # compute mu
-        osc_df = price_adj.with_columns([osc(pl.col(c), fast=fast, slow=slow) for c in cols])
-        mu = osc_df.with_columns([pl.col(c).tanh() for c in osc_df.columns])
-        vol = price.with_columns([
-            pl.col(c).pct_change().ewm_std(com=slow, min_samples=300) for c in price.columns
-        ])
-        return pl.DataFrame({c: mu[c] / vol[c] for c in price.columns})
+        price_adj = price.with_columns(vol_adj(pl.all(), vola=vola, clip=clip, min_samples=300).cum_sum())
+        mu = price_adj.with_columns(osc(pl.all(), fast=fast, slow=slow).tanh())
+        vol = price.select(pl.all().pct_change().ewm_std(com=slow, min_samples=300))
+        return mu.with_columns([pl.col(c) / vol[c] for c in price.columns])
 
     return (f,)
 
@@ -135,10 +129,10 @@ def _(f, fast, slow, vola, winsor):
     assets = [c for c in prices.columns if c != date_col]
     prices_only = prices.drop(date_col)
     pos_values = f(prices_only, fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
-    pos = pl.DataFrame(
-        {date_col: prices[date_col]}
-        | {col: (pos_values[col] * 1e5).fill_nan(0.0).fill_null(0.0).to_list() for col in assets}
-    )
+    pos = pl.concat([
+        prices.select(date_col),
+        pos_values.select((pl.all() * 1e5).fill_nan(0.0).fill_null(0.0))
+    ], how="horizontal")
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
     print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
