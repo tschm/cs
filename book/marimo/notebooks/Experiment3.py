@@ -121,7 +121,16 @@ def _():
 def _(fast, slow, vola, winsor):
     portfolio = Portfolio.from_cash_position(
         prices=prices,
-        cash_position=(f(pl.all().exclude(date_col), fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value) * 1e5).fill_nan(0.0).fill_null(0.0),
+        cash_position=(
+            f(
+                pl.all().exclude(date_col),
+                fast=fast.value,
+                slow=slow.value,
+                vola=vola.value,
+                clip=winsor.value,
+            )
+            * 1e5
+        ).fill_nan(0.0).fill_null(0.0),
         aum=1e8,
     )
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
