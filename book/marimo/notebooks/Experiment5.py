@@ -75,7 +75,7 @@ def _(corr, shrinkage, vola, winsor):
     n_rows = len(prices_only)
     correlation = corr.value
 
-    returns_adj = prices_only.with_columns(vol_adj(pl.all(), vola=vola.value, clip=winsor.value, min_samples=300))
+    returns_adj = prices_only.select(vol_adj(pl.all(), vola=vola.value, clip=winsor.value, min_samples=300))
 
     # EWM correlation (DCC by Engle)
     # cov_t(i,j) = ewm_t(r_i * r_j) - ewm_t(r_i) * ewm_t(r_j)
