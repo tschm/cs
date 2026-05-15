@@ -11,9 +11,8 @@ dependencies = [
     "numpy>=2.4.4",
     "polars>=1.39.3",
     "plotly>=6.7.0",
-    "pyarrow>=23.0.1",
-    "tinycta>=0.9.5",
-    "cvxsimulator>=1.5.1",
+    "jquantstats>=0.8.2",
+    "tinycta==0.12.0",
 ]
 classifiers = [
     "Private :: Do Not Upload",
@@ -39,3 +38,8 @@ index-strategy = "unsafe-best-match"
 
 [tool.deptry]
 package_module_name_map = { marimo = "marimo", numpy = "numpy", polars = "polars", plotly = "plotly" }
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]

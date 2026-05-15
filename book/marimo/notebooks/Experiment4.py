@@ -5,9 +5,8 @@
 #     "numpy==2.4.4",
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
-#     "pyarrow==23.0.1",
-#     "cvxsimulator==1.5.1",
-#     "tinycta==0.9.5"
+#     "jquantstats==0.8.2",
+#     "tinycta==0.12.0"
 # ]
 # ///
 
@@ -31,22 +30,7 @@ with app.setup:
     import plotly.io as pio
     import polars as pl
 
-    # Compatibility shim: cvxsimulator imports from private jquantstats API
-    # that doesn't exist in public jquantstats. Patch sys.modules before
-    # importing cvx.simulator so portfolio.py can resolve these imports.
-    import sys
-    import types
-    import jquantstats.data as _jqs_data_mod
-
-    _fake_jqs_data = types.ModuleType("jquantstats._data")
-    _fake_jqs_data.Data = _jqs_data_mod.Data
-    sys.modules["jquantstats._data"] = _fake_jqs_data
-
-    _fake_jqs_api = types.ModuleType("jquantstats.api")
-    _fake_jqs_api.build_data = lambda returns: _jqs_data_mod.Data.from_returns(returns=returns.reset_index())
-    sys.modules["jquantstats.api"] = _fake_jqs_api
-
-    from cvx.simulator import interpolate
+    from jquantstats import Portfolio, interpolate
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -59,7 +43,7 @@ with app.setup:
 
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
     dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
-    prices = dframe.to_pandas().set_index(date_col).apply(interpolate)
+    prices = interpolate(dframe)
 
 
 @app.cell(hide_code=True)
@@ -79,9 +63,18 @@ def _():
 
 @app.cell
 def _():
-    from tinycta.signal import osc, returns_adjust
+    import pandas as pd
 
-    return osc, returns_adjust
+    def returns_adjust(price, com=32, min_periods=300, clip=4.2):
+        r = price.apply(np.log).diff()
+        return (r / r.ewm(com=com, min_periods=min_periods).std()).clip(-clip, +clip)
+
+    def osc_fn(prices, fast=32, slow=96):
+        diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
+        s = diff.std()
+        return diff / s
+
+    return osc_fn, pd, returns_adjust
 
 
 @app.cell
@@ -99,31 +92,38 @@ def _():
 
 
 @app.cell
-def _(fast, osc, returns_adjust, slow, vola, winsor):
-    from cvx.simulator import Portfolio
+def _(fast, osc_fn, pd, returns_adjust, slow, vola, winsor):
+    assets = [c for c in prices.columns if c != date_col]
+    prices_pd = pd.DataFrame(
+        prices.drop(date_col).to_numpy(allow_copy=True),
+        index=prices[date_col].to_list(),
+        columns=assets,
+    )
 
     mu = np.tanh(
-        prices.apply(returns_adjust, com=vola.value, clip=winsor.value)
+        prices_pd.apply(returns_adjust, com=vola.value, clip=winsor.value)
         .cumsum()
-        .apply(osc, fast=fast.value, slow=slow.value)
+        .apply(osc_fn, fast=fast.value, slow=slow.value)
     )
-    volax = prices.pct_change().ewm(com=vola.value, min_periods=vola.value).std()
+    volax = prices_pd.pct_change().ewm(com=vola.value, min_periods=vola.value).std()
 
-    # compute the series of Euclidean norms by compute the sum of squares for each row
     euclid_norm = np.sqrt((mu * mu).sum(axis=1))
-
-    # Divide each column of mu by the Euclidean norm
     risk_scaled = mu.apply(lambda x: x / euclid_norm, axis=0)
 
-    pos = 5e5 * risk_scaled / volax
-    portfolio = Portfolio.from_cashpos_prices(prices=prices, cashposition=pos, aum=1e8)
-    print(portfolio.sharpe())
+    pos_np = np.nan_to_num((5e5 * risk_scaled / volax).values, nan=0.0)
+    pos = pl.DataFrame(
+        {date_col: prices[date_col]}
+        | {col: pos_np[:, i].tolist() for i, col in enumerate(assets)}
+    )
+    portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
+    _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
+    print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
     return (portfolio,)
 
 
 @app.cell
 def _(portfolio):
-    fig = portfolio.snapshot()
+    fig = portfolio.plots.snapshot()
     fig
     return
 
