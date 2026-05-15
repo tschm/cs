@@ -5,7 +5,7 @@
 #     "numpy==2.4.4",
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
-#     "jquantstats==0.8.2"
+#     "jquantstats==0.8.3"
 # ]
 # ///
 
@@ -69,11 +69,6 @@ def _(fast, slow):
     pos = prices.with_columns(
         f(pl.all().exclude(date_col), fast=fast.value, slow=slow.value).fill_null(0.0) * 5e6
     )
-    return (pos,)
-
-
-@app.cell
-def _(pos):
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
     print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))

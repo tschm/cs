@@ -5,7 +5,7 @@
 #     "numpy==2.4.4",
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
-#     "jquantstats==0.8.2",
+#     "jquantstats==0.8.3",
 #     "tinycta==0.12.2"
 # ]
 # ///
