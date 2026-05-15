@@ -60,24 +60,8 @@ def _():
 
 
 @app.function
-def f(price, fast=32, slow=96, volatility=32):
-    """Calculate volatility-scaled trading signals based on moving averages.
-
-    Args:
-        price: Polars Series of price data
-        fast: Fast moving average period (default: 32)
-        slow: Slow moving average period (default: 96)
-        volatility: Lookback period for volatility calculation (default: 32)
-
-    Returns:
-        Series of trading signals scaled by inverse volatility, providing
-        larger positions during low volatility periods and smaller positions
-        during high volatility periods
-    """
-    s = price.ewm_mean(com=slow, min_samples=300)
-    fast_ma = price.ewm_mean(com=fast, min_samples=300)
-    std = price.pct_change().ewm_std(com=volatility, min_samples=300)
-    return (fast_ma - s).sign() / std
+def f(price: "pl.Expr", fast=32, slow=96, volatility=32) -> "pl.Expr":
+    return (price.ewm_mean(com=fast, min_samples=300) - price.ewm_mean(com=slow, min_samples=300)).sign() / price.pct_change().ewm_std(com=volatility, min_samples=300)
 
 
 @app.cell

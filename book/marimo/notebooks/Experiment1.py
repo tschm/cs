@@ -51,21 +51,8 @@ def _():
 
 
 @app.function
-def f(price, fast=32, slow=96):
-    """Calculate trading signals based on the difference between fast and slow moving averages.
-
-    Args:
-        price: Polars Series of price data
-        fast: Fast moving average period (default: 32)
-        slow: Slow moving average period (default: 96)
-
-    Returns:
-        Series of trading signals (-1, 0, or 1) based on the sign of the difference
-        between fast and slow moving averages
-    """
-    s = price.ewm_mean(com=slow, min_samples=100)
-    fast_ma = price.ewm_mean(com=fast, min_samples=100)
-    return (fast_ma - s).sign()
+def f(price: "pl.Expr", fast=32, slow=96) -> "pl.Expr":
+    return (price.ewm_mean(com=fast, min_samples=100) - price.ewm_mean(com=slow, min_samples=100)).sign()
 
 
 @app.cell
