@@ -14,7 +14,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_DIR = (ROOT / "book" / "marimo" / "notebooks").resolve()
 FLOAT_PATTERN = re.compile(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?")
-NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("*.py"))
+NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("Experiment*.py"))
 EXPECTED_SHARPE_RATIOS = {
     "Experiment1": 0.7819474087813011,
     "Experiment2": 1.1260755020625202,
