@@ -21,26 +21,18 @@ __generated_with = "0.23.1"
 app = marimo.App()
 
 with app.setup:
+    import sys
     from pathlib import Path
 
     import marimo as mo
-    import plotly.io as pio
     import polars as pl
+    from jquantstats import Portfolio
 
-    from jquantstats import Portfolio, interpolate
+    sys.path.insert(0, str(Path(__file__).parent))
 
-    # Ensure Plotly works with Marimo
-    pio.renderers.default = "plotly_mimetype"
+    from preamble import date_col, load_prices
 
-    path = Path(__file__).parent / "public" / "Prices_hashed.csv"
-
-    date_col = "date"
-
-    dframe = pl.read_csv(str(path), try_parse_dates=True)
-
-    dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
-    dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
-    prices = interpolate(dframe)
+    prices = load_prices(__file__)
 
 
 @app.cell(hide_code=True)
