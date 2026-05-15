@@ -56,6 +56,11 @@ def _():
     return
 
 
+@app.function
+def f(price: "pl.Expr", fast=32, slow=96, vola=32, clip=4.2) -> "pl.Expr":
+    return osc(vol_adj(price, vola=vola, clip=clip, min_samples=300).cum_sum(), fast=fast, slow=slow).tanh()
+
+
 @app.cell
 def _():
     # Create sliders using marimo's UI components
@@ -109,7 +114,7 @@ def _(corr, shrinkage, vola, winsor):
     for _k in range(n_assets):
         cor_3d[_var[:, _k] > 0, _k, _k] = 1.0
 
-    mu = returns_adj.with_columns(pl.all().cum_sum()).with_columns(osc(pl.all(), fast=32, slow=96).tanh()).to_numpy()
+    mu = prices_only.select(f(pl.all(), fast=32, slow=96, vola=vola.value, clip=winsor.value)).to_numpy()
     vo = prices_only.select(
         pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=int(vola.value))
     ).to_numpy()

@@ -54,6 +54,11 @@ def _():
     return
 
 
+@app.function
+def f(price: "pl.Expr", fast=32, slow=96, vola=32, clip=4.2) -> "pl.Expr":
+    return osc(vol_adj(price, vola=vola, clip=clip, min_samples=300).cum_sum(), fast=fast, slow=slow).tanh()
+
+
 @app.cell
 def _():
     # Create sliders using marimo's UI components
@@ -73,12 +78,8 @@ def _(fast, slow, vola, winsor):
     assets = [c for c in prices.columns if c != date_col]
     prices_only = prices.drop(date_col)
 
-    adj_cs = prices_only.with_columns(vol_adj(pl.all(), vola=vola.value, clip=winsor.value, min_samples=300).cum_sum())
-    mu = adj_cs.with_columns(osc(pl.all(), fast=fast.value, slow=slow.value).tanh())
-    volax = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value))
-
-    mu_np = mu.to_numpy()
-    volax_np = volax.to_numpy()
+    mu_np = prices_only.select(f(pl.all(), fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)).to_numpy()
+    volax_np = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value)).to_numpy()
     # nansum matches pandas DataFrame.sum(axis=1, skipna=True): assets with no data
     # for a given row contribute 0 rather than propagating NaN into the norm
     euclid_norm = np.sqrt(np.nansum(mu_np ** 2, axis=1, keepdims=True))
