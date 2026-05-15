@@ -18,7 +18,7 @@ NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("*.py"))
 EXPECTED_SHARPE_RATIOS = {
     "Experiment1": 0.7819474087813011,
     "Experiment2": 1.1260755020625202,
-    "Experiment3": 1.1275718123366942,
+    "Experiment3": 1.1285498216316372,
     "Experiment4": 1.1403567453503483,
     "Experiment5": 1.3925079528460707,
 }

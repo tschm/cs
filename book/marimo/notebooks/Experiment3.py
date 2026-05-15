@@ -6,6 +6,7 @@
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
 #     "jquantstats==0.8.2",
+#     "tinycta==0.12.0"
 # ]
 # ///
 
@@ -30,6 +31,7 @@ with app.setup:
     import polars as pl
 
     from jquantstats import Portfolio, interpolate
+    from tinycta.util import vol_adj
 
     # Ensure Plotly works with Marimo
     pio.renderers.default = "plotly_mimetype"
@@ -80,28 +82,6 @@ def _():
     return
 
 
-@app.function
-def filter(price: "pl.DataFrame", volatility=32, clip=4.2, min_periods=300):
-    """Filter price series to handle outliers and normalize volatility.
-
-    Args:
-        price: polars DataFrame of price data (numeric columns only)
-        volatility: Lookback period for volatility calculation (default: 32)
-        clip: Maximum absolute value for volatility-adjusted returns (default: 4.2)
-        min_periods: Minimum number of observations required for volatility calculation (default: 300)
-
-    Returns:
-        Filtered price DataFrame with normalized volatility and clipped extreme values
-    """
-    cols = price.columns
-    r = price.with_columns([pl.col(c).log().diff() for c in cols])
-    vola = r.with_columns([pl.col(c).ewm_std(com=volatility, min_samples=min_periods) for c in cols])
-    return pl.DataFrame({
-        c: (r[c] / vola[c]).clip(-clip, clip).cum_sum()
-        for c in cols
-    })
-
-
 @app.cell(hide_code=True)
 def _():
     mo.md(
@@ -142,11 +122,12 @@ def osc(prices: "pl.DataFrame", fast=32, slow=96):
 
 
 @app.cell
-def _(filter):
+def _():
     # take two moving averages and apply tanh
     def f(price: "pl.DataFrame", slow=96, fast=32, vola=96, clip=3):
-        # construct a fake-price, those fake-prices have homescedastic returns
-        price_adj = filter(price, volatility=vola, clip=clip)
+        cols = price.columns
+        # construct a fake-price with homoscedastic returns using vol_adj from TinyCTA
+        price_adj = price.with_columns([vol_adj(pl.col(c), vola=vola, clip=clip, min_samples=300).cum_sum() for c in cols])
         # compute mu
         osc_df = osc(prices=price_adj, fast=fast, slow=slow)
         mu = osc_df.with_columns([pl.col(c).tanh() for c in osc_df.columns])
