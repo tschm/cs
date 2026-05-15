@@ -106,6 +106,7 @@ def _(fast, osc_fn, returns_adjust, slow, vola, winsor):
     # nansum matches pandas DataFrame.sum(axis=1, skipna=True): assets with no data
     # for a given row contribute 0 rather than propagating NaN into the norm
     euclid_norm = np.sqrt(np.nansum(mu_np ** 2, axis=1, keepdims=True))
+    euclid_norm[euclid_norm == 0] = np.nan
     risk_scaled_np = mu_np / euclid_norm
 
     pos_np = np.nan_to_num(5e5 * risk_scaled_np / volax_np, nan=0.0)
