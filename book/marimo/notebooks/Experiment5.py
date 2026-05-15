@@ -54,26 +54,21 @@ def _():
 
 @app.cell
 def _():
-    import warnings
-
-    # Suppress noisy warnings
-    warnings.simplefilter(action="ignore", category=FutureWarning)
-    return
-
-
-@app.cell
-def _():
     from tinycta.linalg import inv_a_norm, solve
     from tinycta.signal import shrink2id
 
-    def returns_adjust(price, com=32, min_periods=300, clip=4.2):
-        r = price.apply(np.log).diff()
-        return (r / r.ewm(com=com, min_periods=min_periods).std()).clip(-clip, +clip)
+    def returns_adjust(price: "pl.DataFrame", com=32, min_periods=300, clip=4.2) -> "pl.DataFrame":
+        cols = price.columns
+        r = price.with_columns([pl.col(c).log().diff().fill_nan(None) for c in cols])
+        std = r.with_columns([pl.col(c).ewm_std(com=com, min_samples=min_periods) for c in cols])
+        return pl.DataFrame({c: (r[c] / std[c]).fill_nan(None).clip(-clip, clip) for c in cols})
 
-    def osc_fn(prices, fast=32, slow=96):
-        diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
-        s = diff.std()
-        return diff / s
+    def osc_fn(prices: "pl.DataFrame", fast=32, slow=96) -> "pl.DataFrame":
+        cols = prices.columns
+        fast_ma = prices.with_columns([pl.col(c).ewm_mean(com=fast - 1) for c in cols])
+        slow_ma = prices.with_columns([pl.col(c).ewm_mean(com=slow - 1) for c in cols])
+        diff = pl.DataFrame({c: (fast_ma[c] - slow_ma[c]).fill_nan(None) for c in cols})
+        return pl.DataFrame({c: diff[c] / diff[c].std() for c in cols})
 
     return inv_a_norm, osc_fn, returns_adjust, shrink2id, solve
 
@@ -106,44 +101,65 @@ def _(
     vola,
     winsor,
 ):
-    import pandas as pd
-
     assets = [c for c in prices.columns if c != date_col]
-
+    n_assets = len(assets)
+    prices_only = prices.drop(date_col)
+    n_rows = len(prices_only)
     correlation = corr.value
 
-    prices_pd = pd.DataFrame(
-        prices.drop(date_col).to_numpy(allow_copy=True),
-        index=prices[date_col].to_list(),
-        columns=assets,
-    )
+    returns_adj = returns_adjust(prices_only, com=vola.value, clip=winsor.value)
 
-    returns_adj = prices_pd.apply(returns_adjust, com=vola.value, clip=winsor.value)
+    # EWM correlation (DCC by Engle)
+    # cov_t(i,j) = ewm_t(r_i * r_j) - ewm_t(r_i) * ewm_t(r_j)
+    ewm_means_np = returns_adj.select([
+        pl.col(c).ewm_mean(com=correlation, min_samples=int(correlation)) for c in assets
+    ]).to_numpy()
 
-    # DCC by Engle
-    cor = returns_adj.ewm(com=correlation, min_periods=correlation).corr()
+    pair_indices = [(i, j) for i in range(n_assets) for j in range(i, n_assets)]
+    ewm_prod_np = returns_adj.select([
+        (pl.col(assets[i]) * pl.col(assets[j])).fill_nan(None)
+        .ewm_mean(com=correlation, min_samples=int(correlation))
+        .alias(f"p{i}_{j}")
+        for i, j in pair_indices
+    ]).to_numpy()
 
-    mu = np.tanh(returns_adj.cumsum().apply(osc_fn)).values
-    vo = prices_pd.pct_change().ewm(com=vola.value, min_periods=vola.value).std().values
+    cov_np = np.full((n_rows, n_assets, n_assets), np.nan)
+    for _k, (_i, _j) in enumerate(pair_indices):
+        _cov = ewm_prod_np[:, _k] - ewm_means_np[:, _i] * ewm_means_np[:, _j]
+        cov_np[:, _i, _j] = _cov
+        cov_np[:, _j, _i] = _cov
 
-    pos_matrix = np.zeros((len(prices_pd), len(assets)))
+    _var = cov_np[:, np.arange(n_assets), np.arange(n_assets)]
+    with np.errstate(invalid="ignore", divide="ignore"):
+        _denom = np.sqrt(_var[:, :, None] * _var[:, None, :])
+        cor_3d = cov_np / _denom
+    for _k in range(n_assets):
+        cor_3d[_var[:, _k] > 0, _k, _k] = 1.0
 
-    for n in range(len(prices_pd)):
-        t = prices_pd.index[n]
-        # Use prices-only mask (matching cvxsimulator state.mask behavior)
-        mask = np.isfinite(prices_pd.iloc[n].values)
-        if mask.sum() == 0:
+    adj_cs = returns_adj.with_columns([pl.col(c).fill_nan(None).cum_sum() for c in assets])
+    osc_df = osc_fn(adj_cs)
+    mu = osc_df.with_columns([pl.col(c).fill_nan(None).tanh() for c in osc_df.columns]).to_numpy()
+    vo = prices_only.with_columns([
+        pl.col(c).fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=int(vola.value))
+        for c in assets
+    ]).to_numpy()
+
+    prices_np = prices_only.to_numpy()
+    pos_matrix = np.zeros((n_rows, n_assets))
+
+    for _n in range(n_rows):
+        _mask = np.isfinite(prices_np[_n])
+        if _mask.sum() == 0:
             continue
-        # Shrink full matrix first, then extract submatrix for available assets
-        full_shrunk = shrink2id(cor.loc[t].values, lamb=shrinkage.value)
-        matrix = full_shrunk[mask, :][:, mask]
-        expected_mu = np.nan_to_num(mu[n][mask])
-        expected_vo = np.nan_to_num(vo[n][mask])
-        norm = inv_a_norm(expected_mu, matrix)
-        if norm == 0 or np.isnan(norm):
+        _full_shrunk = shrink2id(cor_3d[_n], lamb=shrinkage.value)
+        _matrix = _full_shrunk[_mask, :][:, _mask]
+        _expected_mu = np.nan_to_num(mu[_n][_mask])
+        _expected_vo = np.nan_to_num(vo[_n][_mask])
+        _norm = inv_a_norm(_expected_mu, _matrix)
+        if _norm == 0 or np.isnan(_norm):
             continue
-        risk_pos = solve(matrix, expected_mu) / norm
-        pos_matrix[n, mask] = np.nan_to_num(1e6 * risk_pos / expected_vo, nan=0.0)
+        _risk_pos = solve(_matrix, _expected_mu) / _norm
+        pos_matrix[_n, _mask] = np.nan_to_num(1e6 * _risk_pos / _expected_vo, nan=0.0)
 
     pos = pl.DataFrame(
         {date_col: prices[date_col]}
