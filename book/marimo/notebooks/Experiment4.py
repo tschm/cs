@@ -54,27 +54,22 @@ def _():
 
 @app.cell
 def _():
-    import warnings
+    def returns_adjust(price: "pl.DataFrame", com=32, min_periods=300, clip=4.2) -> "pl.DataFrame":
+        cols = price.columns
+        # fill_nan converts float NaN (e.g. from log of negative prices) to null
+        # so that ewm_std and cum_sum treat them as missing rather than propagating NaN
+        r = price.with_columns([pl.col(c).log().diff().fill_nan(None) for c in cols])
+        std = r.with_columns([pl.col(c).ewm_std(com=com, min_samples=min_periods) for c in cols])
+        return pl.DataFrame({c: (r[c] / std[c]).fill_nan(None).clip(-clip, clip) for c in cols})
 
-    # Suppress noisy warnings
-    warnings.simplefilter(action="ignore", category=FutureWarning)
-    return
+    def osc_fn(prices: "pl.DataFrame", fast=32, slow=96) -> "pl.DataFrame":
+        cols = prices.columns
+        fast_ma = prices.with_columns([pl.col(c).ewm_mean(com=fast - 1) for c in cols])
+        slow_ma = prices.with_columns([pl.col(c).ewm_mean(com=slow - 1) for c in cols])
+        diff = pl.DataFrame({c: (fast_ma[c] - slow_ma[c]).fill_nan(None) for c in cols})
+        return pl.DataFrame({c: diff[c] / diff[c].std() for c in cols})
 
-
-@app.cell
-def _():
-    import pandas as pd
-
-    def returns_adjust(price, com=32, min_periods=300, clip=4.2):
-        r = price.apply(np.log).diff()
-        return (r / r.ewm(com=com, min_periods=min_periods).std()).clip(-clip, +clip)
-
-    def osc_fn(prices, fast=32, slow=96):
-        diff = prices.ewm(com=fast - 1).mean() - prices.ewm(com=slow - 1).mean()
-        s = diff.std()
-        return diff / s
-
-    return osc_fn, pd, returns_adjust
+    return osc_fn, returns_adjust
 
 
 @app.cell
@@ -92,25 +87,28 @@ def _():
 
 
 @app.cell
-def _(fast, osc_fn, pd, returns_adjust, slow, vola, winsor):
+def _(fast, osc_fn, returns_adjust, slow, vola, winsor):
     assets = [c for c in prices.columns if c != date_col]
-    prices_pd = pd.DataFrame(
-        prices.drop(date_col).to_numpy(allow_copy=True),
-        index=prices[date_col].to_list(),
-        columns=assets,
-    )
+    prices_only = prices.drop(date_col)
 
-    mu = np.tanh(
-        prices_pd.apply(returns_adjust, com=vola.value, clip=winsor.value)
-        .cumsum()
-        .apply(osc_fn, fast=fast.value, slow=slow.value)
-    )
-    volax = prices_pd.pct_change().ewm(com=vola.value, min_periods=vola.value).std()
+    adj = returns_adjust(prices_only, com=vola.value, clip=winsor.value)
+    adj_cs = adj.with_columns([pl.col(c).fill_nan(None).cum_sum() for c in adj.columns])
+    osc_df = osc_fn(adj_cs, fast=fast.value, slow=slow.value)
+    mu = osc_df.with_columns([pl.col(c).fill_nan(None).tanh() for c in osc_df.columns])
 
-    euclid_norm = np.sqrt((mu * mu).sum(axis=1))
-    risk_scaled = mu.apply(lambda x: x / euclid_norm, axis=0)
+    volax = prices_only.with_columns([
+        pl.col(c).fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value)
+        for c in prices_only.columns
+    ])
 
-    pos_np = np.nan_to_num((5e5 * risk_scaled / volax).values, nan=0.0)
+    mu_np = mu.to_numpy()
+    volax_np = volax.to_numpy()
+    # nansum matches pandas DataFrame.sum(axis=1, skipna=True): assets with no data
+    # for a given row contribute 0 rather than propagating NaN into the norm
+    euclid_norm = np.sqrt(np.nansum(mu_np ** 2, axis=1, keepdims=True))
+    risk_scaled_np = mu_np / euclid_norm
+
+    pos_np = np.nan_to_num(5e5 * risk_scaled_np / volax_np, nan=0.0)
     pos = pl.DataFrame(
         {date_col: prices[date_col]}
         | {col: pos_np[:, i].tolist() for i, col in enumerate(assets)}
