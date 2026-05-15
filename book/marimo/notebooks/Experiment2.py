@@ -24,7 +24,6 @@ with app.setup:
     from pathlib import Path
 
     import marimo as mo
-    import numpy as np
     import plotly.io as pio
     import polars as pl
 
@@ -45,7 +44,7 @@ with app.setup:
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(r"""# CTA 2.0""")
     return
 
@@ -58,12 +57,10 @@ def f(price: "pl.Expr", fast=32, slow=96, volatility=32) -> "pl.Expr":
 
 @app.cell
 def _():
-    # Create sliders using marimo's UI components
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
     vola = mo.ui.slider(4, 192, step=4, value=32, label="Volatility")
 
-    # Display the sliders in a vertical stack
     mo.vstack([fast, slow, vola])
 
     return fast, slow, vola

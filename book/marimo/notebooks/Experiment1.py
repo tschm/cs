@@ -24,7 +24,6 @@ with app.setup:
     from pathlib import Path
 
     import marimo as mo
-    import numpy as np
     import plotly.io as pio
     import polars as pl
 

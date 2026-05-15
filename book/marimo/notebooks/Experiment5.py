@@ -63,7 +63,6 @@ def f(price: "pl.Expr", fast=32, slow=96, vola=32, clip=4.2) -> "pl.Expr":
 
 @app.cell
 def _():
-    # Create sliders using marimo's UI components
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
     vola = mo.ui.slider(4, 192, step=4, value=32, label="Volatility")
@@ -71,7 +70,6 @@ def _():
     corr = mo.ui.slider(50, 500, step=10, value=200, label="Correlation")
     shrinkage = mo.ui.slider(0.0, 1.0, step=0.05, value=0.5, label="Shrinkage")
 
-    # Display the sliders in a vertical stack
     mo.vstack([fast, slow, vola, winsor, corr, shrinkage])
 
     return corr, shrinkage, vola, winsor
@@ -151,7 +149,7 @@ def _():
     mo.md(
         r"""
     # Conclusions
-    * Dramatic relativ improvements observable despite using the same signals as in previous Experiment.
+    * Dramatic relative improvements observable despite using the same signals as in previous Experiment.
     * Main difference here is to take advantage of cross-correlations in the risk measurement.
     * Possible to add constraints on individual assets or groups of them.
     * Possible to reflect trading costs in objective with regularization terms (Ridge, Lars, Elastic Nets, ...)

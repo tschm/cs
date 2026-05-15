@@ -61,13 +61,11 @@ def f(price: "pl.Expr", fast=32, slow=96, vola=32, clip=4.2) -> "pl.Expr":
 
 @app.cell
 def _():
-    # Create sliders using marimo's UI components
     fast = mo.ui.slider(4, 192, step=4, value=32, label="Fast Moving Average")
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow Moving Average")
     vola = mo.ui.slider(4, 192, step=4, value=32, label="Volatility")
     winsor = mo.ui.slider(1.0, 6.0, step=0.1, value=4.2, label="Winsorizing")
 
-    # Display the sliders in a vertical stack
     mo.vstack([fast, slow, vola, winsor])
 
     return fast, slow, vola, winsor
