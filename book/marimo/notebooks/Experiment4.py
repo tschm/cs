@@ -80,8 +80,6 @@ def _(fast, slow, vola, winsor):
 
     mu_np = prices_only.select(f(pl.all(), fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)).to_numpy()
     volax_np = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value)).to_numpy()
-    # nansum matches pandas DataFrame.sum(axis=1, skipna=True): assets with no data
-    # for a given row contribute 0 rather than propagating NaN into the norm
     euclid_norm = np.sqrt(np.nansum(mu_np ** 2, axis=1, keepdims=True))
     euclid_norm[euclid_norm == 0] = np.nan
     risk_scaled_np = mu_np / euclid_norm

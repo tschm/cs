@@ -114,19 +114,6 @@ def _(portfolio):
     return
 
 
-@app.cell(hide_code=True)
-def _():
-    mo.md(
-        r"""
-    cvxSimulator can construct portfolio objects. Those objects will
-    expose functionality and attributes supporting all analytics.
-    There are two types of portfolio -- EquityPortfolio and FuturesPortfolio.
-    We start with the FuturesPortfolio. The most simple use-case
-    is when we have computed all desirec cash-positions
-    """
-    )
-    return
-
 
 if __name__ == "__main__":
     app.run()

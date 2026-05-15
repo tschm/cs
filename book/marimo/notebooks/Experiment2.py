@@ -50,14 +50,6 @@ def _(mo):
     return
 
 
-@app.cell
-def _():
-    import warnings
-
-    # Suppress noisy warnings
-    warnings.simplefilter(action="ignore", category=FutureWarning)
-    return
-
 
 @app.function
 def f(price: "pl.Expr", fast=32, slow=96, volatility=32) -> "pl.Expr":
@@ -94,7 +86,6 @@ def _():
         r"""
     * This is a **univariate** trading system, we map the (real) price of an asset to its (cash)position
     * Only 3 **free parameters** used here.
-    * Only 4 lines of code
     * Scaling the bet-size by volatility has improved the situation.
     """
     )
