@@ -38,3 +38,8 @@ index-strategy = "unsafe-best-match"
 
 [tool.deptry]
 package_module_name_map = { marimo = "marimo", numpy = "numpy", polars = "polars", plotly = "plotly" }
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
