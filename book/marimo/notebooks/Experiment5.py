@@ -5,7 +5,7 @@
 #     "numpy==2.4.4",
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
-#     "jquantstats==0.8.2",
+#     "jquantstats==0.8.3",
 #     "tinycta==0.12.2"
 # ]
 # ///
@@ -134,11 +134,14 @@ def _(corr, shrinkage, vola, winsor):
         _risk_pos = solve(_matrix, _expected_mu) / _norm
         pos_matrix[_n, _mask] = np.nan_to_num(1e6 * _risk_pos / _expected_vo, nan=0.0)
 
-    pos = pl.concat([
-        prices.select(date_col),
-        pl.from_numpy(pos_matrix, schema={col: pl.Float64 for col in assets})
-    ], how="horizontal")
-    portfolio = Portfolio.from_cash_position(prices=prices, cash_position=pos, aum=1e8)
+    portfolio = Portfolio.from_cash_position(
+        prices=prices,
+        cash_position=pl.concat([
+            prices.select(date_col),
+            pl.from_numpy(pos_matrix, schema={col: pl.Float64 for col in assets})
+        ], how="horizontal"),
+        aum=1e8,
+    )
     _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
     print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
     return (portfolio,)
