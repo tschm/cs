@@ -6,7 +6,7 @@
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
 #     "jquantstats==0.8.2",
-#     "tinycta==0.12.1"
+#     "tinycta==0.12.2"
 # ]
 # ///
 

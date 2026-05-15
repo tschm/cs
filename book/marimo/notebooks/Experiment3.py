@@ -6,7 +6,7 @@
 #     "plotly==6.7.0",
 #     "polars==1.39.3",
 #     "jquantstats==0.8.2",
-#     "tinycta==0.12.1"
+#     "tinycta==0.12.2"
 # ]
 # ///
 
@@ -31,6 +31,7 @@ with app.setup:
     import polars as pl
 
     from jquantstats import Portfolio, interpolate
+    from tinycta.osc import osc
     from tinycta.util import vol_adj
 
     # Ensure Plotly works with Marimo
@@ -97,30 +98,6 @@ def _():
     return
 
 
-@app.function
-def osc(prices: "pl.DataFrame", fast=32, slow=96):
-    """Calculate a properly scaled oscillator based on the difference of two moving averages.
-
-    Args:
-        prices: polars DataFrame of price data (numeric columns only)
-        fast: Fast moving average period (default: 32)
-        slow: Slow moving average period (default: 96)
-
-    Returns:
-        Oscillator DataFrame with consistent statistical properties regardless of
-        the moving average parameters when scaling is enabled
-    """
-    cols = prices.columns
-    fast_ma = prices.with_columns([pl.col(c).ewm_mean(com=fast - 1) for c in cols])
-    slow_ma = prices.with_columns([pl.col(c).ewm_mean(com=slow - 1) for c in cols])
-    diff = pl.DataFrame({c: fast_ma[c] - slow_ma[c] for c in cols})
-
-    f, g = 1 - 1 / fast, 1 - 1 / slow
-    s = np.sqrt(1.0 / (1 - f * f) - 2.0 / (1 - f * g) + 1.0 / (1 - g * g))
-
-    return pl.DataFrame({c: diff[c] / s for c in cols})
-
-
 @app.cell
 def _():
     # take two moving averages and apply tanh
@@ -129,7 +106,7 @@ def _():
         # construct a fake-price with homoscedastic returns using vol_adj from TinyCTA
         price_adj = price.with_columns([vol_adj(pl.col(c), vola=vola, clip=clip, min_samples=300).cum_sum() for c in cols])
         # compute mu
-        osc_df = osc(prices=price_adj, fast=fast, slow=slow)
+        osc_df = price_adj.with_columns([osc(pl.col(c), fast=fast, slow=slow) for c in cols])
         mu = osc_df.with_columns([pl.col(c).tanh() for c in osc_df.columns])
         vol = price.with_columns([
             pl.col(c).pct_change().ewm_std(com=slow, min_samples=300) for c in price.columns

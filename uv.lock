@@ -161,7 +161,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.4.4" },
     { name = "plotly", specifier = ">=6.7.0" },
     { name = "polars", specifier = ">=1.39.3" },
-    { name = "tinycta", specifier = ">=0.12.1" },
+    { name = "tinycta", specifier = ">=0.12.2" },
 ]
 
 [package.metadata.requires-dev]
@@ -1142,7 +1142,7 @@ wheels = [
 
 [[package]]
 name = "tinycta"
-version = "0.12.1"
+version = "0.12.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cvx-linalg" },
@@ -1154,9 +1154,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/51/c6/df4a9bdcd96ad67e4a4591090a30b7b199e6bc64160477825dea2f32b87e/tinycta-0.12.1.tar.gz", hash = "sha256:adfb8b1693dfa881883f50b77d0290b4c98e9cdc353a6b6fd55b117ba4356949", size = 1651180, upload-time = "2026-05-15T12:04:03.297Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a3/66/da0fd8d3bc54fd46bd428f8b6df104cf464c6f670292f123b48909fb4cd4/tinycta-0.12.2.tar.gz", hash = "sha256:d10bab0edf52aa74451c807b6470d2c9c21a9ba5c2e8226ac1649bdd425830cf", size = 1651186, upload-time = "2026-05-15T12:21:05.169Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/82/e8/a6cb7af6752d9842d858696cf287353b45073aab872dbb9ca5689dc80e14/tinycta-0.12.1-py3-none-any.whl", hash = "sha256:a39aa8d3fe30fc9d3f5993784895b49f4d85394afee981acac1fe78e028f2260", size = 14065, upload-time = "2026-05-15T12:04:01.701Z" },
+    { url = "https://files.pythonhosted.org/packages/52/d4/3ce812263d948934c87ba1f9794973191ea71470278fc1d3849592133181/tinycta-0.12.2-py3-none-any.whl", hash = "sha256:2308853c599f7e27c8b9f4f03d1d351a68a346f64abeb204dfc4d64a8fe0fb8f", size = 14065, upload-time = "2026-05-15T12:21:03.351Z" },
 ]
 
 [[package]]
