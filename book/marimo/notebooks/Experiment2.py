@@ -70,8 +70,8 @@ def _(fast, slow, vola):
 
 @app.cell
 def _(portfolio):
-    _nav = portfolio.nav_accumulated["NAV_accumulated"].pct_change().drop_nulls()
-    print(float(_nav.mean() / _nav.std(ddof=1) * portfolio.data._periods_per_year**0.5))
+    _r = portfolio.returns["returns"]
+    print(float(_r.mean() / _r.std(ddof=1) * portfolio.data._periods_per_year**0.5))
 
 
 @app.cell(hide_code=True)
