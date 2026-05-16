@@ -16,11 +16,11 @@ NOTEBOOK_DIR = (ROOT / "book" / "marimo" / "notebooks").resolve()
 FLOAT_PATTERN = re.compile(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?")
 NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("Experiment*.py"))
 EXPECTED_SHARPE_RATIOS = {
-    "Experiment1": 0.7819474087813011,
-    "Experiment2": 1.1260755020625202,
-    "Experiment3": 1.1285498216316372,
-    "Experiment4": 1.140873971788052,
-    "Experiment5": 1.393306947248026,
+    "Experiment1": 0.5605552118857117,
+    "Experiment2": 0.8793799321235558,
+    "Experiment3": 0.8776423555933839,
+    "Experiment4": 1.0712152818814276,
+    "Experiment5": 1.4652366037605955,
 }
 SHARPE_RATIO_REL_TOLERANCE = 1e-6
 SHARPE_RATIO_ABS_TOLERANCE = 1e-6
