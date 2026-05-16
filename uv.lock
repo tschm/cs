@@ -156,7 +156,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "jquantstats", specifier = ">=0.8.2" },
+    { name = "jquantstats", specifier = ">=0.8.3" },
     { name = "marimo", specifier = ">=0.23.6" },
     { name = "numpy", specifier = ">=2.4.4" },
     { name = "plotly", specifier = ">=6.7.0" },
@@ -290,7 +290,7 @@ wheels = [
 
 [[package]]
 name = "jquantstats"
-version = "0.8.2"
+version = "0.8.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
@@ -300,9 +300,9 @@ dependencies = [
     { name = "polars" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/83/62/f0acbaa44d288a32fd522f392ce25d87f71bc0c9de7e8f85de9fafb34122/jquantstats-0.8.2.tar.gz", hash = "sha256:0fa75ec19fa679abe1912086416143ca23a6dc76212390457da5ffc2b5bc55d5", size = 93005, upload-time = "2026-05-14T07:46:25.592Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/42/be/af6918d2856da732ce982992bb9228ec6a41f4bb92f8e9c2a5e5b04e78f3/jquantstats-0.8.3.tar.gz", hash = "sha256:8d90714e45c623057234bb9f81192c553aa915373eb2df3fed2c1eaf545d632d", size = 93089, upload-time = "2026-05-15T13:47:33.39Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4a/41/68d500440b9ca44a628896743e0e28bdf25bb0c4db9a6ecc5dffba5b37b6/jquantstats-0.8.2-py3-none-any.whl", hash = "sha256:11bb555e1c63af90b8fa46e3baa24bc16b297519016d4b7fddddfa4065d8c531", size = 107105, upload-time = "2026-05-14T07:46:23.86Z" },
+    { url = "https://files.pythonhosted.org/packages/89/d4/e7f06defb833674f4e056cb53bd66a352911d1250bf8097ac2f64fa13a43/jquantstats-0.8.3-py3-none-any.whl", hash = "sha256:b72f7cfaebbb3ccb01dcfb124b744037788c13221d7107b144343abc243501ae", size = 107195, upload-time = "2026-05-15T13:47:31.751Z" },
 ]
 
 [[package]]
