@@ -1,0 +1,58 @@
+# This file is part of the jebel-quant/rhiza repository
+# (https://github.com/jebel-quant/rhiza).
+#
+# Workflow: CI
+#
+# Purpose: Runs the test suite across all supported Python versions and
+#          operating systems to surface compatibility issues early.
+#
+# Trigger: This workflow runs on every push and on pull requests to main/master
+#          branches (including from forks)
+
+name: "(RHIZA) CI"
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    name: "Python ${{ matrix.python-version }} / ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "0.11.7"
+          python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+
+      - name: Configure git auth for private packages
+        uses: ./.github/actions/configure-git-auth
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Install dependencies
+        env:
+          UV_EXTRA_INDEX_URL: ${{ secrets.UV_EXTRA_INDEX_URL }}
+          UV_INDEX_STRATEGY: unsafe-best-match
+        run: uv sync --group dev
+
+      - name: Run tests
+        env:
+          UV_EXTRA_INDEX_URL: ${{ secrets.UV_EXTRA_INDEX_URL }}
+          UV_INDEX_STRATEGY: unsafe-best-match
+        run: uv run pytest tests/
