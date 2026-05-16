@@ -87,8 +87,7 @@ def _(fast, slow, vola, winsor):
 
 @app.cell
 def _(portfolio):
-    _r = portfolio.returns["returns"]
-    print(float(_r.mean() / _r.std(ddof=1) * portfolio.data._periods_per_year**0.5))
+    print(portfolio.stats.sharpe())
 
 
 @app.cell
