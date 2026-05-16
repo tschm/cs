@@ -8,8 +8,8 @@ authors = [{ name = "Thomas Schmelzer" }]
 license = { file = "LICENSE" }
 dependencies = [
     "marimo>=0.23.6",
-    "numpy>=2.4.4",
-    "polars>=1.39.3",
+    "numpy>=2.4.5",
+    "polars>=1.40.1",
     "plotly>=6.7.0",
     "jquantstats>=0.8.3",
     "tinycta>=0.12.2",
