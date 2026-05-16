@@ -3,7 +3,7 @@ name = "cs"
 version = "1.0.0"
 description = "Companion materials for the Computational Statistics project."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 authors = [{ name = "Thomas Schmelzer" }]
 license = { file = "LICENSE" }
 dependencies = [
