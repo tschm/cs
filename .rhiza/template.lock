@@ -5,17 +5,9 @@ ref: v0.10.9
 include: []
 exclude:
 - .rhiza/docs/
-- .rhiza/make.d/agentic.mk
-- .rhiza/make.d/gh-aw.mk
-- .rhiza/make.d/github.mk
-- .rhiza/make.d/custom-env.mk
-- .rhiza/make.d/custom-task.mk
-- .rhiza/make.d/README.md
-- .github/agents/
-- docs/adr
 templates:
 - github
-- marimo
+- github-marimo
 files:
 - .bandit
 - .editorconfig
@@ -26,6 +18,7 @@ files:
 - .github/actions/configure-git-auth/action.yml
 - .github/dependabot.yml
 - .github/secret_scanning.yml
+- .github/workflows/rhiza_marimo.yml
 - .github/workflows/rhiza_release.yml
 - .github/workflows/rhiza_sync.yml
 - .gitignore
@@ -38,6 +31,8 @@ files:
 - .rhiza/assets/rhiza-logo.svg
 - .rhiza/make.d/book.mk
 - .rhiza/make.d/bootstrap.mk
+- .rhiza/make.d/custom-env.mk
+- .rhiza/make.d/custom-task.mk
 - .rhiza/make.d/marimo.mk
 - .rhiza/make.d/quality.mk
 - .rhiza/make.d/releasing.mk
@@ -54,5 +49,5 @@ files:
 - docs/index.md
 - docs/mkdocs-base.yml
 - ruff.toml
-synced_at: '2026-05-22T07:56:47Z'
+synced_at: '2026-05-22T08:03:16Z'
 strategy: merge
