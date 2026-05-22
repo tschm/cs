@@ -3,15 +3,15 @@ template-branch: "v0.10.9"
 
 templates:
   - github
-  - marimo
+  - github-marimo
 
 exclude:
   - .rhiza/docs/
-  - .rhiza/make.d/agentic.mk
-  - .rhiza/make.d/gh-aw.mk
-  - .rhiza/make.d/github.mk
-  - .rhiza/make.d/custom-env.mk
-  - .rhiza/make.d/custom-task.mk
-  - .rhiza/make.d/README.md
-  - .github/agents/
-  - docs/adr
+  #- .rhiza/make.d/agentic.mk
+  #- .rhiza/make.d/gh-aw.mk
+  #- .rhiza/make.d/github.mk
+  #- .rhiza/make.d/custom-env.mk
+  #- .rhiza/make.d/custom-task.mk
+  #- .rhiza/make.d/README.md
+  #- .github/agents/
+  #- docs/adr

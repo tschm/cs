@@ -16,6 +16,7 @@ _tests
 _book
 _pdoc
 docs/notebooks/*.html
+book/marimo/notebooks/*.html
 docs/reports
 docs/reports.md
 _marimushka
