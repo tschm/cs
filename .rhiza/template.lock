@@ -1,21 +1,13 @@
-sha: ea7baa29f491ef74b76882bd75c1ae0551ccad0d
+sha: d20dd62adfdd9bfcd918fac200f5d37ed237c604
 repo: jebel-quant/rhiza
 host: github
-ref: v0.10.2
+ref: v0.10.9
 include: []
 exclude:
 - .rhiza/docs/
-- .rhiza/make.d/agentic.mk
-- .rhiza/make.d/gh-aw.mk
-- .rhiza/make.d/github.mk
-- .rhiza/make.d/custom-env.mk
-- .rhiza/make.d/custom-task.mk
-- .rhiza/make.d/README.md
-- .github/agents/
-- docs/adr
 templates:
 - github
-- marimo
+- github-marimo
 files:
 - .bandit
 - .editorconfig
@@ -26,7 +18,6 @@ files:
 - .github/actions/configure-git-auth/action.yml
 - .github/dependabot.yml
 - .github/secret_scanning.yml
-- .github/workflows/rhiza_book.yml
 - .github/workflows/rhiza_marimo.yml
 - .github/workflows/rhiza_release.yml
 - .github/workflows/rhiza_sync.yml
@@ -40,6 +31,8 @@ files:
 - .rhiza/assets/rhiza-logo.svg
 - .rhiza/make.d/book.mk
 - .rhiza/make.d/bootstrap.mk
+- .rhiza/make.d/custom-env.mk
+- .rhiza/make.d/custom-task.mk
 - .rhiza/make.d/marimo.mk
 - .rhiza/make.d/quality.mk
 - .rhiza/make.d/releasing.mk
@@ -48,11 +41,13 @@ files:
 - .rhiza/requirements/marimo.txt
 - .rhiza/requirements/tools.txt
 - .rhiza/rhiza.mk
+- .rhiza/utils/pip_audit_policy.py
+- .rhiza/utils/suppression_audit.py
 - Makefile
 - docs/assets/rhiza-logo.svg
 - docs/development/MARIMO.md
 - docs/index.md
 - docs/mkdocs-base.yml
 - ruff.toml
-synced_at: '2026-04-23T14:09:05Z'
+synced_at: '2026-05-22T08:03:16Z'
 strategy: merge
