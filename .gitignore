@@ -15,7 +15,7 @@ __marimo__
 _tests
 _book
 _pdoc
-docs/notebooks/*.html
+*.html
 docs/reports
 docs/reports.md
 _marimushka
@@ -44,7 +44,6 @@ __pycache__/
 *$py.class
 
 # Generated presentation files
-presentation.html
 presentation.pdf
 *.pptx
 
