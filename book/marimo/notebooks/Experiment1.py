@@ -17,7 +17,7 @@ moving averages with different lookback periods.
 
 import marimo
 
-__generated_with = "0.23.1"
+__generated_with = "0.23.6"
 app = marimo.App()
 
 with app.setup:
@@ -38,12 +38,15 @@ with app.setup:
 
 @app.cell(hide_code=True)
 def _():
-    mo.md(r"""# CTA 1.0""")
+    mo.md(r"""
+    # CTA 1.0
+    """)
     return
 
 
 @app.function
 def f(price: "pl.Expr", fast=32, slow=96) -> "pl.Expr":
+    """Compute sign of difference between fast and slow EWM of price."""
     return (price.ewm_mean(com=fast, min_samples=100) - price.ewm_mean(com=slow, min_samples=100)).sign()
 
 
@@ -53,7 +56,6 @@ def _():
     slow = mo.ui.slider(4, 192, step=4, value=96, label="Slow moving average")
 
     mo.vstack([fast, slow])
-
     return fast, slow
 
 
@@ -66,41 +68,44 @@ def _(fast, slow):
 
 @app.cell
 def _(portfolio):
-    print(portfolio.stats.sharpe())
+    print(portfolio.stats.sharpe()["returns"])
+    return
 
 
 @app.cell(hide_code=True)
 def _():
-    mo.md(
-        r"""
+    mo.md(r"""
     Results do not look terrible but...
     * No concept of risk integrated.
     * The size of each bet is constant regardless of the underlying asset.
     * The system lost its mojo in 2009 and has never really recovered.
     * The sign function is very expensive to trade as position changes are too extreme.
-    """
-    )
+    """)
     return
 
 
 @app.cell(hide_code=True)
 def _():
-    mo.md(
-        r"""
+    mo.md(r"""
     Such fundamental flaws are not addressed by **parameter-hacking**
     or **pimp-my-trading-system** steps (remove the worst performing assets,
     insane quantity of stop-loss limits, ...)
-    """
-    )
+    """)
     return
+
+
+app._unparsable_cell(
+    r"""
+    portfolio.report.to_html(path="Experiment1.html")
+    portfolio.report.
+    """,
+    name="_",
+)
 
 
 @app.cell
-def _(portfolio):
-    fig = portfolio.plots.snapshot()
-    fig
+def _():
     return
-
 
 
 if __name__ == "__main__":
