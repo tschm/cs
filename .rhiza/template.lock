@@ -1,7 +1,7 @@
-sha: d20dd62adfdd9bfcd918fac200f5d37ed237c604
+sha: 38a5a25d415f12dfd7fa8cc81e985da9907dc94e
 repo: jebel-quant/rhiza
 host: github
-ref: v0.10.9
+ref: v0.11.0
 include: []
 exclude:
 - .rhiza/docs/
@@ -49,5 +49,5 @@ files:
 - docs/index.md
 - docs/mkdocs-base.yml
 - ruff.toml
-synced_at: '2026-05-22T08:03:16Z'
+synced_at: '2026-05-24T13:24:49Z'
 strategy: merge
