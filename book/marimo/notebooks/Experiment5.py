@@ -52,6 +52,7 @@ def _():
 
 @app.function
 def f(price: "pl.Expr", fast=32, slow=96, vola=32, clip=4.2) -> "pl.Expr":
+    """Return the tanh oscillator of vol-adjusted cumulative price."""
     return osc(vol_adj(price, vola=vola, clip=clip, min_samples=300).cum_sum(), fast=fast, slow=slow).tanh()
 
 
@@ -79,17 +80,18 @@ def _(corr, shrinkage, vola, winsor):
 
     # EWM correlation (DCC by Engle)
     # cov_t(i,j) = ewm_t(r_i * r_j) - ewm_t(r_i) * ewm_t(r_j)
-    ewm_means_np = returns_adj.select(
-        pl.all().ewm_mean(com=correlation, min_samples=int(correlation))
-    ).to_numpy()
+    ewm_means_np = returns_adj.select(pl.all().ewm_mean(com=correlation, min_samples=int(correlation))).to_numpy()
 
     pair_indices = [(i, j) for i in range(n_assets) for j in range(i, n_assets)]
-    ewm_prod_np = returns_adj.select([
-        (pl.col(assets[i]) * pl.col(assets[j])).fill_nan(None)
-        .ewm_mean(com=correlation, min_samples=int(correlation))
-        .alias(f"p{i}_{j}")
-        for i, j in pair_indices
-    ]).to_numpy()
+    ewm_prod_np = returns_adj.select(
+        [
+            (pl.col(assets[i]) * pl.col(assets[j]))
+            .fill_nan(None)
+            .ewm_mean(com=correlation, min_samples=int(correlation))
+            .alias(f"p{i}_{j}")
+            for i, j in pair_indices
+        ]
+    ).to_numpy()
 
     cov_np = np.full((n_rows, n_assets, n_assets), np.nan)
     for _k, (_i, _j) in enumerate(pair_indices):
@@ -128,10 +130,10 @@ def _(corr, shrinkage, vola, winsor):
 
     portfolio = Portfolio.from_cash_position(
         prices=prices,
-        cash_position=pl.concat([
-            prices.select(date_col),
-            pl.from_numpy(pos_matrix, schema=dict.fromkeys(assets, pl.Float64))
-        ], how="horizontal"),
+        cash_position=pl.concat(
+            [prices.select(date_col), pl.from_numpy(pos_matrix, schema=dict.fromkeys(assets, pl.Float64))],
+            how="horizontal",
+        ),
         aum=1e8,
     )
     return (portfolio,)

@@ -92,6 +92,7 @@ def _():
 
 @app.function
 def f(price: "pl.Expr", slow=96, fast=32, vola=96, clip=3) -> "pl.Expr":
+    """Return the tanh oscillator of vol-adjusted cumulative price, divided by volatility."""
     price_adj = vol_adj(price, vola=vola, clip=clip, min_samples=300).cum_sum()
     mu = osc(price_adj, fast=fast, slow=slow).tanh()
     vol = price.pct_change().ewm_std(com=slow, min_samples=300)
@@ -114,7 +115,8 @@ def _():
 def _(fast, slow, vola, winsor):
     signals = prices_only.select(
         (f(pl.all(), fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value) * 1e5)
-        .fill_nan(0.0).fill_null(0.0)
+        .fill_nan(0.0)
+        .fill_null(0.0)
     )
     portfolio = Portfolio.from_cash_position(prices=prices, cash_position=signals, aum=1e8)
     return (portfolio,)

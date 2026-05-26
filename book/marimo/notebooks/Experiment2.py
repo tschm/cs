@@ -42,10 +42,12 @@ def _():
     return
 
 
-
 @app.function
 def f(price: "pl.Expr", fast=32, slow=96, volatility=32) -> "pl.Expr":
-    return (price.ewm_mean(com=fast, min_samples=300) - price.ewm_mean(com=slow, min_samples=300)).sign() / price.pct_change().ewm_std(com=volatility, min_samples=300)
+    """Return the volatility-scaled EWM crossover signal."""
+    return (
+        price.ewm_mean(com=fast, min_samples=300) - price.ewm_mean(com=slow, min_samples=300)
+    ).sign() / price.pct_change().ewm_std(com=volatility, min_samples=300)
 
 
 @app.cell

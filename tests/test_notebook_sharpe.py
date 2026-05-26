@@ -1,3 +1,5 @@
+"""Tests verifying that each marimo experiment notebook produces the expected Sharpe ratio."""
+
 import math
 import multiprocessing
 import os
@@ -115,6 +117,7 @@ def _trusted_notebook_path(notebook: Path) -> Path:
 
 
 def test_expected_sharpe_ratio_baselines_cover_all_notebooks() -> None:
+    """Every notebook in the directory has a corresponding Sharpe ratio baseline."""
     assert set(EXPECTED_SHARPE_RATIOS) == {notebook.stem for notebook in NOTEBOOKS}
 
 
@@ -123,6 +126,7 @@ def test_notebook_matches_expected_sharpe_ratio(
     notebook: Path,
     tmp_path: Path,
 ) -> None:
+    """Notebook produces the pre-recorded Sharpe ratio within tolerance."""
     pytest.importorskip("marimo", reason="Marimo notebooks import marimo at module import time")
     notebook = _trusted_notebook_path(notebook)
     output_dir = tmp_path / notebook.stem

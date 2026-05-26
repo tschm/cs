@@ -50,6 +50,7 @@ def _():
 
 @app.function
 def f(price: "pl.Expr", fast=32, slow=96, vola=32, clip=4.2) -> "pl.Expr":
+    """Return the tanh oscillator of vol-adjusted cumulative price."""
     return osc(vol_adj(price, vola=vola, clip=clip, min_samples=300).cum_sum(), fast=fast, slow=slow).tanh()
 
 
@@ -67,19 +68,22 @@ def _():
 
 @app.cell
 def _(fast, slow, vola, winsor):
-    mu_np = prices_only.select(f(pl.all(), fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)).to_numpy()
-    volax_np = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value)).to_numpy()
-    euclid_norm = np.sqrt(np.nansum(mu_np ** 2, axis=1, keepdims=True))
+    mu_np = prices_only.select(
+        f(pl.all(), fast=fast.value, slow=slow.value, vola=vola.value, clip=winsor.value)
+    ).to_numpy()
+    volax_np = prices_only.select(
+        pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=vola.value)
+    ).to_numpy()
+    euclid_norm = np.sqrt(np.nansum(mu_np**2, axis=1, keepdims=True))
     euclid_norm[euclid_norm == 0] = np.nan
     risk_scaled_np = mu_np / euclid_norm
 
     pos_np = np.nan_to_num(5e5 * risk_scaled_np / volax_np, nan=0.0)
     portfolio = Portfolio.from_cash_position(
         prices=prices,
-        cash_position=pl.concat([
-            prices.select(date_col),
-            pl.from_numpy(pos_np, schema=dict.fromkeys(assets, pl.Float64))
-        ], how="horizontal"),
+        cash_position=pl.concat(
+            [prices.select(date_col), pl.from_numpy(pos_np, schema=dict.fromkeys(assets, pl.Float64))], how="horizontal"
+        ),
         aum=1e8,
     )
     return (portfolio,)
