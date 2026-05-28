@@ -32,6 +32,7 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://tschm.github.io/cs"
+Repository = "https://github.com/tschm/cs"
 
 [tool.uv]
 index-strategy = "unsafe-best-match"
@@ -40,6 +41,9 @@ index-strategy = "unsafe-best-match"
 package_module_name_map = { marimo = "marimo", numpy = "numpy", polars = "polars", plotly = "plotly" }
 
 [dependency-groups]
-dev = [
+test = [
     "pytest>=9.0.3",
+]
+lint = [
+    "ruff>=0.4.0",
 ]
