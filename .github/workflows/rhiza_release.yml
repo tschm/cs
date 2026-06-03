@@ -109,7 +109,7 @@ jobs:
       tag: ${{ steps.set_tag.outputs.tag }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
         with:
           fetch-depth: 0
 
@@ -144,7 +144,7 @@ jobs:
     needs: tag
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
         with:
           fetch-depth: 0
 
@@ -154,7 +154,7 @@ jobs:
           version: "0.11.16"
 
       - name: Configure git auth for private packages
-        uses: jebel-quant/rhiza/.github/actions/configure-git-auth@v0.18.4
+        uses: jebel-quant/rhiza/.github/actions/configure-git-auth@v0.18.5
         with:
           token: ${{ secrets.GH_PAT }}
 
@@ -253,7 +253,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
         with:
           fetch-depth: 0
 
@@ -287,7 +287,7 @@ jobs:
     needs: [tag, draft-release]
     steps:
       - name: Checkout Default Branch
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
         with:
           ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 0
@@ -320,7 +320,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
         with:
           fetch-depth: 0
 
@@ -368,7 +368,7 @@ jobs:
       image_name: ${{ steps.image_name.outputs.image_name }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
         with:
           fetch-depth: 0
 
@@ -453,7 +453,7 @@ jobs:
     if: needs.pypi.result == 'success' || needs.devcontainer.result == 'success'
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
         with:
           fetch-depth: 0
 
