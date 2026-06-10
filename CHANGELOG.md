@@ -1,3 +1,12 @@
+## [1.2.1] - 2026-06-10
+
+### 💼 Other
+
+- Bump version 1.2.0 → 1.2.1
+
+### ⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG.md for v1.2.0 [skip ci]
 ## [1.2.0] - 2026-06-08
 
 ### 🚀 Features
