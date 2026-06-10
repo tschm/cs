@@ -44,6 +44,9 @@ PRICES = load_prices(str(NOTEBOOK_DIR / "optimize.py"))
 PRICES_ONLY = PRICES.drop(date_col)
 ASSETS = PRICES_ONLY.columns
 
+# ``clip`` is a fixed winsorizing level, not a search dimension.
+CLIP = 4.2
+
 
 def _signal(notebook: str) -> Callable:
     """Import the signal function ``f`` from an experiment notebook."""
@@ -185,8 +188,8 @@ def _portfolio_from_matrix(pos_np: np.ndarray) -> Portfolio:
 
 # ── Optuna search spaces ──────────────────────────────────────────────────────
 #
-# ``fast``/``slow``/``vola`` ranges mirror the marimo sliders (4..192 step 4);
-# ``clip`` mirrors the winsorizing slider (1.0..6.0 step 0.1). ``slow`` is drawn
+# ``fast``/``slow``/``vola`` ranges mirror the marimo sliders (4..192 step 4).
+# ``clip`` is held fixed at ``CLIP`` (4.2) rather than searched. ``slow`` is drawn
 # strictly above ``fast`` so the oscillator stays well-defined (osc requires
 # fast < slow) and the crossover keeps its fast/slow meaning.
 
@@ -211,28 +214,25 @@ def objective_exp2(trial: optuna.Trial) -> float:
 
 
 def objective_exp3(trial: optuna.Trial) -> float:
-    """Sharpe of CTA 3.0 for a sampled (fast, slow, vola, clip)."""
+    """Sharpe of CTA 3.0 for a sampled (fast, slow, vola); clip is fixed."""
     fast, slow = _suggest_fast_slow(trial)
     vola = trial.suggest_int("vola", 4, 192, step=4)
-    clip = trial.suggest_float("clip", 1.0, 6.0, step=0.1)
-    return _sharpe(build_exp3(fast=fast, slow=slow, vola=vola, clip=clip))
+    return _sharpe(build_exp3(fast=fast, slow=slow, vola=vola, clip=CLIP))
 
 
 def objective_exp4(trial: optuna.Trial) -> float:
-    """Sharpe of CTA 4.0 for a sampled (fast, slow, vola, clip)."""
+    """Sharpe of CTA 4.0 for a sampled (fast, slow, vola); clip is fixed."""
     fast, slow = _suggest_fast_slow(trial)
     vola = trial.suggest_int("vola", 4, 192, step=4)
-    clip = trial.suggest_float("clip", 1.0, 6.0, step=0.1)
-    return _sharpe(build_exp4(fast=fast, slow=slow, vola=vola, clip=clip))
+    return _sharpe(build_exp4(fast=fast, slow=slow, vola=vola, clip=CLIP))
 
 
 def objective_exp5(trial: optuna.Trial) -> float:
-    """Sharpe of CTA 5.0 for a sampled (vola, clip, corr, shrinkage)."""
+    """Sharpe of CTA 5.0 for a sampled (vola, corr, shrinkage); clip is fixed."""
     vola = trial.suggest_int("vola", 4, 192, step=4)
-    clip = trial.suggest_float("clip", 1.0, 6.0, step=0.1)
     corr = trial.suggest_int("corr", 50, 500, step=10)
     shrinkage = trial.suggest_float("shrinkage", 0.0, 1.0, step=0.05)
-    return _sharpe(build_exp5(vola=vola, clip=clip, corr=corr, shrinkage=shrinkage))
+    return _sharpe(build_exp5(vola=vola, clip=CLIP, corr=corr, shrinkage=shrinkage))
 
 
 # ── Experiment registry ───────────────────────────────────────────────────────
