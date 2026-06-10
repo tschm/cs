@@ -10,6 +10,37 @@ ifndef MAKE_VERSION
 $(error GNU Make is required. macOS ships BSD make — install GNU Make with: brew install make)
 endif
 
+# Require a working POSIX shell.
+# Recipes use POSIX shell syntax (mkdir -p, printf, [ ... ], curl | sh). GNU Make
+# runs recipes with sh when it finds one on PATH -- even when make itself was
+# launched from PowerShell or cmd -- so e.g. CI on windows-latest (which ships
+# Git's sh.exe) works fine. Only when no POSIX shell is found does make fall back
+# to cmd.exe, where the recipes fail on the first non-cmd line with errors like:
+#   process_begin: CreateProcess(NULL, # Ensure ... folder exists, ...) failed.
+# So probe the shell make actually uses rather than guessing from the OS: run a
+# POSIX command and require its output. Guarded by $(OS) so the probe only runs
+# on Windows (no subprocess cost on Linux/macOS/WSL, where the shell is POSIX).
+ifeq ($(OS),Windows_NT)
+ifneq ($(shell printf POSIX),POSIX)
+define RHIZA_WINDOWS_SHELL_ERROR
+
+  This project's Makefile requires a POSIX shell, but make could not find one
+  and fell back to cmd.exe, which is not supported.
+
+  Run 'make' from an environment that provides a POSIX shell, e.g.:
+    - WSL (recommended):  https://learn.microsoft.com/windows/wsl/install
+    - Git Bash:           bundled with Git for Windows (https://git-scm.com/download/win)
+
+  Tip: if 'sh.exe' (from Git for Windows) is on your PATH, make will use it
+  automatically even from PowerShell or cmd.
+
+  See README.md > Prerequisites for details.
+
+endef
+$(error $(RHIZA_WINDOWS_SHELL_ERROR))
+endif
+endif
+
 # Colours for pretty output in help messages
 BLUE := \033[36m
 BOLD := \033[1m

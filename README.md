@@ -22,6 +22,14 @@ opens the door to deeper insights into the strategy.
 ### 📋 Prerequisites
 
 - Python 3.12+
+- A POSIX shell. macOS and Linux have one by default.
+
+> **🪟 Windows users:** The `make` targets are written for a POSIX shell and
+> rely on tools like `mkdir -p`, `printf`, `curl`, and `[ … ]`. They will **not**
+> run under `cmd.exe` or PowerShell — you'll see errors such as
+> `process_begin: CreateProcess(NULL, # Ensure the … folder exists, …) failed.`
+> Run the commands below from **WSL** (recommended) or **Git Bash**, both of
+> which provide a POSIX shell.
 
 ### 🔧 Installation
 
