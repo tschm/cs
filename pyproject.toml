@@ -13,6 +13,7 @@ dependencies = [
     "plotly>=6.8.0",
     "jquantstats>=0.9.3",
     "tinycta>=0.13.2",
+    "optuna>=4.8.0",
 ]
 classifiers = [
     "Private :: Do Not Upload",
