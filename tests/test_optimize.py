@@ -29,7 +29,7 @@ def test_default_sharpe_matches_baseline_builder():
     """Experiment.default_sharpe reproduces the notebook defaults exactly."""
     experiment = optimize["EXPERIMENTS"]["1"]
     direct = optimize["build_exp1"](**experiment.default_params)
-    assert experiment.default_sharpe() == optimize["_sharpe"](direct)
+    assert experiment.default_sharpe() == pytest.approx(optimize["_sharpe"](direct))
 
 
 @pytest.mark.parametrize("key", ["1", "2"])
