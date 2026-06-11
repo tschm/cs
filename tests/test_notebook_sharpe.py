@@ -12,20 +12,16 @@ from pathlib import Path
 from queue import Empty
 
 import pytest
+from expected_sharpe import (
+    EXPECTED_SHARPE_RATIOS,
+    SHARPE_RATIO_ABS_TOLERANCE,
+    SHARPE_RATIO_REL_TOLERANCE,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_DIR = (ROOT / "book" / "marimo" / "notebooks").resolve()
 FLOAT_PATTERN = re.compile(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?")
 NOTEBOOKS = sorted(path.resolve() for path in NOTEBOOK_DIR.glob("Experiment*.py"))
-EXPECTED_SHARPE_RATIOS = {
-    "Experiment1": 0.5605552118857117,
-    "Experiment2": 0.8793799321235558,
-    "Experiment3": 0.8776423555933839,
-    "Experiment4": 1.0712152818814276,
-    "Experiment5": 1.4652366037605955,
-}
-SHARPE_RATIO_REL_TOLERANCE = 1e-6
-SHARPE_RATIO_ABS_TOLERANCE = 1e-6
 NOTEBOOK_TIMEOUT = 600
 # Queue read grace period after the child has exited and should have published a result.
 QUEUE_TIMEOUT = 10

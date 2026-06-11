@@ -7,6 +7,11 @@ from pathlib import Path
 
 import optuna
 import pytest
+from expected_sharpe import (
+    EXPECTED_SHARPE_RATIOS,
+    SHARPE_RATIO_ABS_TOLERANCE,
+    SHARPE_RATIO_REL_TOLERANCE,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_DIR = ROOT / "book" / "marimo" / "notebooks"
@@ -30,6 +35,22 @@ def test_default_sharpe_matches_baseline_builder():
     experiment = optimize["EXPERIMENTS"]["1"]
     direct = optimize["build_exp1"](**experiment.default_params)
     assert experiment.default_sharpe() == pytest.approx(optimize["_sharpe"](direct))
+
+
+@pytest.mark.parametrize("key", sorted(optimize["EXPERIMENTS"]))
+def test_builder_matches_pinned_notebook_sharpe(key):
+    """Every builder run with notebook defaults reproduces the pinned notebook Sharpe.
+
+    The build_exp* functions deliberately mirror each notebook's portfolio
+    construction; this ties them to the notebooks numerically so the two
+    cannot silently diverge.
+    """
+    experiment = optimize["EXPERIMENTS"][key]
+    assert experiment.default_sharpe() == pytest.approx(
+        EXPECTED_SHARPE_RATIOS[f"Experiment{key}"],
+        rel=SHARPE_RATIO_REL_TOLERANCE,
+        abs=SHARPE_RATIO_ABS_TOLERANCE,
+    )
 
 
 @pytest.mark.parametrize("key", ["1", "2"])
