@@ -11,6 +11,7 @@ nav:
   - Home: index.md
   - Development:
       - Marimo: development/MARIMO.md
+      - Sharpe pins: development/SHARPE_PINS.md
   - Notebooks:
       - Experiment1: notebooks/Experiment1.html
       - Experiment2: notebooks/Experiment2.html
