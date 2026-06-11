@@ -31,6 +31,13 @@ repos:
         pass_filenames: false
         files: '^(book/marimo/notebooks/.*\.py|uv\.lock)$'
 
+      - id: mypy
+        name: mypy (scope configured in pyproject.toml)
+        entry: uv run --frozen --group lint mypy
+        language: system
+        pass_filenames: false
+        files: '^(book/marimo/notebooks/(optimize|preamble)\.py|scripts/.*\.py|pyproject\.toml)$'
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: 'v0.15.14'
     hooks:
