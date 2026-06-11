@@ -195,6 +195,7 @@ def _portfolio_from_matrix(pos_np: np.ndarray) -> Portfolio:
 
 
 def _suggest_fast_slow(trial: optuna.Trial) -> tuple[int, int]:
+    """Sample a (fast, slow) pair with slow strictly above fast."""
     fast = trial.suggest_int("fast", 4, 96, step=4)
     slow = trial.suggest_int("slow", fast + 4, 192, step=4)
     return fast, slow

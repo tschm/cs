@@ -81,7 +81,7 @@ repos:
     hooks:
       - id: interrogate
         args: [--config=pyproject.toml]
-        files: ^src/
+        files: ^(book/marimo/notebooks/|tests/|scripts/).*\.py$
 
   - repo: https://github.com/Jebel-Quant/rhiza-hooks
     rev: v0.4.0  # Use the latest release

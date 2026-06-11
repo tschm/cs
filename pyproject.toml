@@ -41,6 +41,12 @@ index-strategy = "unsafe-best-match"
 [tool.deptry]
 package_module_name_map = { marimo = "marimo", numpy = "numpy", polars = "polars", plotly = "plotly" }
 
+[tool.interrogate]
+# Marimo notebooks define anonymous cells as functions named "_"; those are
+# generated structure, not API, so they are exempt from docstring coverage.
+ignore-regex = ["^_$"]
+fail-under = 100
+
 [dependency-groups]
 test = [
     "pytest>=9.0.3",
