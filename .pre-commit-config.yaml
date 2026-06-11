@@ -24,6 +24,13 @@ repos:
         language: system
         pass_filenames: false
 
+      - id: check-inline-pins
+        name: Notebook PEP 723 pins match uv.lock
+        entry: python3 scripts/check_inline_pins.py
+        language: system
+        pass_filenames: false
+        files: '^(book/marimo/notebooks/.*\.py|uv\.lock)$'
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: 'v0.15.14'
     hooks:
