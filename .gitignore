@@ -120,3 +120,6 @@ local.mk
 
 .bandit-baseline.json
 
+
+# Local planning notes
+plan.md
