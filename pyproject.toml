@@ -11,9 +11,9 @@ dependencies = [
     "numpy>=2.4.6",
     "polars>=1.41.2",
     "plotly>=6.8.0",
-    "jquantstats>=0.9.3",
+    "jquantstats>=0.9.6",
     "tinycta>=0.13.2",
-    "optuna>=4.8.0",
+    "optuna>=4.9.0",
 ]
 classifiers = [
     "Private :: Do Not Upload",
@@ -68,9 +68,9 @@ fail-under = 100
 
 [dependency-groups]
 test = [
-    "pytest>=9.0.3",
+    "pytest>=9.1.0",
 ]
 lint = [
     "mypy>=2.1.0",
-    "ruff>=0.15.16",
+    "ruff>=0.15.17",
 ]
