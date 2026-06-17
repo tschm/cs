@@ -5,7 +5,7 @@
 #     "numpy==2.4.6",
 #     "plotly==6.8.0",
 #     "polars==1.41.2",
-#     "jquantstats==0.9.3",
+#     "jquantstats==0.9.6",
 #     "tinycta==0.13.2"
 # ]
 # ///
@@ -19,7 +19,7 @@ techniques to improve portfolio construction and risk management.
 
 import marimo
 
-__generated_with = "0.23.1"
+__generated_with = "0.23.9"
 app = marimo.App()
 
 with app.setup:
@@ -46,7 +46,9 @@ with app.setup:
 
 @app.cell(hide_code=True)
 def _():
-    mo.md(r"""# CTA 5.0 - Optimization 2.0""")
+    mo.md(r"""
+    # CTA 5.0 - Optimization 2.0
+    """)
     return
 
 
@@ -66,7 +68,6 @@ def _():
     shrinkage = mo.ui.slider(0.0, 1.0, step=0.05, value=0.5, label="Shrinkage")
 
     mo.vstack([fast, slow, vola, winsor, corr, shrinkage])
-
     return corr, shrinkage, vola, winsor
 
 
@@ -142,25 +143,35 @@ def _(corr, shrinkage, vola, winsor):
 @app.cell
 def _(portfolio):
     print(portfolio.stats.sharpe())
+    return
 
 
 @app.cell(hide_code=True)
 def _():
-    mo.md(
-        r"""
+    mo.md(r"""
     # Conclusions
     * Dramatic relative improvements observable despite using the same signals as in previous Experiment.
     * Main difference here is to take advantage of cross-correlations in the risk measurement.
     * Possible to add constraints on individual assets or groups of them.
     * Possible to reflect trading costs in objective with regularization terms (Ridge, Lars, Elastic Nets, ...)
-    """
-    )
+    """)
     return
 
 
 @app.cell
 def _(portfolio):
     portfolio.plots.snapshot()
+    return
+
+
+@app.cell
+def _(portfolio):
+    portfolio.stats.summary()
+    return
+
+
+@app.cell
+def _():
     return
 
 
