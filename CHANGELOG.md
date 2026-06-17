@@ -1,3 +1,15 @@
+## [1.2.2] - 2026-06-17
+
+### 💼 Other
+
+- Bump version 1.2.1 → 1.2.2
+
+### ⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG.md for v1.2.1 [skip ci]
+- Sync notebook jquantstats pins to uv.lock (0.9.6)
+- Update MARIMO_FOLDER path to book/marimo/notebooks
+- Add Rhiza Claude commands (/rhiza_quality, /rhiza_update)
 ## [1.2.1] - 2026-06-10
 
 ### 💼 Other
