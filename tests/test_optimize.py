@@ -68,3 +68,41 @@ def test_optimize_finds_finite_best_value():
     assert math.isfinite(study.best_value)
     # With trend logic the best configuration should be a real positive Sharpe.
     assert study.best_value > 0
+
+
+@pytest.mark.parametrize("key", ["3", "4", "5"])
+def test_objective_returns_finite_value(key):
+    """Each remaining experiment's Optuna objective evaluates to a finite Sharpe.
+
+    Experiments 1 and 2 are covered by the fast/slow ordering test; this
+    exercises the objective bodies for 3, 4 and 5 (and the builders behind
+    them) with a minimal study.
+    """
+    study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(seed=0))
+    study.optimize(optimize["EXPERIMENTS"][key].objective, n_trials=1)
+    assert math.isfinite(study.best_value)
+
+
+def test_build_exp5_skips_singular_days(monkeypatch):
+    """A singular daily correlation matrix is skipped rather than aborting the build."""
+
+    def _raise(*_args, **_kwargs):
+        """Stand in for inv_a_norm, mimicking TinyCTA's singular-matrix ValueError."""
+        raise ValueError
+
+    # build_exp5 resolves inv_a_norm from its own module globals (runpy returns a
+    # copy of the namespace, so patch the function's __globals__ directly). Force
+    # every day to hit the SingularMatrixError guard and confirm the build still
+    # returns a Portfolio (all-zero positions) instead of aborting.
+    build_exp5 = optimize["build_exp5"]
+    monkeypatch.setitem(build_exp5.__globals__, "inv_a_norm", _raise)
+    portfolio = build_exp5(vola=32, clip=4.2, corr=200, shrinkage=0.5)
+    assert portfolio.stats.sharpe()["returns"] is not None
+
+
+def test_main_runs_single_experiment(capsys):
+    """The CLI entry point runs one experiment and prints its summary."""
+    optimize["main"](["--experiment", "1", "--trials", "1"])
+    out = capsys.readouterr().out
+    assert "Experiment 1" in out
+    assert "best Sharpe" in out

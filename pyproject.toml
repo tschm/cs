@@ -60,6 +60,32 @@ warn_unused_ignores = true
 module = ["jquantstats.*", "tinycta.*", "plotly.*"]
 ignore_missing_imports = true
 
+[tool.coverage.run]
+# The notebook regression tests execute each marimo notebook in a spawned
+# child process for isolation. Without subprocess tracking, the cell bodies
+# they run would not be counted. parallel+multiprocessing+patch let coverage
+# follow those children and combine their data with the parent run.
+parallel = true
+concurrency = ["multiprocessing"]
+sigterm = true
+patch = ["subprocess"]
+# Scope measurement to the notebooks. The spawn start method re-imports the
+# test module in each child to locate the worker function; without this the
+# child would also report the test file itself.
+source = ["book/marimo/notebooks"]
+
+[tool.coverage.report]
+exclude_also = [
+    # marimo emits a trailing `return <outputs>` in every generated @app.cell to
+    # declare that cell's dataflow edges. Its runtime compiles the cell body
+    # without that statement, so these lines are structurally unexecutable.
+    "^\\s*return$",
+    "^\\s*return [\\w, ]+$",
+    # CLI entry guard: main() is covered through the API (test_main_*), not by
+    # re-running the module as a subprocess.
+    "if __name__ == .__main__.:",
+]
+
 [tool.interrogate]
 # Marimo notebooks define anonymous cells as functions named "_"; those are
 # generated structure, not API, so they are exempt from docstring coverage.
