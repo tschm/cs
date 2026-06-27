@@ -7,9 +7,9 @@ requires-python = ">=3.11"
 authors = [{ name = "Thomas Schmelzer" }]
 license = { file = "LICENSE" }
 dependencies = [
-    "marimo>=0.23.10",
+    "marimo>=0.23.11",
     "numpy>=2.4.6",
-    "polars>=1.41.2",
+    "polars>=1.42.0",
     "plotly>=6.8.0",
     "jquantstats>=0.9.6",
     "tinycta>=0.13.3",
@@ -93,5 +93,5 @@ test = [
 ]
 lint = [
     "mypy>=2.1.0",
-    "ruff>=0.15.18",
+    "ruff>=0.15.20",
 ]
