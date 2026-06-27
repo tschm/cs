@@ -1,29 +1,41 @@
-sha: ae79c6f0729b21239655abe390269be9171f907d
+sha: 1a17313aea5af3d15901a77b18f1bff91c7da3a7
 repo: jebel-quant/rhiza
 host: github
-ref: v0.18.8
+ref: v0.19.6
 include: []
 exclude:
 - .rhiza/docs/
+- .rhiza/make.d/custom-env.mk
 templates:
 - github
 - github-marimo
 files:
 - .bandit
+- .claude/commands/rhiza_book.md
+- .claude/commands/rhiza_quality.md
+- .claude/commands/rhiza_release.md
+- .claude/commands/rhiza_update.md
 - .editorconfig
+- .github/CONFIG.md
+- .github/DISCUSSION_TEMPLATE/help-wanted.yml
+- .github/DISCUSSION_TEMPLATE/ideas.yml
 - .github/DISCUSSION_TEMPLATE/q-and-a.yml
 - .github/ISSUE_TEMPLATE/bug_report.yml
 - .github/ISSUE_TEMPLATE/feature_request.yml
 - .github/dependabot.yml
 - .github/pull_request_template.md
 - .github/release.yml
+- .github/rulesets/main-branch-protection.json
 - .github/secret_scanning.yml
 - .github/workflows/rhiza_benchmark.yml
 - .github/workflows/rhiza_book.yml
 - .github/workflows/rhiza_ci.yml
 - .github/workflows/rhiza_codeql.yml
+- .github/workflows/rhiza_fuzzing.yml
 - .github/workflows/rhiza_marimo.yml
+- .github/workflows/rhiza_mutation.yml
 - .github/workflows/rhiza_release.yml
+- .github/workflows/rhiza_scorecard.yml
 - .github/workflows/rhiza_sync.yml
 - .github/workflows/rhiza_weekly.yml
 - .gitignore
@@ -42,6 +54,7 @@ files:
 - .rhiza/make.d/custom-env.mk
 - .rhiza/make.d/custom-task.mk
 - .rhiza/make.d/doctor.mk
+- .rhiza/make.d/github.mk
 - .rhiza/make.d/marimo.mk
 - .rhiza/make.d/quality.mk
 - .rhiza/make.d/releasing.mk
@@ -76,9 +89,12 @@ files:
 - .rhiza/tests/sync/test_readme_validation.py
 - .rhiza/tests/test_utils.py
 - .rhiza/tests/utils/test_git_repo_fixture.py
+- .rhiza/tests/utils/test_pip_audit_policy.py
+- .rhiza/tests/utils/test_suppression_audit.py
 - .rhiza/utils/pip_audit_policy.py
 - .rhiza/utils/suppression_audit.py
 - Makefile
+- cliff.toml
 - docs/assets/rhiza-logo.svg
 - docs/development/MARIMO.md
 - docs/development/TESTS.md
@@ -88,5 +104,5 @@ files:
 - ruff.toml
 profiles:
 - github-project
-synced_at: '2026-06-06T05:12:08Z'
+synced_at: '2026-06-27T04:29:51Z'
 strategy: merge
