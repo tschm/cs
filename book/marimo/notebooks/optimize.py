@@ -25,6 +25,7 @@ import sys
 import warnings
 from collections.abc import Callable
 from pathlib import Path
+from typing import Any, cast
 
 import numpy as np
 import optuna
@@ -48,9 +49,9 @@ ASSETS = PRICES_ONLY.columns
 CLIP = 4.2
 
 
-def _signal(notebook: str) -> Callable:
+def _signal(notebook: str) -> Callable[..., Any]:
     """Import the signal function ``f`` from an experiment notebook."""
-    return runpy.run_path(str(NOTEBOOK_DIR / notebook))["f"]
+    return cast("Callable[..., Any]", runpy.run_path(str(NOTEBOOK_DIR / notebook))["f"])
 
 
 F1 = _signal("Experiment1.py")
@@ -242,7 +243,9 @@ def objective_exp5(trial: optuna.Trial) -> float:
 class Experiment:
     """Bundles an objective with its baseline (notebook default) for reporting."""
 
-    def __init__(self, name: str, objective: Callable, default_params: dict, baseline: Callable):
+    def __init__(
+        self, name: str, objective: Callable[..., Any], default_params: dict[str, Any], baseline: Callable[..., Any]
+    ):
         """Store the experiment's name, Optuna objective, notebook defaults and builder."""
         self.name = name
         self.objective = objective

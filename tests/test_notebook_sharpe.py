@@ -45,7 +45,7 @@ def _run_notebook_worker(notebook: str, output_dir: str, queue: multiprocessing.
         os.environ["NOTEBOOK_OUTPUT_FOLDER"] = output_dir
         with redirect_stdout(stdout), redirect_stderr(stderr):
             runpy.run_path(notebook, run_name="__main__")
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 - harness boundary: report any notebook failure to the parent via the queue
         queue.put(
             {
                 "stdout": stdout.getvalue(),

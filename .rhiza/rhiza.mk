@@ -100,7 +100,24 @@ export UV_VENV_CLEAR := 1
 unexport VIRTUAL_ENV
 
 # Load .rhiza/.env (if present) and export its variables so recipes see them.
+# This file is optional — sensible defaults are defined below.
 -include .rhiza/.env
+
+# ---------------------------------------------------------------------------
+# Default values for variables that may be set in .rhiza/.env.
+# These ?= assignments are skipped when the variable is already defined by
+# the included file, by an environment variable, or by the root Makefile.
+# ---------------------------------------------------------------------------
+
+# Directory that holds the project's Python source package(s).
+SOURCE_FOLDER ?= src
+
+# Directory that holds Marimo notebooks (used by marimo.mk and book.mk).
+MARIMO_FOLDER ?= docs/notebooks
+
+# JSON array of GitHub Actions runner OS labels used by the CI matrix.
+# Override in .rhiza/.env or your root Makefile to add more platforms.
+RHIZA_CI_OS_MATRIX ?= ["ubuntu-latest"]
 
 # ==============================================================================
 # Rhiza Core
@@ -195,7 +212,7 @@ version-matrix: install-uv ## Emit the list of supported Python versions from py
 	@${UVX_BIN} "rhiza-tools>=0.2.2" version-matrix
 
 ci-os-matrix: ## Emit GitHub CI OSes (RHIZA_CI_OS_MATRIX as JSON array, default ["ubuntu-latest"])
-	@printf '%s\n' '$(or $(RHIZA_CI_OS_MATRIX),["ubuntu-latest"])'
+	@$(info $(or $(RHIZA_CI_OS_MATRIX),["ubuntu-latest"]))
 
 print-% : ## print the value of a variable (usage: make print-VARIABLE)
 	@printf "${BLUE}[INFO] Printing value of variable '$*':${RESET}\n"
