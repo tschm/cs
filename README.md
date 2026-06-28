@@ -21,7 +21,7 @@ opens the door to deeper insights into the strategy.
 
 ### 📋 Prerequisites
 
-- Python 3.12+
+- Python 3.11+
 - A POSIX shell. macOS and Linux have one by default.
 
 > **🪟 Windows users:** The `make` targets are written for a POSIX shell and
