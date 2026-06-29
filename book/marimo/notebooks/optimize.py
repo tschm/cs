@@ -20,7 +20,6 @@ strategy logic lives in the notebooks, the search space lives here.
 from __future__ import annotations
 
 import argparse
-import runpy
 import sys
 import warnings
 from collections.abc import Callable
@@ -37,7 +36,7 @@ from tinycta.signal import shrink2id
 NOTEBOOK_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(NOTEBOOK_DIR))
 
-from preamble import date_col, load_prices  # noqa: E402
+from preamble import date_col, load_notebook, load_prices  # noqa: E402
 
 # ── Data and signal functions (loaded once) ──────────────────────────────────
 
@@ -51,7 +50,7 @@ CLIP = 4.2
 
 def _signal(notebook: str) -> Callable[..., Any]:
     """Import the signal function ``f`` from an experiment notebook."""
-    return cast("Callable[..., Any]", runpy.run_path(str(NOTEBOOK_DIR / notebook))["f"])
+    return cast("Callable[..., Any]", load_notebook(notebook)["f"])
 
 
 F1 = _signal("Experiment1.py")

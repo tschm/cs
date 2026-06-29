@@ -1,10 +1,8 @@
 """Tests for the Optuna parameter-optimization module (optimize.py)."""
 
 import math
-import runpy
-import sys
-from pathlib import Path
 
+import numpy as np
 import optuna
 import pytest
 from expected_sharpe import (
@@ -12,12 +10,9 @@ from expected_sharpe import (
     SHARPE_RATIO_ABS_TOLERANCE,
     SHARPE_RATIO_REL_TOLERANCE,
 )
+from preamble import load_notebook
 
-ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOK_DIR = ROOT / "book" / "marimo" / "notebooks"
-sys.path.insert(0, str(NOTEBOOK_DIR))
-
-optimize = runpy.run_path(str(NOTEBOOK_DIR / "optimize.py"))
+optimize = load_notebook("optimize.py")
 
 # Keep Optuna quiet during the test run.
 optuna.logging.set_verbosity(optuna.logging.WARNING)
@@ -106,3 +101,69 @@ def test_main_runs_single_experiment(capsys):
     out = capsys.readouterr().out
     assert "Experiment 1" in out
     assert "best Sharpe" in out
+
+
+def test_default_trials_cover_every_experiment():
+    """DEFAULT_TRIALS has an entry for each registered experiment (no KeyError in main)."""
+    assert set(optimize["DEFAULT_TRIALS"]) == set(optimize["EXPERIMENTS"])
+
+
+def test_sharpe_returns_neg_inf_for_nonfinite_portfolio():
+    """A degenerate (all-zero) portfolio has a non-finite Sharpe, mapped to -inf.
+
+    Exercises the ``else float('-inf')`` branch of ``_sharpe`` that the search
+    relies on to discard parameter regions that produce no usable returns.
+    """
+    zeros = np.zeros((len(optimize["PRICES_ONLY"]), len(optimize["ASSETS"])))
+    portfolio = optimize["_portfolio_from_matrix"](zeros)
+    assert optimize["_sharpe"](portfolio) == float("-inf")
+
+
+def test_suggest_fast_slow_stays_within_slider_bounds():
+    """Sampled (fast, slow) pairs honor the slider ranges and the fast < slow rule.
+
+    Checks the boundaries of the shared ``_suggest_fast_slow`` search space:
+    fast in [4, 96], slow in [fast+4, 192], both multiples of 4.
+    """
+    study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(seed=1))
+    study.optimize(optimize["objective_exp1"], n_trials=15)
+    for trial in study.trials:
+        fast, slow = trial.params["fast"], trial.params["slow"]
+        assert 4 <= fast <= 96
+        assert fast % 4 == 0
+        assert fast + 4 <= slow <= 192
+        assert slow % 4 == 0
+
+
+def test_objective_exp5_samples_within_search_space():
+    """Experiment 5's objective samples vola/corr/shrinkage within their declared ranges."""
+    study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(seed=2))
+    study.optimize(optimize["objective_exp5"], n_trials=2)
+    for trial in study.trials:
+        assert 4 <= trial.params["vola"] <= 192
+        assert 50 <= trial.params["corr"] <= 500
+        assert 0.0 <= trial.params["shrinkage"] <= 1.0
+
+
+def test_main_experiment_all_uses_default_trials_for_every_experiment(capsys, monkeypatch):
+    """``--experiment all`` (no ``--trials``) dispatches to all experiments using DEFAULT_TRIALS.
+
+    Exercises both the ``"all"`` key expansion and the
+    ``n_trials = ... else DEFAULT_TRIALS[key]`` fallback branch in ``main``.
+    DEFAULT_TRIALS is shrunk to a single trial each to keep the test fast.
+    """
+    for key in optimize["EXPERIMENTS"]:
+        monkeypatch.setitem(optimize["DEFAULT_TRIALS"], key, 1)
+    optimize["main"](["--experiment", "all"])
+    out = capsys.readouterr().out
+    for experiment in optimize["EXPERIMENTS"].values():
+        assert experiment.name in out
+
+
+def test_main_verbose_enables_optuna_logging(capsys, monkeypatch):
+    """The ``--verbose`` flag leaves Optuna's per-trial logging enabled (skips the silencing branch)."""
+    calls = []
+    monkeypatch.setattr(optuna.logging, "set_verbosity", lambda level: calls.append(level))
+    optimize["main"](["--experiment", "1", "--trials", "1", "--verbose"])
+    # With --verbose, main must not silence Optuna by lowering verbosity to WARNING.
+    assert optuna.logging.WARNING not in calls
