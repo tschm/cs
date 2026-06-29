@@ -1,6 +1,6 @@
 [project]
 name = "cs"
-version = "1.2.2"
+version = "1.2.3"
 description = "Companion materials for the Computational Statistics project."
 readme = "README.md"
 requires-python = ">=3.11"

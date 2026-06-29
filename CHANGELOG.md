@@ -1,91 +1,219 @@
+# Changelog
+
+All notable changes to this project are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com),
+and entries are generated from [Conventional Commits](https://www.conventionalcommits.org).
+
+## [1.2.3] - 2026-06-29
+
+### Documentation
+- Fix README Python prerequisite to 3.11+
+
+### Maintenance
+- Chore(deps)(deps): bump the github-actions group with 8 updates
+- Target quality gates at real code and reach 100% coverage
+- Chore(deps)(deps): bump the python-dependencies group with 4 updates
+- Chore(deps)(deps): bump the python-dependencies group with 3 updates
+- Chore(deps)(deps): bump the github-actions group with 4 updates
+- Sync notebook inline pins with uv.lock
+- Apply rhiza sync v1.0.0
+
+### Other Changes
+- Merge pull request #437 from tschm/dependabot/github_actions/github-actions-3014ed96f2
+- Merge branch 'main' into dependabot/uv/python-dependencies-cc07e5a61c
+- Merge pull request #438 from tschm/dependabot/uv/python-dependencies-cc07e5a61c
+- Merge branch 'main' into address-quality-gates
+- Merge pull request #443 from tschm/address-quality-gates
+- Bump rhiza template v0.18.8 → v0.19.6 and CLI pin 0.16.1 → 0.18.0
+- Resolve rhiza v0.19.6 sync conflicts
+- Silence BLE001 in notebook test harness boundary
+- Pass v0.19.6 mypy --strict typecheck gate
+- Make book/validate use non-editable local install
+- Merge pull request #445 from tschm/sync/rhiza-v0.19.6
+- Merge pull request #446 from tschm/dependabot/github_actions/github-actions-5e4f1bf470
+- Merge branch 'main' into dependabot/uv/python-dependencies-2bd65f840e
+- Merge pull request #447 from tschm/dependabot/uv/python-dependencies-2bd65f840e
+- Bump rhiza template ref v0.19.6 -> v0.19.9
+- Sync Rhiza template v0.19.6 -> v0.19.9
+- Merge pull request #448 from tschm/sync/rhiza-v0.19.9
+- Merge branch 'main' into quality/readme-python-version-449
+- Merge pull request #450 from tschm/quality/readme-python-version-449
+- Branch coverage, shared notebook loader, optimization docs
+- Merge pull request #452 from tschm/rhiza_v1.0.0
+- Merge branch 'main' into quality/address-453-454-455
+- Merge pull request #456 from tschm/quality/address-453-454-455
+
 ## [1.2.2] - 2026-06-17
 
-### 💼 Other
-
-- Bump version 1.2.1 → 1.2.2
-
-### ⚙️ Miscellaneous Tasks
-
-- Update CHANGELOG.md for v1.2.1 [skip ci]
+### Maintenance
+- Testing expected Sharpe
+- Chore(deps)(deps): bump the python-dependencies group with 4 updates
 - Sync notebook jquantstats pins to uv.lock (0.9.6)
 - Update MARIMO_FOLDER path to book/marimo/notebooks
+- Chore(deps)(deps): bump the github-actions group with 8 updates
+- Chore(deps)(deps): bump python-multipart from 0.0.29 to 0.0.31
 - Add Rhiza Claude commands (/rhiza_quality, /rhiza_update)
+- Chore(deps)(deps): bump starlette from 1.0.1 to 1.3.1
+
+### Other Changes
+- Add Optuna parameter optimization for the CTA experiments
+- Hold winsorizing clip fixed instead of searching it
+- Merge branch 'main' into optuna
+- Merge pull request #425 from tschm/optuna
+- Ignore local planning notes (plan.md)
+- Sync notebook PEP 723 pins with uv.lock and guard against drift
+- Make the interrogate hook check real code instead of nonexistent src/
+- Centralize Sharpe pins and tie optimizer builders to the notebooks
+- Add mypy static type checking
+- Remove mypy from pre-commit
+- Merge pull request #431 from tschm/address-open-issues
+- Merge pull request #435 from tschm/dependabot/uv/python-multipart-0.0.31
+- Merge pull request #432 from tschm/chore/add-rhiza-claude-commands
+- Merge pull request #436 from tschm/dependabot/uv/starlette-1.3.1
+- Merge branch 'main' into dependabot/github_actions/github-actions-28fa30880a
+- Merge pull request #433 from tschm/dependabot/github_actions/github-actions-28fa30880a
+- Merge branch 'main' into dependabot/uv/python-dependencies-2a35da631d
+- Merge pull request #434 from tschm/dependabot/uv/python-dependencies-2a35da631d
+- Bump version 1.2.1 → 1.2.2
+
 ## [1.2.1] - 2026-06-10
 
-### 💼 Other
+### Maintenance
+- Chore(deps)(deps): bump the github-actions group with 9 updates
+- Chore(deps)(deps): bump the python-dependencies group with 4 updates
 
+### Other Changes
+- Merge pull request #423 from tschm/dependabot/uv/python-dependencies-07046f8c2d
+- Merge branch 'main' into dependabot/github_actions/github-actions-a94090fe49
+- Merge pull request #422 from tschm/dependabot/github_actions/github-actions-a94090fe49
+- Guide Windows users to a POSIX shell for make targets
+- Merge pull request #424 from tschm/windows-posix-shell-guidance
 - Bump version 1.2.0 → 1.2.1
 
-### ⚙️ Miscellaneous Tasks
-
-- Update CHANGELOG.md for v1.2.0 [skip ci]
 ## [1.2.0] - 2026-06-08
 
-### 🚀 Features
-
+### New Features
 - Add profiles: github-project to template.yml
 
-### 🐛 Bug Fixes
-
+### Bug Fixes
 - Resolve make fmt failures and CI security checks
 - Downgrade polars constraint after 1.41.0 yanked from PyPI
 - Align pyproject.toml with rhiza test requirements
 
-### 💼 Other
-
-- Bump version 1.1.0 → 1.2.0
-
-### ⚙️ Miscellaneous Tasks
-
-- Bump Rhiza template to v0.10.9
+### Maintenance
+- Chore(deps)(deps): bump the python-dependencies group with 3 updates
 - Sync Rhiza template to v0.10.9
 - Update rhiza template config and ignore notebook HTML outputs
 - Restore template files and update lock after rhiza sync
-- Bump rhiza template to v0.11.0
 - Sync with rhiza v0.11.0
-- Bump rhiza template to v0.13.3
 - Sync with rhiza v0.13.3
-- Bump rhiza to v0.15.1
 - Apply rhiza sync v0.15.1
-- Bump rhiza to v0.15.2
 - Apply rhiza sync v0.15.2
-- Bump rhiza to v0.15.3
+- Chore(deps)(deps): bump the github-actions group with 7 updates
+- Chore(deps)(deps): bump the python-dependencies group with 4 updates
 - Apply rhiza sync v0.15.3
-- Bump rhiza to v0.17.0
 - Apply rhiza sync v0.17.0
-- Bump rhiza to v0.18.4
 - Apply rhiza sync v0.18.4
 - Add pip dependabot entry for .rhiza/requirements
-- Bump rhiza to v0.18.8
+- Chore(deps)(deps): bump the github-actions group with 8 updates
+- Chore(deps)(deps): bump the python-dependencies group with 2 updates
+- Chore(deps)(deps): bump the github-actions group with 9 updates
+- Chore(deps)(deps): bump the python-dependencies group with 2 updates
+- Chore(deps)(deps): bump starlette from 1.0.0 to 1.0.1
 - Refactor CI workflows and expand test coverage for rhiza v0.18.8
+
+### Other Changes
+- Merge branch 'main' into dependabot/uv/python-dependencies-18ecef5dbc
+- Merge pull request #401 from tschm/dependabot/uv/python-dependencies-18ecef5dbc
+- Merge pull request #402 from tschm/jquantstats_update
+- Merge pull request #403 from tschm/dependabot/uv/python-dependencies-ec8c7037b8
+- Merge pull request #405 from tschm/rhiza222
+- Merge pull request #406 from tschm/rhiza11
+- Merge pull request #409 from tschm/rhiza_v0.15.2
+- Merge pull request #411 from tschm/dependabot/uv/python-dependencies-9daad5f80c
+- Merge branch 'main' into dependabot/github_actions/github-actions-d4114beb95
+- Merge pull request #410 from tschm/dependabot/github_actions/github-actions-d4114beb95
+- Merge pull request #412 from tschm/rhiza_v0.15.3
+- Merge pull request #413 from tschm/rhiza_v0.17.0
+- Merge pull request #414 from tschm/rhiza_v0.18.4
+- Merge pull request #416 from tschm/dependabot/uv/python-dependencies-6cfc232fd4
+- Merge branch 'main' into dependabot/github_actions/github-actions-f379237d3f
+- Merge pull request #415 from tschm/dependabot/github_actions/github-actions-f379237d3f
+- Merge pull request #418 from tschm/dependabot/uv/python-dependencies-6664ff0d93
+- Merge branch 'main' into dependabot/github_actions/github-actions-74b91dd3f0
+- Merge pull request #417 from tschm/dependabot/github_actions/github-actions-74b91dd3f0
+- Merge pull request #419 from tschm/dependabot/uv/starlette-1.0.1
+- Merge pull request #421 from tschm/rhiza_v0.18.8
+- Bump version 1.1.0 → 1.2.0
+
 ## [1.1.0] - 2026-05-16
 
-### 🚀 Features
-
+### New Features
 - List individual notebooks in mkdocs nav
 
-### 🐛 Bug Fixes
-
+### Bug Fixes
 - *(notebooks)* Restore baseline Sharpe ratios in Experiment3 and Experiment4
 - *(notebooks)* Suppress divide-by-zero warning in Experiment4 norm step
 - *(tests)* Correct Sharpe ratio baselines for Experiment4 and Experiment5 after rebase
 - *(tests)* Exclude preamble.py from notebook test collection
 - *(notebooks)* Use portfolio.returns["returns"] for Sharpe computation
 
-### 💼 Other
+### Documentation
+- Remove stale requirements.txt hint from README
+- Add Rhiza infrastructure section to README
+- Remove stale Jupyter Book reference from README
+- Refresh MARIMO.md with actual project notebooks and structure
+- *(notebooks)* Remove stale comments and outdated references
 
-- Align notebook runtime dependencies
-- *(notebooks)* Remove stale imports and redundant comments
+### Performance
+- *(Experiment3)* Use pl.all() and pl.concat to speed up Polars operations
+- *(notebooks)* Replace per-column loops with pl.all() and pl.from_numpy across all experiments
+
+### Dependencies
+- *(deps)* Add jquantstats 0.8.2 dependency
+- *(deps)* Remove cvxsimulator dependency
+- *(deps)* Add tinycta==0.9.5 dependency
+- *(deps)* Update tinycta to 0.12.0
+- *(deps)* Add pytest as a dev dependency and update related configs
+- *(deps)* Add pandas==3.0 as a commented dependency in Experiment3 notebook
 - *(deps)* Bump jquantstats to v0.8.3
 - *(deps)* Bump jquantstats to v0.8.3 in notebooks
-- Lower Python version requirement to >=3.11 in pyproject.toml
-- Sync uv.lock
-- Bump version 1.0.0 → 1.1.0
 
-### 🚜 Refactor
-
+### Maintenance
+- Prepare rhiza sync infrastructure
+- Sync with rhiza template v0.9.5
+- Sync Rhiza template to v0.10.2
+- Chore(deps)(deps): bump the python-dependencies group with 4 updates
+- Add mkdocs.yml based on docs/mkdocs-base.yml
+- Chore(deps)(deps): bump the python-dependencies group across 1 directory with 2 updates
+- Chore(deps)(deps): bump pygments from 2.19.2 to 2.20.0
+- Chore(deps)(deps): bump astral-sh/setup-uv in the github-actions group
+- Merge main into rhiza, resolve all conflicts
+- Chore(deps)(deps): bump marimo in the python-dependencies group
+- Chore(deps)(deps): bump marimo in the python-dependencies group
+- Chore(deps)(deps): bump the python-dependencies group with 2 updates
+- Remove direct pandas dependency references
 - *(notebooks)* Replace cvxsimulator with jquantstats in Experiment1, Experiment2, and Experiment3
 - *(notebooks)* Replace cvxsimulator with jquantstats in Experiment4 and Experiment5
+- Add sharpe ratio notebook coverage
+- Tidy notebook timeout constant
+- Document notebook sharpe parsing
+- Harden notebook subprocess invocation
+- Clarify notebook path guard
+- Use explicit notebook trust check
+- Run notebooks in process
+- Use process timeout for notebooks
+- Polish notebook process runner
+- Document notebook process execution
+- Harden notebook process shutdown
+- Clarify notebook runtime checks
+- Align notebook runtime dependencies
+- Clarify notebook timeout handling
+- Hardcode notebook sharpe baselines
+- Relax sharpe baseline tolerance
+- Check sharpe baselines cover notebooks
+- Name sharpe tolerance constants
 - *(notebooks)* Improve Sharpe ratio calculation in Experiment2 by using NAV-based method
 - *(notebooks)* Update Sharpe ratio calculation in Experiment3 to use NAV-based method
 - *(notebooks)* Improve Experiment5 by redefining `osc` and `returns_adjust` functions, updating Sharpe ratio calculation, and refactoring correlation logic
@@ -105,67 +233,154 @@
 - *(notebooks)* Tighten preamble — export only date_col and load_prices
 - *(notebooks)* Precompute prices_only in setup, split Sharpe cell
 - *(notebooks)* With_columns -> select for vol-adjusted returns in Experiment5
-- Replace inline Sharpe ratio calculation with portfolio.stats.sharpe()
-
-### 📚 Documentation
-
-- Remove stale requirements.txt hint from README
-- Add Rhiza infrastructure section to README
-- Remove stale Jupyter Book reference from README
-- Refresh MARIMO.md with actual project notebooks and structure
-- *(notebooks)* Remove stale comments and outdated references
-
-### ⚡ Performance
-
-- *(Experiment3)* Use pl.all() and pl.concat to speed up Polars operations
-- *(notebooks)* Replace per-column loops with pl.all() and pl.from_numpy across all experiments
-
-### 🧪 Testing
-
-- Add sharpe ratio notebook coverage
-- Tidy notebook timeout constant
-- Document notebook sharpe parsing
-- Harden notebook subprocess invocation
-- Clarify notebook path guard
-- Use explicit notebook trust check
-- Run notebooks in process
-- Use process timeout for notebooks
-- Polish notebook process runner
-- Document notebook process execution
-- Harden notebook process shutdown
-- Clarify notebook runtime checks
-- Clarify notebook timeout handling
-- Hardcode notebook sharpe baselines
-- Relax sharpe baseline tolerance
-- Check sharpe baselines cover notebooks
-- Name sharpe tolerance constants
 - Update Sharpe ratio baselines for profit/AUM return convention
 - *(preamble)* Add test suite for preamble.py
 - *(experiment1)* Add unit tests for signal function f
 - Add test suites for preamble and experiments 2–5
-- Cache load_prices dataframe in preamble tests
-
-### ⚙️ Miscellaneous Tasks
-
-- Prepare rhiza sync infrastructure
-- Sync with rhiza template v0.9.5
-- Bump Rhiza template to v0.10.2
-- Sync Rhiza template to v0.10.2
-- Add mkdocs.yml based on docs/mkdocs-base.yml
-- Merge main into rhiza, resolve all conflicts
-- Remove direct pandas dependency references
-- *(notebooks)* Bump tinycta to 0.12.1 in Experiment3, Experiment4, and Experiment5
-- Bump tinycta to 0.12.1 in pyproject.toml and uv.lock
 - Add CI workflow for tests across Python 3.11–3.14 and all OSes
+- Lower Python version requirement to >=3.11 in pyproject.toml
+- Cache load_prices dataframe in preamble tests
+- Replace inline Sharpe ratio calculation with portfolio.stats.sharpe()
+- Sync uv.lock
 - Remove commented-out Docker config from dependabot.yml
+- Chore(deps)(deps): bump the python-dependencies group with 2 updates
+
+### Other Changes
+- Remove the README from make.d
+- Moving documents into place
+- Reduced Makefile
+- Merge pull request #369 from tschm/rhiza
+- Merge branch 'main' into mkdocs
+- Merge pull request #371 from tschm/mkdocs
+- Merge branch 'main' into dependabot/uv/python-dependencies-142a3810de
+- Merge pull request #370 from tschm/dependabot/uv/python-dependencies-142a3810de
+- Moving notebooks
+- Merge pull request #372 from tschm/README
+- Update .env
+- Add Notebooks section to navigation
+- Update notebook dependencies to latest versions
+- Uv sync: add cvxsimulator and update lock file
+- Pin jquantstats==0.6.5 in notebook inline deps
+- Revert explicit jquantstats pin — conflicts with cvxsimulator in CI
+- Use uv run --no-project to isolate notebook environments
+- Fix imports: cvxsimulator 1.4.6 renamed module to cvx.simulator
+- Set index-strategy=unsafe-best-match for private jquantstats
+- Experiments fixing
+- Bump cvxsimulator 1.4.6 → 1.5.1 across all notebooks
+- Merge pull request #374 from tschm/marimo
+- Merge branch 'main' into dependabot/uv/pygments-2.20.0
+- Merge pull request #373 from tschm/dependabot/uv/pygments-2.20.0
+- Merge branch 'main' into dependabot/uv/python-dependencies-f384b4bdca
+- Merge branch 'main' into dependabot/github_actions/github-actions-81661f83bb
+- Merge branch 'main' into dependabot/github_actions/github-actions-81661f83bb
+- Merge pull request #376 from tschm/dependabot/github_actions/github-actions-81661f83bb
+- Merge branch 'main' into dependabot/uv/python-dependencies-f384b4bdca
+- Merge pull request #378 from tschm/dependabot/uv/python-dependencies-f384b4bdca
+- Merge pull request #379 from tschm/dependabot/pip/dot-rhiza/requirements/pip-4ea199e985
+- Merge pull request #380 from tschm/rhiza
+- Merge pull request #382 from tschm/dependabot/uv/python-dependencies-6719f662e7
+- Merge pull request #383 from tschm/dependabot/uv/python-dependencies-189a206c4b
+- Merge pull request #384 from tschm/dependabot/uv/python-dependencies-f78d620da7
+- Initial plan
+- Merge pull request #386 from tschm/copilot/replace-pandas-with-polars
+- Initial plan
+- Merge pull request #389 from tschm/copilot/create-tests-for-sharpe-ratio
+- Merge branch 'main' into jquantstats2
+- Merge pull request #387 from tschm/jquantstats2
+- Merge pull request #391 from tschm/exp4
+- Merge pull request #392 from tschm/exp5
+- Merge pull request #390 from tschm/exp3
+- Merge pull request #393 from tschm/osc
+- Merge branch 'main' into TinyCTA6
+- Merge pull request #394 from tschm/TinyCTA6
+- *(notebooks)* Remove stale imports and redundant comments
+- Merge pull request #395 from tschm/fast
+- Potential fix for pull request finding
+- Potential fix for pull request finding
+- Merge pull request #396 from tschm/exp1a
+- Merge pull request #397 from tschm/preamble
+- Merge pull request #398 from tschm/returns
+- Lock file
+- Revert "test(preamble): add test suite for preamble.py"
+- Merge branch 'main' into test
+- Merge pull request #399 from tschm/test
+- Merge pull request #400 from tschm/test2
+- Bump version 1.0.0 → 1.1.0
+
 ## [1.0.0] - 2026-01-28
 
-### 💼 Other
+### Dependencies
+- *(deps)* Update tschm/marimushka action to v0.0.22 (#263)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.12.0 (#264)
+- *(deps)* Update pre-commit hook python-jsonschema/check-jsonschema to v0.33.1 (#265)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.12.1 (#266)
+- *(deps)* Update jebel-quant/marimushka action to v0.1.2 (#267)
+- *(deps)* Update tschm/cradle action to v0.1.73 (#268)
+- *(deps)* Update jebel-quant/marimushka action to v0.1.3 (#270)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.12.2 (#271)
+- *(deps)* Update tschm/cradle action to v0.1.80 (#273)
+- *(deps)* Update pre-commit hook python-jsonschema/check-jsonschema to v0.33.2 (#272)
+- *(deps)* Update tschm/cradle action to v0.1.81 (#275)
+- *(deps)* Update jebel-quant/marimushka action to v0.1.4 (#276)
+- *(deps)* Update tschm/cradle action to v0.2.1 (#277)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.12.3 (#278)
+- *(deps)* Update tschm/cradle action to v0.3.01 (#279)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.12.4 (#280)
+- *(deps)* Update tschm/cradle action to v0.3.04 (#281)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.12.7 (#282)
+- *(deps)* Update tschm/cradle action to v0.3.06 (#283)
+- *(deps)* Update pre-commit hook pre-commit/pre-commit-hooks to v6 (#285)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.12.8 (#284)
+- *(deps)* Update pre-commit hook python-jsonschema/check-jsonschema to v0.33.3 (#288)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.12.10 (#290)
+- *(deps)* Update actions/upload-pages-artifact action to v4 (#291)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.12.12 (#293)
+- *(deps)* Update softprops/action-gh-release action to v2.3.3 (#294)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.13.0 (#296)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.13.1 (#298)
+- *(deps)* Update pre-commit hook python-jsonschema/check-jsonschema to v0.34.0 (#299)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.13.3 (#306)
+- *(deps)* Update softprops/action-gh-release action to v2.4.0 (#307)
+- *(deps)* Update pre-commit hook python-jsonschema/check-jsonschema to v0.34.1 (#309)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.14.0 (#312)
+- *(deps)* Update softprops/action-gh-release action to v2.4.1 (#311)
+- *(deps)* Update pre-commit hook rhysd/actionlint to v1.7.8 (#310)
+- *(deps)* Update dependency python to 3.14 (#315)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.14.4 (#322)
+- *(deps)* Update pre-commit hook python-jsonschema/check-jsonschema to v0.35.0
+- *(deps)* Update ghcr.io/astral-sh/uv docker tag to v0.9.9
+- *(deps)* Update ghcr.io/astral-sh/uv docker tag to v0.9.14 (#333)
+- *(deps)* Update softprops/action-gh-release action to v2.5.0
+- *(deps)* Update ghcr.io/astral-sh/uv docker tag to v0.9.16 (#336)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.14.8
+- *(deps)* Update pre-commit hook igorshubovych/markdownlint-cli to v0.47.0
+- *(deps)* Update ghcr.io/astral-sh/uv docker tag to v0.9.17
+- *(deps)* Update pre-commit hook python-jsonschema/check-jsonschema to v0.36.0 (#342)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.14.10 (#344)
+- *(deps)* Update dependency astral-sh/uv to v0.9.20 (#346)
+- *(deps)* Update ghcr.io/astral-sh/uv docker tag to v0.9.20 (#347)
+- *(deps)* Lock file maintenance (#348)
+- *(deps)* Update dependency astral-sh/uv to v0.9.22 (#350)
+- *(deps)* Update ghcr.io/astral-sh/uv docker tag to v0.9.22 (#351)
+- *(deps)* Lock file maintenance (#352)
+- *(deps)* Lock file maintenance (#353)
+- *(deps)* Update dependency marimo to v0.19.2 (#355)
+- *(deps)* Lock file maintenance (#357)
+- *(deps)* Update dependency marimo to v0.19.4
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.14.13
+- *(deps)* Update ghcr.io/astral-sh/uv docker tag to v0.9.26
+- *(deps)* Update dependency astral-sh/uv to v0.9.26
+- *(deps)* Lock file maintenance (#363)
+- *(deps)* Update dependency marimo to v0.19.6 (#365)
+- *(deps)* Update pre-commit hook python-jsonschema/check-jsonschema to v0.36.1
+- *(deps)* Update ghcr.io/astral-sh/uv docker tag to v0.9.27
+- *(deps)* Update dependency astral-sh/uv to v0.9.27
 
-- Bump version 0.0.0 → 1.0.0
-
-### ⚙️ Miscellaneous Tasks
-
+### Maintenance
+- Testing notebooks
+- Testing with marimushka
+- Testing with marimushka
+- Testing with marimushka
 - Sync config files from .config-templates (#286)
 - Sync config files from .config-templates (#287)
 - Sync config files from .config-templates (#289)
@@ -199,9 +414,647 @@
 - Update via rhiza
 - Remove unused dependencies
 - Update lockfile
+
+### Other Changes
+- Update renovate.json
+- Update Makefile
+- Publish via book route
+- Update marimushka
+- Towards less workflows
+- Jebel-quant
+- Book revisit (#274)
+- Update README.md
+- Create sync.yml
+- Delete .github/workflows/maintain.yml
+- Update Experiment1.py
+- Fmt
+- Experiments without mo.notebook_location
+- Bring in tinycta
+- Delete .devcontainer directory
+- Delete .github/taskfiles directory
+- Delete .github/CODE_OF_CONDUCT.md
+- Delete .github/CONTRIBUTING.md
+- Refactor sync workflow to use sync_template action
+- Create template.yml for GitHub repository setup
+- Refactor sync workflow with updated template settings (#302)
+- Merge pull request #323 from tschm/template-updates
+- Merge pull request #325 from tschm/renovate/python-jsonschema-check-jsonschema-0.x
+- Merge pull request #324 from tschm/renovate/ghcr.io-astral-sh-uv-0.x
+- Merge pull request #326 from tschm/template-updates
+- Merge pull request #327 from tschm/template-updates
+- Delete tests/test_docs.py
+- Merge pull request #328 from tschm/template-updates
+- Remove tests/test_taskfile.py Taskfile.yml taskfiles
+- Merge pull request #330 from tschm/template-updates
+- Merge branch 'main' into remove-file-6
+- Merge pull request #329 from tschm/remove-file-6
+- Delete .github/scripts/build-extras.sh
+- Delete .github/workflows/devcontainer.yml
+- Modify template.yml to exclude workflow files
+- Merge pull request #332 from tschm/tschm-patch-1
+- Merge branch 'main' into template-updates
+- Merge pull request #331 from tschm/template-updates
+- Merge pull request #334 from tschm/renovate/softprops-action-gh-release-2.x
+- Add pytest.ini to template.yml include list
+- Merge pull request #337 from tschm/renovate/astral-sh-ruff-pre-commit-0.x
+- Merge pull request #339 from tschm/renovate/igorshubovych-markdownlint-cli-0.x
+- Merge pull request #338 from tschm/renovate/ghcr.io-astral-sh-uv-0.x
+- Remove standard tests
+- Update template.yml
+- Merge pull request #340 from tschm/template-updates
+- Delete .github/workflows/_devcontainer.yml
+- Delete .github/workflows/devcontainer.yml
+- Delete .github/workflows/structure.yml
+- Fix formatting of include and exclude sections
+- Rhiza
+- Merge pull request #343 from tschm/cleanup/delete-files
+- Migrate
+- Uv.lock
+- Lock file
+- Empty src
+- Delete .github/workflows/docker.yml
+- Delete src directory
+- Add book and renovate.json to template.yml
+- Towards rhiza
+- Rhiza
+- Merge pull request #345 from tschm/rhiza/20561780280
+- Missing dependencies
+- Rhiza
+- Deptry
+- Problems with deptry
+- Make deptry
+- Deptry fixing
+- Remove packaging
+- Make deptry
+- Rhiza
+- Dependencies
+- Merge pull request #349 from tschm/rhiza/20701569805
+- Merge pull request #354 from tschm/rhiza/20904518355
+- Delete .rhiza.env
+- Merge pull request #356 from tschm/tschm-patch-1
+- Merge pull request #362 from tschm/renovate/astral-sh-ruff-pre-commit-0.x
+- Merge branch 'main' into renovate/marimo-0.x
+- Merge pull request #361 from tschm/renovate/ghcr.io-astral-sh-uv-0.x
+- Merge pull request #359 from tschm/renovate/astral-sh-uv-0.x
+- Merge branch 'main' into renovate/marimo-0.x
+- Merge pull request #360 from tschm/renovate/marimo-0.x
+- Merge branch 'main' into rhiza/21342369665
+- Merge pull request #364 from tschm/rhiza/21342369665
+- Merge pull request #366 from tschm/renovate/python-jsonschema-check-jsonschema-0.x
+- Merge pull request #368 from tschm/renovate/ghcr.io-astral-sh-uv-0.x
+- Merge pull request #367 from tschm/renovate/astral-sh-uv-0.x
+- Remove tests
+- Remove workflows for testing
+- Book resilient
+- Update README.md
+- Bump version 0.0.0 → 1.0.0
+- Classifier
+
+## [0.0.7] - 2025-06-11
+
+### Dependencies
+- *(deps)* Update tschm/cradle action to v0.1.71 (#250)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.11.13 (#258)
+- *(deps)* Update tschm/cradle action to v0.1.72 (#259)
+
+### Other Changes
+- Update README.md
+- Book publishing
+- Polar (#248)
+- Book job
+- Update Experiment1.py (#249)
+- Plotly dependency
+- Update Makefile
+- Update book.yml
+- Update book.yml
+- Fmt
+- Update book.yml
+- Fmt
+- Update book.yml
+- Remove tests
+- Update requirements.txt
+- Marimo workflow (#251)
+- Update Experiment1.py (#253)
+- Cradle job
+- Marimo workflow
+- Books
+- More pyproject style
+- More pyproject style
+- Notebook revisit
+- Merge branch 'ruff' into main
+- Cradle job
+- Cvxsimulator
+- Corrections
+- Update cvxsimulator
+- Move into notebook folder
+- Fmt
+- Cradle job
+- Cradle job
+- 256 fix appsetup (#257)
+- 260 remove pyprojecttoml (#261)
+- Makefile and correcting books
+- Makefile and correcting books
+- 260 remove pyprojecttoml (#262)
+- Update polars
+- Update polars
+- Update polars
+- Update polars
+
+## [0.0.6] - 2025-05-31
+
+### Dependencies
+- *(deps)* Update dependency tinycta to v0.7.19 (#231)
+- *(deps)* Update tschm/cradle action to v0.1.69 (#233)
+- *(deps)* Update dependency marimo to v0.13.15 (#242)
+- *(deps)* Update dependency tinycta to v0.7.20 (#243)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.11.12 (#244)
+- *(deps)* Update dependency cvxsimulator to v1.3.14 (#245)
+
+### Other Changes
+- Update README.md (#230)
+- Marimo (#232)
+- 234 remove jupyter notebooks (#235)
+- Update Makefile
+- Delete book/docs/notebooks/data directory
+- Update _config.yml
+- Update README.md
+- Wasm for first notebook (#236)
+- 237 bring wasm into book (#238)
+- 237 bring wasm into book (#239)
+- Book (#240)
+- Fmt wasm
+- Layout file (#241)
+- Notebooks export (#247)
+- Links to notebooks
+- Remove Notebooks.md
+
 ## [0.0.5] - 2025-05-25
 
-### ⚙️ Miscellaneous Tasks
+### Dependencies
+- *(deps)* Update tschm/cradle action to v0.1.58 (#204)
+- *(deps)* Update tschm/cradle action to v0.1.59 (#205)
+- *(deps)* Update dependency cvxsimulator to v1.3.10 (#206)
+- *(deps)* Update dependency tinycta to v0.7.17 (#207)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.11.3 (#208)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.11.4 (#209)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.11.5 (#211)
+- *(deps)* Update tschm/cradle action to v0.1.60 (#212)
+- *(deps)* Update pre-commit hook python-jsonschema/check-jsonschema to v0.33.0 (#213)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.11.6 (#214)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.11.7 (#215)
+- *(deps)* Update tschm/cradle action to v0.1.63 (#216)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.11.8 (#217)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.11.9 (#218)
+- *(deps)* Update tschm/cradle action to v0.1.64 (#219)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.11.10 (#221)
+- *(deps)* Update dependency cvxsimulator to v1.3.11 (#220)
+- *(deps)* Update pre-commit hook igorshubovych/markdownlint-cli to v0.45.0 (#222)
+- *(deps)* Update tschm/cradle action to v0.1.68 (#223)
+- *(deps)* Update dependency cvxsimulator to v1.3.12 (#225)
+- *(deps)* Update pre-commit hook astral-sh/ruff-pre-commit to v0.11.11 (#226)
+- *(deps)* Update cvxgrp/.github action to v2.2.8 (#229)
+- *(deps)* Update dependency cvxsimulator to v1.3.12 (#227)
+- *(deps)* Update dependency tinycta to v0.7.17 (#228)
 
+### Maintenance
 - *(config)* Migrate config .github/renovate.json (#210)
-## [list] - 2019-05-01
+
+### Other Changes
+- Update renovate.json
+- Update renovate.json
+- Update renovate.json
+- Update README.md
+- Update README.md
+- Makebranch2 (#224)
+
+## [0.0.4] - 2025-03-26
+
+### Other Changes
+- Update cvxgrp/.github action to v2.1.1 (#185)
+- Update cvxgrp/.github action to v2.1.2 (#186)
+- Update cvxgrp/.github action to v2.2.1 (#188)
+- Update pre-commit.yml (#187)
+- Update cvxgrp/.github action to v2.2.3 (#189)
+- Update cvxgrp/.github action to v2.2.4 (#190)
+- Update JamesIves/github-pages-deploy-action action to v4.7.3 (#191)
+- Update dependency cvxsimulator to v1.3.9 (#192)
+- Update cvxgrp/.github action to v2.2.5 (#193)
+- Update cvxgrp/.github action to v2.2.6 (#194)
+- Update pre-commit hooks (#195)
+- Update cvxgrp/.github action to v2.2.7 (#196)
+- Update cvxgrp/.github action to v2.2.8 (#197)
+- Update dependency tinycta to v0.7.16 (#198)
+- Update pre-commit.yml (#199)
+- Update release.yml (#200)
+- Update tschm/cradle action to v0.1.57 (#201)
+- Update tschm/cradle action to v0.1.57 (#202)
+- Update pre-commit hooks (#203)
+
+## [0.0.3] - 2025-02-02
+
+### Other Changes
+- Update cvxgrp/.github action to v2.0.16 (#182)
+- Update pre-commit.yml
+- Update release.yml (#183)
+- Update pre-commit.yml
+- Update cvxgrp/.github action to v2.1.0 (#184)
+- Update release.yml
+
+## [0.0.2] - 2025-02-02
+
+### Other Changes
+- Update renovate.json
+- Delete .python-version
+- Create pre-commit.yml
+- LICENSE file
+- Update cvxgrp/.github action to v2.0.13 (#180)
+- Update dependency tinycta to v0.7.15 (#181)
+- Update release.yml
+
+## [0.0.1] - 2025-01-31
+
+### Bug Fixes
+- Fixing experiments
+- Fixing the kernel
+- Fixing notebooks
+
+### Documentation
+- Docs
+- Docs
+- Docs
+- Docs
+- Docs
+- Docs
+- Docs
+
+### Maintenance
+- Tests
+- Build_portfolio
+- Build_portfolio
+- Build_portfolio
+- Build_portfolio
+- Build_portfolio
+- Build_portfolio
+- Build_portfolio
+- Build_portfolio
+- Test experiment3
+- Test experiment 1 and 2
+- Test experiment 4 and 5
+
+### Other Changes
+- Initial commit
+- No autolaunch
+- Update README.md
+- Merge remote-tracking branch 'origin/master'
+- Corrections
+- New pdfs
+- Inv a_norm
+- Inv a_norm
+- Cleaning docker in Makefile
+- Cleaning docker in Makefile
+- Dockerfile
+- Smn ignore
+- Merge branch 'master' of https://github.com/tschm/cs
+- Moving away from beakerx image
+- Merge remote-tracking branch 'origin/master'
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Moving away from beakerx image
+- Moving away from beakerx image
+- Experiment 5?
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of https://github.com/tschm/cs
+- Merge branch 'master' of https://github.com/tschm/cs
+- New Jupyter underlying
+- Comments
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge remote-tracking branch 'origin/master'
+- Merge remote-tracking branch 'origin/master'
+- Merge remote-tracking branch 'origin/master'
+- Merge remote-tracking branch 'origin/master'
+- Merge remote-tracking branch 'origin/master'
+- Merge remote-tracking branch 'origin/master'
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- New Docker
+- Merge remote-tracking branch 'origin/master'
+- Merge branch 'master' of github.com:tschm/cs
+- Merge remote-tracking branch 'origin/master'
+- Merge remote-tracking branch 'origin/master'
+- Merge remote-tracking branch 'origin/master'
+- Merge branch 'master' of github.com:tschm/cs
+- Slides
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Merge branch 'master' of github.com:tschm/cs
+- Matplotlib
+- Matplotlib
+- Slides
+- Cleaning abstract and bio
+- Updated data file
+- Updated data file
+- Updated data file
+- Updated data file
+- Updated data file
+- Clean notebooks
+- Clean notebooks
+- Binder link
+- Work folder?
+- Push action updated
+- Push action updated
+- Push action updated
+- Push action updated
+- Push action updated
+- Push action updated
+- Push action updated
+- Remove obsolete object
+- Analysis towards dataclass
+- Created using Colaboratory
+- Created using Colaboratory
+- Update slides.yml
+- Update slides.yml
+- Bring in poetry
+- Rename readme
+- Moving py files
+- Cleaning
+- Workflows
+- Version of poetry
+- Merge pull request #4 from tschm/tschm-patch-2
+- Testing (#5)
+- Book (#6)
+- Update readme.md (#7)
+- Book publishing (#8)
+- Reshuffle (#9)
+- Update slides.yml (#10)
+- Update _toc.yml (#11)
+- Update book.yml (#12)
+- Update readme.md (#20)
+- Binder2 (#21)
+- Update requirements.txt (#22)
+- Update _config.yml (#23)
+- Update _config.yml (#24)
+- Binder (#25)
+- Update _config.yml (#26)
+- Docker (#28)
+- Delete .gitkeep (#27)
+- Update _config.yml (#29)
+- Remove tests (#30)
+- Remove docker (#31)
+- Remove python package (#32)
+- Tutorial (#33)
+- Binder (#34)
+- Badge (#35)
+- Update runtime.txt (#36)
+- Cleaning (#37)
+- Binder (#38)
+- Change to tinycta
+- Ignore venv
+- Change to tinycta
+- Change to tinycta
+- Change to tinycta
+- Change to tinycta
+- Change to tinycta
+- Change to tinycta
+- Font problem
+- Font problem
+- Font problem
+- Font problem
+- Font problem
+- Font problem
+- Font problem
+- Font problem
+- Missing ipywidgets
+- Create binder.yml (#39)
+- Delete binder-badge.yml
+- Update README.md
+- Update README.md
+- Update README.md
+- Update binder.yml
+- Bring in fresh prices
+- Create kernel
+- Update binder.yml (#41)
+- Merge branch 'main' of github.com:tschm/cs
+- Hashed prices
+- Ignore the data
+- Data
+- Update requirements.txt (#42)
+- Update book.yml (#40)
+- 43 fly through the slides (#44)
+- Remove spaces
+- Create dependabot.yml
+- Pre-commit
+- Makefile
+- Towards testing
+- Towards testing
+- Towards testing
+- Towards testing
+- Updated requirements
+- Updated notebooks
+- Updated test workflow
+- Notebook parsing
+- Gearing
+- Update book.yml
+- Update Makefile
+- Make book
+- Update book.yml
+- Makefile@
+- Makefile
+- Makefile
+- Remove kernel construction
+- Order of slides
+- Danke
+- Pre-commit job
+- Pre-commit with validate github
+- Update README.md
+- Pre-commit verbose
+- [pre-commit.ci] pre-commit autoupdate (#49)
+- Create LICENSE
+- Experiment 1 with fullscreen plot
+- [pre-commit.ci] pre-commit autoupdate (#50)
+- Update _toc.yml
+- Update TinyCTA
+- Index updated
+- Index with link
+- [pre-commit.ci] pre-commit autoupdate (#52)
+- Reorder
+- Update README.md
+- Update index.md
+- Update index.md
+- Fmt
+- Notebooks revisited
+- Changing titles
+- Optimization to md
+- Towards md file for intermezzo
+- Optimization to md
+- Optimization to md
+- Revisit all experiments
+- Spelling
+- Software section
+- Software section
+- Update Strategies.md
+- Data
+- Remove obsolete data not used in tests
+- Update README.md
+- Update index.md
+- Remove example.md
+- Remove obsolete data not used in tests
+- Link for orange juice future
+- Update Strategies.md
+- Fmt
+- [pre-commit.ci] pre-commit autoupdate (#53)
+- [pre-commit.ci] pre-commit autoupdate (#54)
+- [pre-commit.ci] pre-commit autoupdate (#55)
+- [pre-commit.ci] pre-commit autoupdate (#56)
+- [pre-commit.ci] pre-commit autoupdate (#57)
+- [pre-commit.ci] pre-commit autoupdate (#58)
+- [pre-commit.ci] pre-commit autoupdate (#59)
+- [pre-commit.ci] pre-commit autoupdate (#60)
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- Update cvxSimulator
+- Update
+- Ignore more
+- Remove tests
+- Corrected experiment 5
+- Update index.md
+- Update README.md
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- Update pre-commit.yml
+- Update dependabot.yml
+- Update book.yml
+- Update book.yml
+- Update book.yml
+- Update book.yml
+- Fmt
+- Bump actions/checkout from 3 to 4
+- Bump tinycta from 0.7.0 to 0.7.1
+- Bump JamesIves/github-pages-deploy-action from 4.4.3 to 4.5.0
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- Bump JamesIves/github-pages-deploy-action from 4.5.0 to 4.6.0
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- Bump JamesIves/github-pages-deploy-action from 4.6.0 to 4.6.1
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- Bump JamesIves/github-pages-deploy-action from 4.6.1 to 4.6.3
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- Bump JamesIves/github-pages-deploy-action from 4.6.3 to 4.6.4
+- Bump JamesIves/github-pages-deploy-action from 4.6.4 to 4.6.8
+- Bump cvxsimulator from 0.8.17 to 1.0.0
+- Update Experiment4.ipynb
+- Bump cvxsimulator from 1.0.0 to 1.0.1
+- [pre-commit.ci] pre-commit autoupdate
+- Sorting imports
+- Fmt
+- [pre-commit.ci] pre-commit autoupdate
+- Bump cvxsimulator from 1.0.1 to 1.1.1
+- Bump JamesIves/github-pages-deploy-action from 4.6.8 to 4.6.9
+- [pre-commit.ci] pre-commit autoupdate
+- Bump cvxsimulator from 1.1.1 to 1.2.0
+- [pre-commit.ci] pre-commit autoupdate
+- Bump cvxsimulator from 1.2.0 to 1.2.1
+- [pre-commit.ci] pre-commit autoupdate
+- Bump JamesIves/github-pages-deploy-action from 4.6.9 to 4.7.1
+- [pre-commit.ci] pre-commit autoupdate
+- Bump JamesIves/github-pages-deploy-action from 4.7.1 to 4.7.2
+- Bump cvxsimulator from 1.2.1 to 1.3.0
+- [pre-commit.ci] pre-commit autoupdate
+- [pre-commit.ci] pre-commit autoupdate
+- Bump cvxsimulator from 1.3.0 to 1.3.1
+- [pre-commit.ci] pre-commit autoupdate
+- Update .pre-commit-config.yaml
+- [pre-commit.ci] auto fixes from pre-commit.com hooks
+- Fmt
+- Fmt
+- Fmt
+- Add renovate.json
+- Update renovate.json
+- Rename renovate.json to .github/renovate.json
+- Delete .github/dependabot.yml
+- Update pre-commit hook astral-sh/ruff-pre-commit to v0.8.5
+- Update .pre-commit-config.yaml
+- Fmt
+- Remove runtime
+- Python-version
+- Update renovate.json
+- Update renovate.json
+- Update pre-commit hook astral-sh/ruff-pre-commit to v0.8.6 (#147)
+- Delete .github/workflows/binder.yml
+- Update pre-commit hook rhysd/actionlint to v1.7.6 (#149)
+- Update pre-commit hook python-jsonschema/check-jsonschema to v0.31.0 (#150)
+- Update pre-commit hook astral-sh/ruff-pre-commit to v0.9.0 (#151)
+- Update renovate.json
+- Update pre-commit hook astral-sh/ruff-pre-commit to v0.9.1 (#153)
+- Update .pre-commit-config.yaml (#154)
+- Update pre-commit hook astral-sh/ruff-pre-commit to v0.9.2 (#155)
+- Makefile new (#157)
+- Update pre-commit hook rhysd/actionlint to v1.7.7 (#158)
+- Update pre-commit hook astral-sh/ruff-pre-commit to v0.9.3 (#159)
+- Update dependency tinycta to v0.7.2 (#160)
+- Update pre-commit hook igorshubovych/markdownlint-cli to v0.44.0 (#161)
+- Update dependency tinycta to v0.7.3 (#162)
+- Update dependency tinycta to v0.7.4 (#163)
+- Update dependency cvxsimulator to v1.3.3 (#164)
+- Update dependency tinycta to v0.7.5 (#165)
+- Update dependency tinycta to v0.7.6 (#166)
+- Update dependency cvxsimulator to v1.3.4 (#167)
+- Update dependency tinycta to v0.7.7 (#168)
+- Manual release
+- Update cvxgrp/.github action to v2.0.12 (#169)
+- Update dependency cvxsimulator to v1.3.6 (#170)
+- Update dependency tinycta to v0.7.9 (#171)
+- Update pre-commit hook python-jsonschema/check-jsonschema to v0.31.1 (#172)
+- Update Makefile
+- Update README.md
+- Index as link to README
+- Update dependency tinycta to v0.7.10 (#173)
+- Update dependency cvxsimulator to v1.3.8 (#174)
+- Update pre-commit hook astral-sh/ruff-pre-commit to v0.9.4 (#175)
+- Update renovate.json
+- Schedule for renovate
+- Schedule for renovate
+- Update dependency tinycta to v0.7.11 (#176)
+- Update renovate.json
+- Update dependency tinycta to v0.7.13 (#177)
+
+<!-- generated by git-cliff -->
