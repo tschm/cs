@@ -49,6 +49,14 @@ make install
 make book
 ```
 
+Developer notes live under [`docs/development/`](docs/development/):
+
+- [Parameter optimization](docs/development/OPTIMIZATION.md) — how the Optuna
+  search in `optimize.py` reuses the notebook signals (the
+  notebooks-are-the-source-of-truth contract).
+- [Sharpe-ratio pins](docs/development/SHARPE_PINS.md) — the pinned regression
+  baselines and how to update them.
+
 ### 🧪 Interactive Development
 
 ```bash

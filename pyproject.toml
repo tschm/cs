@@ -56,6 +56,10 @@ module = ["jquantstats.*", "tinycta.*", "plotly.*"]
 ignore_missing_imports = true
 
 [tool.coverage.run]
+# Measure branch coverage, not just line coverage, so a conditional that is only
+# ever taken one way (e.g. a guard whose else-branch is never exercised) is
+# reported as a partial branch rather than counting as fully covered.
+branch = true
 # The notebook regression tests execute each marimo notebook in a spawned
 # child process for isolation. Without subprocess tracking, the cell bodies
 # they run would not be counted. parallel+multiprocessing+patch let coverage

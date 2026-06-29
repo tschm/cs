@@ -1,14 +1,9 @@
 """Tests for the signal function f defined in Experiment 1."""
 
-import runpy
-from pathlib import Path
-
 import polars as pl
+from preamble import load_notebook
 
-ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOK_DIR = ROOT / "book" / "marimo" / "notebooks"
-
-f = runpy.run_path(str(NOTEBOOK_DIR / "Experiment1.py"))["f"]
+f = load_notebook("Experiment1.py")["f"]
 
 
 def test_f_signal_values_are_sign(rising):

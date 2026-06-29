@@ -1,17 +1,15 @@
 """Tests for the preamble module shared by marimo experiment notebooks."""
 
-import runpy
 from pathlib import Path
 
 import plotly.io as pio
 import polars as pl
 import pytest
+from preamble import NOTEBOOK_DIR, load_notebook
 
-ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOK_DIR = ROOT / "book" / "marimo" / "notebooks"
 NOTEBOOK_FILE = str(NOTEBOOK_DIR / "Experiment1.py")
 
-preamble = runpy.run_path(str(NOTEBOOK_DIR / "preamble.py"))
+preamble = load_notebook("preamble.py")
 load_prices = preamble["load_prices"]
 date_col = preamble["date_col"]
 
