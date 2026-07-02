@@ -4,7 +4,7 @@
 #     "marimo==0.23.11",
 #     "numpy==2.4.6",
 #     "plotly==6.8.0",
-#     "polars==1.42.0",
+#     "polars==1.42.1",
 #     "jquantstats==0.9.6"
 # ]
 # ///
