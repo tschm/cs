@@ -7,7 +7,7 @@ requires-python = ">=3.11"
 authors = [{ name = "Thomas Schmelzer" }]
 license = { file = "LICENSE" }
 dependencies = [
-    "marimo>=0.23.11",
+    "marimo>=0.23.13",
     "numpy>=2.4.6",
     "polars>=1.42.1",
     "plotly>=6.8.0",
