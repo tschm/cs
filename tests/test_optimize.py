@@ -114,7 +114,7 @@ def test_sharpe_returns_neg_inf_for_nonfinite_portfolio():
     Exercises the ``else float('-inf')`` branch of ``_sharpe`` that the search
     relies on to discard parameter regions that produce no usable returns.
     """
-    zeros = np.zeros((len(optimize["PRICES_ONLY"]), len(optimize["ASSETS"])))
+    zeros = np.zeros((len(optimize["_prices_only"]()), len(optimize["_assets"]())))
     portfolio = optimize["_portfolio_from_matrix"](zeros)
     assert optimize["_sharpe"](portfolio) == float("-inf")
 
@@ -158,6 +158,20 @@ def test_main_experiment_all_uses_default_trials_for_every_experiment(capsys, mo
     out = capsys.readouterr().out
     for experiment in optimize["EXPERIMENTS"].values():
         assert experiment.name in out
+
+
+def test_optimize_handles_zero_baseline(capsys, monkeypatch):
+    """A zero baseline Sharpe prints 'n/a' instead of raising ZeroDivisionError.
+
+    ``optimize`` divides the improvement by the baseline to report a percentage;
+    forcing every Sharpe evaluation to 0 drives the baseline to exactly 0 and
+    exercises the zero-baseline guard. Patch ``_sharpe`` in the module globals
+    (the objective and ``Experiment.default_sharpe`` both resolve it there).
+    """
+    monkeypatch.setitem(optimize["optimize"].__globals__, "_sharpe", lambda _portfolio: 0.0)
+    study = optimize["optimize"]("1", n_trials=1, seed=0)
+    assert study.best_value == 0.0
+    assert "n/a — zero baseline" in capsys.readouterr().out
 
 
 def test_main_verbose_enables_optuna_logging(capsys, monkeypatch):
