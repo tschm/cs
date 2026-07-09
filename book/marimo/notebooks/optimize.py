@@ -23,6 +23,7 @@ import argparse
 import sys
 import warnings
 from collections.abc import Callable
+from functools import cache
 from pathlib import Path
 from typing import Any, cast
 
@@ -38,26 +39,38 @@ sys.path.insert(0, str(NOTEBOOK_DIR))
 
 from preamble import date_col, load_notebook, load_prices  # noqa: E402
 
-# ── Data and signal functions (loaded once) ──────────────────────────────────
-
-PRICES = load_prices(str(NOTEBOOK_DIR / "optimize.py"))
-PRICES_ONLY = PRICES.drop(date_col)
-ASSETS = PRICES_ONLY.columns
+# ── Data and signal functions (loaded lazily, then cached) ────────────────────
+#
+# Wrapped in ``@cache``d accessors rather than evaluated at import: merely
+# importing this module now reads no CSV and executes no notebook. The price
+# frame and each notebook's signal ``f`` are loaded on first use and reused.
 
 # ``clip`` is a fixed winsorizing level, not a search dimension.
 CLIP = 4.2
 
 
+@cache
+def _prices() -> pl.DataFrame:
+    """Load the price frame once (date column plus one column per asset)."""
+    return load_prices(str(NOTEBOOK_DIR / "optimize.py"))
+
+
+@cache
+def _prices_only() -> pl.DataFrame:
+    """The price frame with the date column dropped."""
+    return _prices().drop(date_col)
+
+
+@cache
+def _assets() -> list[str]:
+    """Column names of the tradable assets (price columns, no date)."""
+    return _prices_only().columns
+
+
+@cache
 def _signal(notebook: str) -> Callable[..., Any]:
-    """Import the signal function ``f`` from an experiment notebook."""
+    """Import (and cache) the signal function ``f`` from an experiment notebook."""
     return cast("Callable[..., Any]", load_notebook(notebook)["f"])
-
-
-F1 = _signal("Experiment1.py")
-F2 = _signal("Experiment2.py")
-F3 = _signal("Experiment3.py")
-F4 = _signal("Experiment4.py")
-F5 = _signal("Experiment5.py")
 
 
 def _sharpe(portfolio: Portfolio) -> float:
@@ -71,28 +84,33 @@ def _sharpe(portfolio: Portfolio) -> float:
 
 def build_exp1(*, fast: int, slow: int) -> Portfolio:
     """CTA 1.0 — sign of the fast-minus-slow EWM crossover."""
-    signals = PRICES_ONLY.select(F1(pl.all(), fast=fast, slow=slow).fill_null(0.0) * 5e6)
-    return Portfolio.from_cash_position(prices=PRICES, cash_position=signals, aum=1e8)
+    f = _signal("Experiment1.py")
+    signals = _prices_only().select(f(pl.all(), fast=fast, slow=slow).fill_null(0.0) * 5e6)
+    return Portfolio.from_cash_position(prices=_prices(), cash_position=signals, aum=1e8)
 
 
 def build_exp2(*, fast: int, slow: int, volatility: int) -> Portfolio:
     """CTA 2.0 — volatility-scaled crossover."""
-    signals = PRICES_ONLY.select(F2(pl.all(), fast=fast, slow=slow, volatility=volatility).fill_null(0.0) * 1e5)
-    return Portfolio.from_cash_position(prices=PRICES, cash_position=signals, aum=1e8)
+    f = _signal("Experiment2.py")
+    signals = _prices_only().select(f(pl.all(), fast=fast, slow=slow, volatility=volatility).fill_null(0.0) * 1e5)
+    return Portfolio.from_cash_position(prices=_prices(), cash_position=signals, aum=1e8)
 
 
 def build_exp3(*, fast: int, slow: int, vola: int, clip: float) -> Portfolio:
     """CTA 3.0 — tanh oscillator on vol-adjusted prices, divided by volatility."""
-    signals = PRICES_ONLY.select(
-        (F3(pl.all(), fast=fast, slow=slow, vola=vola, clip=clip) * 1e5).fill_nan(0.0).fill_null(0.0)
+    f = _signal("Experiment3.py")
+    signals = _prices_only().select(
+        (f(pl.all(), fast=fast, slow=slow, vola=vola, clip=clip) * 1e5).fill_nan(0.0).fill_null(0.0)
     )
-    return Portfolio.from_cash_position(prices=PRICES, cash_position=signals, aum=1e8)
+    return Portfolio.from_cash_position(prices=_prices(), cash_position=signals, aum=1e8)
 
 
 def build_exp4(*, fast: int, slow: int, vola: int, clip: float) -> Portfolio:
     """CTA 4.0 — Euclidean risk-scaling across assets (optimization 1.0)."""
-    mu_np = PRICES_ONLY.select(F4(pl.all(), fast=fast, slow=slow, vola=vola, clip=clip)).to_numpy()
-    volax_np = PRICES_ONLY.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola, min_samples=vola)).to_numpy()
+    prices_only = _prices_only()
+    f = _signal("Experiment4.py")
+    mu_np = prices_only.select(f(pl.all(), fast=fast, slow=slow, vola=vola, clip=clip)).to_numpy()
+    volax_np = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola, min_samples=vola)).to_numpy()
     euclid_norm = np.sqrt(np.nansum(mu_np**2, axis=1, keepdims=True))
     euclid_norm[euclid_norm == 0] = np.nan
     risk_scaled_np = mu_np / euclid_norm
@@ -100,27 +118,27 @@ def build_exp4(*, fast: int, slow: int, vola: int, clip: float) -> Portfolio:
     return _portfolio_from_matrix(pos_np)
 
 
-def build_exp5(*, vola: int, clip: float, corr: int, shrinkage: float) -> Portfolio:
-    """CTA 5.0 — DCC correlation + shrinkage matrix optimization (optimization 2.0).
+def _dcc_correlation(prices_only: pl.DataFrame, *, vola: int, clip: float, corr: int) -> np.ndarray:
+    """Engle-DCC per-day correlation tensor, shape ``(n_rows, n_assets, n_assets)``.
 
-    ``fast``/``slow`` are held at the notebook's fixed 32/96 — the notebook only
-    exposes vola, clip, corr and shrinkage to the search.
+    ``cov_t(i, j) = ewm_t(r_i * r_j) - ewm_t(r_i) * ewm_t(r_j)`` on the
+    vol-adjusted returns, normalized to a correlation. Days with non-positive
+    variance keep NaN off-diagonals; the diagonal is forced to 1 where the
+    variance is positive.
     """
     from tinycta.util import vol_adj
 
-    n_assets = len(ASSETS)
-    n_rows = len(PRICES_ONLY)
+    assets = prices_only.columns
+    n_assets = len(assets)
+    n_rows = len(prices_only)
 
-    returns_adj = PRICES_ONLY.select(vol_adj(pl.all(), vola=vola, clip=clip, min_samples=300))
-
-    # EWM correlation (DCC by Engle):
-    # cov_t(i,j) = ewm_t(r_i * r_j) - ewm_t(r_i) * ewm_t(r_j)
+    returns_adj = prices_only.select(vol_adj(pl.all(), vola=vola, clip=clip, min_samples=300))
     ewm_means_np = returns_adj.select(pl.all().ewm_mean(com=corr, min_samples=int(corr))).to_numpy()
 
     pair_indices = [(i, j) for i in range(n_assets) for j in range(i, n_assets)]
     ewm_prod_np = returns_adj.select(
         [
-            (pl.col(ASSETS[i]) * pl.col(ASSETS[j]))
+            (pl.col(assets[i]) * pl.col(assets[j]))
             .fill_nan(None)
             .ewm_mean(com=corr, min_samples=int(corr))
             .alias(f"p{i}_{j}")
@@ -140,11 +158,26 @@ def build_exp5(*, vola: int, clip: float, corr: int, shrinkage: float) -> Portfo
         cor_3d = cov_np / _denom
     for _k in range(n_assets):
         cor_3d[_var[:, _k] > 0, _k, _k] = 1.0
+    return cast("np.ndarray", cor_3d)
 
-    mu = PRICES_ONLY.select(F5(pl.all(), fast=32, slow=96, vola=vola, clip=clip)).to_numpy()
-    vo = PRICES_ONLY.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola, min_samples=int(vola))).to_numpy()
 
-    prices_np = PRICES_ONLY.to_numpy()
+def build_exp5(*, vola: int, clip: float, corr: int, shrinkage: float) -> Portfolio:
+    """CTA 5.0 — DCC correlation + shrinkage matrix optimization (optimization 2.0).
+
+    ``fast``/``slow`` are held at the notebook's fixed 32/96 — the notebook only
+    exposes vola, clip, corr and shrinkage to the search.
+    """
+    prices_only = _prices_only()
+    n_assets = len(_assets())
+    n_rows = len(prices_only)
+
+    cor_3d = _dcc_correlation(prices_only, vola=vola, clip=clip, corr=corr)
+
+    f = _signal("Experiment5.py")
+    mu = prices_only.select(f(pl.all(), fast=32, slow=96, vola=vola, clip=clip)).to_numpy()
+    vo = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola, min_samples=int(vola))).to_numpy()
+
+    prices_np = prices_only.to_numpy()
     pos_matrix = np.zeros((n_rows, n_assets))
 
     # The search deliberately explores (corr, shrinkage) regions that make the
@@ -179,11 +212,12 @@ def build_exp5(*, vola: int, clip: float, corr: int, shrinkage: float) -> Portfo
 
 def _portfolio_from_matrix(pos_np: np.ndarray) -> Portfolio:
     """Wrap a (rows x assets) position matrix into a Portfolio with the date column."""
+    prices = _prices()
     cash_position = pl.concat(
-        [PRICES.select(date_col), pl.from_numpy(pos_np, schema=dict.fromkeys(ASSETS, pl.Float64))],
-        how="horizontal",
+        [prices.select(date_col), pl.from_numpy(pos_np, schema=dict.fromkeys(_assets(), pl.Float64))],
+        how="horizontal_extend",
     )
-    return Portfolio.from_cash_position(prices=PRICES, cash_position=cash_position, aum=1e8)
+    return Portfolio.from_cash_position(prices=prices, cash_position=cash_position, aum=1e8)
 
 
 # ── Optuna search spaces ──────────────────────────────────────────────────────
@@ -289,7 +323,11 @@ def optimize(key: str, *, n_trials: int, seed: int) -> optuna.Study:
     print(f"  best Sharpe:     {study.best_value:.4f}")
     print(f"  best params:     {study.best_params}")
     improvement = study.best_value - baseline
-    print(f"  improvement:     {improvement:+.4f} ({improvement / abs(baseline):+.1%})")
+    if baseline == 0:
+        # A zero baseline Sharpe has no meaningful percentage; report absolute only.
+        print(f"  improvement:     {improvement:+.4f} (n/a — zero baseline)")
+    else:
+        print(f"  improvement:     {improvement:+.4f} ({improvement / abs(baseline):+.1%})")
     print(f"{'═' * 60}")
     return study
 
