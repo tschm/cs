@@ -1,7 +1,7 @@
-sha: cc162bbe38291955e0aa5f3418c1bcfd10fbba24
+sha: b0748ea2ac6b1b0e3bbf76470b717427cf22a289
 repo: jebel-quant/rhiza
 host: github
-ref: v1.1.1
+ref: v1.1.2
 include: []
 exclude:
 - .rhiza/docs/
@@ -63,14 +63,9 @@ files:
 - .rhiza/semgrep.yml
 - .rhiza/tests/README.md
 - .rhiza/tests/conftest.py
-- .rhiza/tests/stress/README.md
-- .rhiza/tests/stress/__init__.py
-- .rhiza/tests/stress/conftest.py
 - .rhiza/tests/test_docstrings.py
-- .rhiza/tests/test_git_repo_fixture.py
 - .rhiza/tests/test_pyproject.py
 - .rhiza/tests/test_readme_validation.py
-- .rhiza/tests/test_utils.py
 - Makefile
 - cliff.toml
 - docs/assets/rhiza-logo.svg
@@ -82,5 +77,5 @@ files:
 - ruff.toml
 profiles:
 - github-project
-synced_at: '2026-07-09T14:09:54Z'
+synced_at: '2026-07-10T11:31:34Z'
 strategy: merge
