@@ -71,24 +71,26 @@ def _():
     return corr, shrinkage, vola, winsor
 
 
-@app.cell
-def _(corr, shrinkage, vola, winsor):
-    n_assets = len(assets)
-    n_rows = len(prices_only)
-    correlation = corr.value
+@app.function
+def ewm_covariance(returns_adj: "pl.DataFrame", *, corr: int) -> "np.ndarray":
+    """EWM covariance tensor of the vol-adjusted returns (the Engle-DCC numerator).
 
-    returns_adj = prices_only.select(vol_adj(pl.all(), vola=vola.value, clip=winsor.value, min_samples=300))
+    ``cov_t(i, j) = ewm_t(r_i * r_j) - ewm_t(r_i) * ewm_t(r_j)``, evaluated for
+    every day; the result has shape ``(n_rows, n_assets, n_assets)`` and is
+    symmetric in ``(i, j)``.
+    """
+    columns = returns_adj.columns
+    n_assets = len(columns)
+    n_rows = len(returns_adj)
 
-    # EWM correlation (DCC by Engle)
-    # cov_t(i,j) = ewm_t(r_i * r_j) - ewm_t(r_i) * ewm_t(r_j)
-    ewm_means_np = returns_adj.select(pl.all().ewm_mean(com=correlation, min_samples=int(correlation))).to_numpy()
+    ewm_means_np = returns_adj.select(pl.all().ewm_mean(com=corr, min_samples=int(corr))).to_numpy()
 
     pair_indices = [(i, j) for i in range(n_assets) for j in range(i, n_assets)]
     ewm_prod_np = returns_adj.select(
         [
-            (pl.col(assets[i]) * pl.col(assets[j]))
+            (pl.col(columns[i]) * pl.col(columns[j]))
             .fill_nan(None)
-            .ewm_mean(com=correlation, min_samples=int(correlation))
+            .ewm_mean(com=corr, min_samples=int(corr))
             .alias(f"p{i}_{j}")
             for i, j in pair_indices
         ]
@@ -99,27 +101,51 @@ def _(corr, shrinkage, vola, winsor):
         _cov = ewm_prod_np[:, _k] - ewm_means_np[:, _i] * ewm_means_np[:, _j]
         cov_np[:, _i, _j] = _cov
         cov_np[:, _j, _i] = _cov
+    return cov_np
 
+
+@app.function
+def correlation_from_covariance(cov_np: "np.ndarray") -> "np.ndarray":
+    """Normalize a per-day covariance tensor to a correlation tensor.
+
+    Days with non-positive variance keep their NaN off-diagonals; the diagonal
+    is forced to 1 wherever the variance is positive.
+    """
+    n_assets = cov_np.shape[1]
     _var = cov_np[:, np.arange(n_assets), np.arange(n_assets)]
     with np.errstate(invalid="ignore", divide="ignore"):
         _denom = np.sqrt(_var[:, :, None] * _var[:, None, :])
         cor_3d = cov_np / _denom
     for _k in range(n_assets):
         cor_3d[_var[:, _k] > 0, _k, _k] = 1.0
+    return cor_3d
 
-    mu = prices_only.select(f(pl.all(), fast=32, slow=96, vola=vola.value, clip=winsor.value)).to_numpy()
-    vo = prices_only.select(
-        pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=int(vola.value))
-    ).to_numpy()
 
-    prices_np = prices_only.to_numpy()
+@app.function
+def dcc_correlation(prices_only: "pl.DataFrame", *, vola: int, clip: float, corr: int) -> "np.ndarray":
+    """Engle-DCC per-day correlation tensor, shape ``(n_rows, n_assets, n_assets)``."""
+    returns_adj = prices_only.select(vol_adj(pl.all(), vola=vola, clip=clip, min_samples=300))
+    cov_np = ewm_covariance(returns_adj, corr=corr)
+    return correlation_from_covariance(cov_np)
+
+
+@app.function
+def positions(
+    cor_3d: "np.ndarray", mu: "np.ndarray", vo: "np.ndarray", prices_np: "np.ndarray", *, shrinkage: float
+) -> "np.ndarray":
+    """Per-day risk-parity positions from the shrunk DCC correlation tensor.
+
+    Each day, the correlation matrix is shrunk towards the identity, restricted
+    to the assets with a finite price, and used to solve for the risk-scaled
+    position. Days with no live assets or a singular/zero norm are left flat.
+    """
+    n_rows, n_assets = prices_np.shape
     pos_matrix = np.zeros((n_rows, n_assets))
-
     for _n in range(n_rows):
         _mask = np.isfinite(prices_np[_n])
         if _mask.sum() == 0:
             continue
-        _full_shrunk = shrink2id(cor_3d[_n], lamb=shrinkage.value)
+        _full_shrunk = shrink2id(cor_3d[_n], lamb=shrinkage)
         _matrix = _full_shrunk[_mask, :][:, _mask]
         _expected_mu = np.nan_to_num(mu[_n][_mask])
         _expected_vo = np.nan_to_num(vo[_n][_mask])
@@ -128,6 +154,20 @@ def _(corr, shrinkage, vola, winsor):
             continue
         _risk_pos = solve(_matrix, _expected_mu) / _norm
         pos_matrix[_n, _mask] = np.nan_to_num(1e6 * _risk_pos / _expected_vo, nan=0.0)
+    return pos_matrix
+
+
+@app.cell
+def _(corr, shrinkage, vola, winsor):
+    # EWM correlation (DCC by Engle), then per-day risk-parity positions.
+    cor_3d = dcc_correlation(prices_only, vola=vola.value, clip=winsor.value, corr=corr.value)
+
+    mu = prices_only.select(f(pl.all(), fast=32, slow=96, vola=vola.value, clip=winsor.value)).to_numpy()
+    vo = prices_only.select(
+        pl.all().fill_nan(None).pct_change().ewm_std(com=vola.value, min_samples=int(vola.value))
+    ).to_numpy()
+
+    pos_matrix = positions(cor_3d, mu, vo, prices_only.to_numpy(), shrinkage=shrinkage.value)
 
     portfolio = Portfolio.from_cash_position(
         prices=prices,
