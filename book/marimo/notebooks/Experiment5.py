@@ -173,7 +173,7 @@ def _(corr, shrinkage, vola, winsor):
         prices=prices,
         cash_position=pl.concat(
             [prices.select(date_col), pl.from_numpy(pos_matrix, schema=dict.fromkeys(assets, pl.Float64))],
-            how="horizontal",
+            how="horizontal_extend",
         ),
         aum=1e8,
     )

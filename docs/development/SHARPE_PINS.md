@@ -56,3 +56,14 @@ That is the test doing its job. To review and update:
 
 Never widen the tolerances to make a bump pass; that trades away the
 regression protection the pins exist to provide.
+
+## Keeping the builders drift-resistant
+
+Because the pins are so tight, the code that assembles each portfolio should
+avoid deprecated dependency APIs whose *default* behaviour is scheduled to
+change — a silent default flip can perturb the baselines for no real reason.
+Concretely, the position matrices are joined to the date column with
+`pl.concat(..., how="horizontal_extend")` (in both the notebooks and
+`optimize.py`) rather than the deprecated `how="horizontal"`, whose default is
+changing in a future polars release. Prefer the explicit, stable variant of any
+such API when touching these code paths.

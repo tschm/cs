@@ -68,9 +68,19 @@ def _assets() -> list[str]:
 
 
 @cache
+def _notebook(name: str) -> dict[str, Any]:
+    """Execute (and cache) an experiment notebook, returning its namespace.
+
+    Both the signal ``f`` and Experiment 5's ``dcc_correlation`` helper are read
+    out of this namespace, so the strategy math lives once in the notebooks and
+    ``optimize.py`` never reimplements it.
+    """
+    return load_notebook(name)
+
+
 def _signal(notebook: str) -> Callable[..., Any]:
-    """Import (and cache) the signal function ``f`` from an experiment notebook."""
-    return cast("Callable[..., Any]", load_notebook(notebook)["f"])
+    """The signal function ``f`` defined by an experiment notebook."""
+    return cast("Callable[..., Any]", _notebook(notebook)["f"])
 
 
 def _sharpe(portfolio: Portfolio) -> float:
@@ -118,72 +128,38 @@ def build_exp4(*, fast: int, slow: int, vola: int, clip: float) -> Portfolio:
     return _portfolio_from_matrix(pos_np)
 
 
-def _dcc_correlation(prices_only: pl.DataFrame, *, vola: int, clip: float, corr: int) -> np.ndarray:
-    """Engle-DCC per-day correlation tensor, shape ``(n_rows, n_assets, n_assets)``.
+def _day_position(matrix: np.ndarray, expected_mu: np.ndarray, expected_vo: np.ndarray) -> np.ndarray | None:
+    """Risk-scaled position vector for a single day, or ``None`` if the day is unusable.
 
-    ``cov_t(i, j) = ewm_t(r_i * r_j) - ewm_t(r_i) * ewm_t(r_j)`` on the
-    vol-adjusted returns, normalized to a correlation. Days with non-positive
-    variance keep NaN off-diagonals; the diagonal is forced to 1 where the
-    variance is positive.
+    Returns ``None`` for the degenerate days the Optuna search deliberately
+    visits: a singular correlation matrix (TinyCTA's ``inv_a_norm`` raises
+    ``ValueError``) or a zero/NaN norm. ``inv_a_norm``/``solve`` are resolved
+    from the module globals so tests can monkeypatch them.
     """
-    from tinycta.util import vol_adj
-
-    assets = prices_only.columns
-    n_assets = len(assets)
-    n_rows = len(prices_only)
-
-    returns_adj = prices_only.select(vol_adj(pl.all(), vola=vola, clip=clip, min_samples=300))
-    ewm_means_np = returns_adj.select(pl.all().ewm_mean(com=corr, min_samples=int(corr))).to_numpy()
-
-    pair_indices = [(i, j) for i in range(n_assets) for j in range(i, n_assets)]
-    ewm_prod_np = returns_adj.select(
-        [
-            (pl.col(assets[i]) * pl.col(assets[j]))
-            .fill_nan(None)
-            .ewm_mean(com=corr, min_samples=int(corr))
-            .alias(f"p{i}_{j}")
-            for i, j in pair_indices
-        ]
-    ).to_numpy()
-
-    cov_np = np.full((n_rows, n_assets, n_assets), np.nan)
-    for _k, (_i, _j) in enumerate(pair_indices):
-        _cov = ewm_prod_np[:, _k] - ewm_means_np[:, _i] * ewm_means_np[:, _j]
-        cov_np[:, _i, _j] = _cov
-        cov_np[:, _j, _i] = _cov
-
-    _var = cov_np[:, np.arange(n_assets), np.arange(n_assets)]
-    with np.errstate(invalid="ignore", divide="ignore"):
-        _denom = np.sqrt(_var[:, :, None] * _var[:, None, :])
-        cor_3d = cov_np / _denom
-    for _k in range(n_assets):
-        cor_3d[_var[:, _k] > 0, _k, _k] = 1.0
-    return cast("np.ndarray", cor_3d)
+    try:
+        norm = inv_a_norm(expected_mu, matrix)
+    except ValueError:
+        # Singular correlation matrix on this day; skip the day, not the trial.
+        return None
+    if norm == 0 or np.isnan(norm):
+        return None
+    return cast("np.ndarray", np.nan_to_num(1e6 * (solve(matrix, expected_mu) / norm) / expected_vo, nan=0.0))
 
 
-def build_exp5(*, vola: int, clip: float, corr: int, shrinkage: float) -> Portfolio:
-    """CTA 5.0 — DCC correlation + shrinkage matrix optimization (optimization 2.0).
+def _solve_positions(
+    cor_3d: np.ndarray, mu: np.ndarray, vo: np.ndarray, prices_np: np.ndarray, *, shrinkage: float
+) -> np.ndarray:
+    """Per-day risk-parity positions from the shrunk DCC correlation tensor.
 
-    ``fast``/``slow`` are held at the notebook's fixed 32/96 — the notebook only
-    exposes vola, clip, corr and shrinkage to the search.
+    Mirrors Experiment 5's ``positions`` but tolerates the singular/ill-conditioned
+    daily matrices the search visits: :func:`_day_position` returns ``None`` for
+    those days and they are left flat instead of aborting the trial.
     """
-    prices_only = _prices_only()
-    n_assets = len(_assets())
-    n_rows = len(prices_only)
-
-    cor_3d = _dcc_correlation(prices_only, vola=vola, clip=clip, corr=corr)
-
-    f = _signal("Experiment5.py")
-    mu = prices_only.select(f(pl.all(), fast=32, slow=96, vola=vola, clip=clip)).to_numpy()
-    vo = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola, min_samples=int(vola))).to_numpy()
-
-    prices_np = prices_only.to_numpy()
+    n_rows, n_assets = prices_np.shape
     pos_matrix = np.zeros((n_rows, n_assets))
-
     # The search deliberately explores (corr, shrinkage) regions that make the
-    # daily correlation matrix ill-conditioned or singular; the guards below
-    # handle the degenerate days, so silence the accompanying numerical noise.
-    # (TinyCTA's ``SingularMatrixError`` is a ``ValueError``; the conditioning
+    # daily correlation matrix ill-conditioned or singular; _day_position handles
+    # those days, so silence the accompanying numerical noise. (The conditioning
     # warning is matched by message to avoid importing cvx's internal classes.)
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", message="Matrix condition number")
@@ -192,21 +168,31 @@ def build_exp5(*, vola: int, clip: float, corr: int, shrinkage: float) -> Portfo
             _mask = np.isfinite(prices_np[_n])
             if _mask.sum() == 0:
                 continue
-            _full_shrunk = shrink2id(cor_3d[_n], lamb=shrinkage)
-            _matrix = _full_shrunk[_mask, :][:, _mask]
-            _expected_mu = np.nan_to_num(mu[_n][_mask])
-            _expected_vo = np.nan_to_num(vo[_n][_mask])
-            try:
-                _norm = inv_a_norm(_expected_mu, _matrix)
-            except ValueError:
-                # Singular correlation matrix on this day (some corr/shrinkage
-                # combinations trigger it); skip the day rather than the trial.
-                continue
-            if _norm == 0 or np.isnan(_norm):
-                continue
-            _risk_pos = solve(_matrix, _expected_mu) / _norm
-            pos_matrix[_n, _mask] = np.nan_to_num(1e6 * _risk_pos / _expected_vo, nan=0.0)
+            _matrix = shrink2id(cor_3d[_n], lamb=shrinkage)[_mask, :][:, _mask]
+            _pos = _day_position(_matrix, np.nan_to_num(mu[_n][_mask]), np.nan_to_num(vo[_n][_mask]))
+            if _pos is not None:
+                pos_matrix[_n, _mask] = _pos
+    return pos_matrix
 
+
+def build_exp5(*, vola: int, clip: float, corr: int, shrinkage: float) -> Portfolio:
+    """CTA 5.0 — DCC correlation + shrinkage matrix optimization (optimization 2.0).
+
+    ``fast``/``slow`` are held at the notebook's fixed 32/96 — the notebook only
+    exposes vola, clip, corr and shrinkage to the search. The DCC correlation
+    tensor is computed by Experiment 5's own ``dcc_correlation`` (pulled from the
+    notebook namespace) so the notebook and the optimizer share one implementation.
+    """
+    prices_only = _prices_only()
+
+    dcc_correlation = _notebook("Experiment5.py")["dcc_correlation"]
+    cor_3d = dcc_correlation(prices_only, vola=vola, clip=clip, corr=corr)
+
+    f = _signal("Experiment5.py")
+    mu = prices_only.select(f(pl.all(), fast=32, slow=96, vola=vola, clip=clip)).to_numpy()
+    vo = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola, min_samples=int(vola))).to_numpy()
+
+    pos_matrix = _solve_positions(cor_3d, mu, vo, prices_only.to_numpy(), shrinkage=shrinkage)
     return _portfolio_from_matrix(pos_matrix)
 
 
