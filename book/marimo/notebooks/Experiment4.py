@@ -82,7 +82,8 @@ def _(fast, slow, vola, winsor):
     portfolio = Portfolio.from_cash_position(
         prices=prices,
         cash_position=pl.concat(
-            [prices.select(date_col), pl.from_numpy(pos_np, schema=dict.fromkeys(assets, pl.Float64))], how="horizontal"
+            [prices.select(date_col), pl.from_numpy(pos_np, schema=dict.fromkeys(assets, pl.Float64))],
+            how="horizontal_extend",
         ),
         aum=1e8,
     )
