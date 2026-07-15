@@ -1,22 +1,8 @@
-template-repository: "jebel-quant/rhiza"
-template-branch: "v1.1.3"
+repository: "jebel-quant/rhiza"
+ref: "v1.1.3"
 
 profiles:
   - github-project
 
 templates:
-  - github
-  - github-marimo
-
-exclude:
-  - .rhiza/docs/
-  # Locally owned: pins SOURCE_FOLDER/COVERAGE_FAIL_UNDER to this repo's
-  # notebook layout so the typecheck/docs/coverage gates target real code.
-  - .rhiza/make.d/custom-env.mk
-  #- .rhiza/make.d/agentic.mk
-  #- .rhiza/make.d/gh-aw.mk
-  #- .rhiza/make.d/github.mk
-  #- .rhiza/make.d/custom-task.mk
-  #- .rhiza/make.d/README.md
-  #- .github/agents/
-  #- docs/adr
+  - legal
