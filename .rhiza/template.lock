@@ -3,12 +3,9 @@ repo: jebel-quant/rhiza
 host: github
 ref: v1.1.3
 include: []
-exclude:
-- .rhiza/docs/
-- .rhiza/make.d/custom-env.mk
+exclude: []
 templates:
-- github
-- github-marimo
+- legal
 files:
 - .bandit
 - .editorconfig
@@ -41,6 +38,8 @@ files:
 - .rhiza/.env
 - .rhiza/.gitignore
 - .rhiza/.rhiza-version
+- .rhiza/CODE_OF_CONDUCT.md
+- .rhiza/CONTRIBUTING.md
 - .rhiza/assets/rhiza-logo.svg
 - .rhiza/completions/README.md
 - .rhiza/completions/rhiza-completion.bash
@@ -63,7 +62,9 @@ files:
 - .rhiza/tests/test_docstrings.py
 - .rhiza/tests/test_pyproject.py
 - .rhiza/tests/test_readme_validation.py
+- LICENSE
 - Makefile
+- SECURITY.md
 - cliff.toml
 - docs/assets/rhiza-logo.svg
 - docs/development/MARIMO.md
@@ -74,5 +75,5 @@ files:
 - ruff.toml
 profiles:
 - github-project
-synced_at: '2026-07-11T07:25:17Z'
+synced_at: '2026-07-15T04:36:20Z'
 strategy: merge
