@@ -135,7 +135,7 @@ endef
 export RHIZA_LOGO
 
 # Declare phony targets for Rhiza Core
-.PHONY: print-logo sync sync-experimental materialize validate readme pre-sync post-sync pre-validate post-validate _apply-sync-schedule
+.PHONY: print-logo sync sync-experimental materialize validate pre-sync post-sync pre-validate post-validate _apply-sync-schedule
 
 # Hook targets (double-colon rules allow multiple definitions)
 # Note: pre-install/post-install are defined in bootstrap.mk
@@ -201,9 +201,6 @@ validate: pre-validate rhiza-test ## validate project structure against template
 		${UVX_BIN} "rhiza==$(RHIZA_VERSION)" validate .; \
 	fi
 	@$(MAKE) post-validate
-
-readme: install-uv ## update README.md with current Makefile help output
-	@${UVX_BIN} "rhiza-tools>=0.2.0" update-readme
 
 ##@ Meta
 
