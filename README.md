@@ -56,6 +56,49 @@ Developer notes live under [`docs/development/`](docs/development/):
   notebooks-are-the-source-of-truth contract).
 - [Sharpe-ratio pins](docs/development/SHARPE_PINS.md) — the pinned regression
   baselines and how to update them.
+- [Test-layout parity](docs/development/TEST_LAYOUT.md) — why tests mirror the
+  notebooks (not a `src/` tree) and the repo-local gate that enforces it.
+
+### 🔬 Running the Experiments
+
+Each `ExperimentN.py` notebook is a self-contained CTA strategy. To search its
+parameter space for the configuration that maximizes the portfolio Sharpe ratio,
+run the Optuna driver in `book/marimo/notebooks/optimize.py`:
+
+```bash
+# Optimize a single experiment (1–5) with an explicit trial budget
+python book/marimo/notebooks/optimize.py --experiment 3 --trials 200
+
+# Optimize all five, each with its per-experiment default budget
+python book/marimo/notebooks/optimize.py --experiment all
+
+# Reproducible run with Optuna's per-trial logging (short flags)
+python book/marimo/notebooks/optimize.py -e 1 -n 50 --seed 7 --verbose
+```
+
+Each run prints the baseline Sharpe (notebook defaults), the best Sharpe found,
+the winning parameters, and the improvement. The driver never re-implements a
+strategy — it imports each notebook's live signal function, so the notebooks stay
+the single source of truth. See
+[OPTIMIZATION.md](docs/development/OPTIMIZATION.md) for the full contract.
+
+#### Regenerating the Sharpe baselines
+
+The headline Sharpe of every experiment is pinned in
+[`tests/expected_sharpe.py`](tests/expected_sharpe.py) and checked to a tight
+`1e-6` tolerance by both the notebook and optimizer regression tests. A
+dependency bump that legitimately shifts the numbers will fail those tests; the
+assertion message prints the expected pin next to the freshly computed value:
+
+```bash
+# See old vs. new values for every experiment
+uv run pytest tests/test_notebook_sharpe.py tests/test_optimize.py -v
+```
+
+Eyeball the deltas, and only if they are acceptable copy the new values into
+`EXPECTED_SHARPE_RATIOS`, then re-run the suite so both test modules agree. The
+full review checklist (and when *not* to re-pin) is in
+[SHARPE_PINS.md](docs/development/SHARPE_PINS.md).
 
 ### 🧪 Interactive Development
 
