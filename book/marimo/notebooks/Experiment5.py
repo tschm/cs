@@ -53,7 +53,7 @@ def _():
 
 
 @app.function
-def f(price: "pl.Expr", fast=32, slow=96, vola=32, clip=4.2) -> "pl.Expr":
+def f(price: "pl.Expr", fast: int = 32, slow: int = 96, vola: int = 32, clip: float = 4.2) -> "pl.Expr":
     """Return the tanh oscillator of vol-adjusted cumulative price."""
     return osc(vol_adj(price, vola=vola, clip=clip, min_samples=300).cum_sum(), fast=fast, slow=slow).tanh()
 
@@ -115,7 +115,7 @@ def correlation_from_covariance(cov_np: "np.ndarray") -> "np.ndarray":
     _var = cov_np[:, np.arange(n_assets), np.arange(n_assets)]
     with np.errstate(invalid="ignore", divide="ignore"):
         _denom = np.sqrt(_var[:, :, None] * _var[:, None, :])
-        cor_3d = cov_np / _denom
+        cor_3d: np.ndarray = cov_np / _denom
     for _k in range(n_assets):
         cor_3d[_var[:, _k] > 0, _k, _k] = 1.0
     return cor_3d

@@ -43,7 +43,7 @@ def _():
 
 
 @app.function
-def f(price: "pl.Expr", fast=32, slow=96) -> "pl.Expr":
+def f(price: "pl.Expr", fast: int = 32, slow: int = 96) -> "pl.Expr":
     """Return the sign of the fast-minus-slow EWM crossover."""
     return (price.ewm_mean(com=fast, min_samples=100) - price.ewm_mean(com=slow, min_samples=100)).sign()
 

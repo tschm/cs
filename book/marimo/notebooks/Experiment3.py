@@ -91,7 +91,7 @@ def _():
 
 
 @app.function
-def f(price: "pl.Expr", slow=96, fast=32, vola=96, clip=3) -> "pl.Expr":
+def f(price: "pl.Expr", slow: int = 96, fast: int = 32, vola: int = 96, clip: float = 3) -> "pl.Expr":
     """Return the tanh oscillator of vol-adjusted cumulative price, divided by volatility."""
     price_adj = vol_adj(price, vola=vola, clip=clip, min_samples=300).cum_sum()
     mu = osc(price_adj, fast=fast, slow=slow).tanh()
