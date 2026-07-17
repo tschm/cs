@@ -1,4 +1,25 @@
-"""Tests verifying that each marimo experiment notebook produces the expected Sharpe ratio."""
+"""Tests verifying that each marimo experiment notebook produces the expected Sharpe ratio.
+
+Trust boundary
+--------------
+These tests execute notebook code in a spawned child process (see
+``_run_notebook_worker``), which is a code-execution surface. The boundary is
+deliberately narrow and closed:
+
+* The only notebooks ever run are the ``Experiment*.py`` files discovered under
+  the repo-tracked ``book/marimo/notebooks`` directory (``NOTEBOOKS``). No path
+  is ever taken from a test parameter, environment variable, CLI argument or any
+  other user-supplied source.
+* Every path is re-validated by :func:`_trusted_notebook_path` immediately before
+  execution: it must resolve to a location inside ``NOTEBOOK_DIR`` and end in
+  ``.py``. A path that escapes the directory (e.g. via ``..`` or a symlink) is
+  rejected rather than run.
+
+In other words, the harness only ever executes code that is already committed to
+this repository; running the test suite grants it no ability to execute arbitrary
+or attacker-controlled files. If a future change introduces a way to feed an
+external path into the runner, that validation must be preserved.
+"""
 
 import math
 import multiprocessing
@@ -101,7 +122,16 @@ def _extract_sharpe_ratio(output: str) -> float:
 
 
 def _trusted_notebook_path(notebook: Path) -> Path:
-    """Return a validated repo-local notebook path for child-process execution."""
+    """Return a validated repo-local notebook path for child-process execution.
+
+    This is the trust gate for the subprocess notebook runner (see the module
+    docstring). It accepts a path only when it resolves to a ``.py`` file inside
+    the repo-tracked ``NOTEBOOK_DIR``; anything that escapes that directory or
+    has another suffix raises ``ValueError`` and is never executed. Callers must
+    route every path through here before handing it to :func:`_run_notebook`, so
+    the harness can only ever run notebooks that are committed to this repo, not
+    arbitrary or user-supplied files.
+    """
     notebook = notebook.resolve()
     if not notebook.is_relative_to(NOTEBOOK_DIR):
         msg = f"Notebook must be within {NOTEBOOK_DIR}: {notebook}"

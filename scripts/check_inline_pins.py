@@ -48,17 +48,22 @@ def header_pins(notebook: Path) -> dict[str, str]:
     return pins
 
 
+def notebook_drift(notebook: Path, locked: dict[str, str]) -> list[str]:
+    """Return the drift messages for one notebook's inline pins against ``locked``."""
+    messages = []
+    for name, pinned in header_pins(notebook).items():
+        resolved = locked.get(name)
+        if resolved is None:
+            messages.append(f"{notebook.name}: '{name}' is pinned inline but absent from uv.lock")
+        elif resolved != pinned:
+            messages.append(f"{notebook.name}: {name}=={pinned} (inline) != {name}=={resolved} (uv.lock)")
+    return messages
+
+
 def main() -> int:
     """Compare every notebook's inline pins against uv.lock and report drift."""
     locked = locked_versions()
-    failures = []
-    for notebook in sorted(NOTEBOOK_DIR.glob("*.py")):
-        for name, pinned in header_pins(notebook).items():
-            resolved = locked.get(name)
-            if resolved is None:
-                failures.append(f"{notebook.name}: '{name}' is pinned inline but absent from uv.lock")
-            elif resolved != pinned:
-                failures.append(f"{notebook.name}: {name}=={pinned} (inline) != {name}=={resolved} (uv.lock)")
+    failures = [msg for notebook in sorted(NOTEBOOK_DIR.glob("*.py")) for msg in notebook_drift(notebook, locked)]
     if failures:
         print("Notebook inline script pins have drifted from uv.lock:", file=sys.stderr)
         for failure in failures:

@@ -1,20 +1,12 @@
 """Optuna parameter optimization for the CTA experiments.
 
 Each ``ExperimentN.py`` marimo notebook defines a signal function ``f(...)`` and
-builds a :class:`jquantstats.Portfolio` whose Sharpe ratio is the quantity the
-notebook's sliders are meant to tune by hand. This module replays the exact same
-portfolio construction (reusing each notebook's ``f`` and the TinyCTA API) and
-hands the search over to `Optuna <https://optuna.org>`_, maximizing the
-portfolio Sharpe ratio over each experiment's parameter space.
-
-Run from the command line::
-
-    python optimize.py --experiment 3 --trials 200
-    python optimize.py --experiment all
-
-The signal functions are imported from the notebooks via :func:`runpy.run_path`
-(the same mechanism the tests use), so this stays a single source of truth: the
-strategy logic lives in the notebooks, the search space lives here.
+builds a :class:`jquantstats.Portfolio` whose Sharpe ratio its sliders tune by
+hand. This module replays the same portfolio construction (reusing each notebook's
+``f`` via :func:`runpy.run_path` and the TinyCTA API) and hands the search to
+Optuna, maximizing the Sharpe over each experiment's parameter space. Strategy
+logic thus lives once in the notebooks; only the search space lives here. Run it as
+``python optimize.py --experiment {1..5|all} [--trials N]``.
 """
 
 from __future__ import annotations
@@ -39,13 +31,8 @@ sys.path.insert(0, str(NOTEBOOK_DIR))
 
 from preamble import date_col, load_notebook, load_prices  # noqa: E402
 
-# ── Data and signal functions (loaded lazily, then cached) ────────────────────
-#
-# Wrapped in ``@cache``d accessors rather than evaluated at import: merely
-# importing this module now reads no CSV and executes no notebook. The price
-# frame and each notebook's signal ``f`` are loaded on first use and reused.
-
-# ``clip`` is a fixed winsorizing level, not a search dimension.
+# Data/signal accessors are ``@cache``d, so importing this module reads no CSV and
+# runs no notebook. ``clip`` is a fixed winsorizing level, not a search dimension.
 CLIP = 4.2
 
 
@@ -69,12 +56,7 @@ def _assets() -> list[str]:
 
 @cache
 def _notebook(name: str) -> dict[str, Any]:
-    """Execute (and cache) an experiment notebook, returning its namespace.
-
-    Both the signal ``f`` and Experiment 5's ``dcc_correlation`` helper are read
-    out of this namespace, so the strategy math lives once in the notebooks and
-    ``optimize.py`` never reimplements it.
-    """
+    """Execute (and cache) a notebook's namespace (its ``f`` / ``dcc_correlation``)."""
     return load_notebook(name)
 
 
@@ -89,9 +71,7 @@ def _sharpe(portfolio: Portfolio) -> float:
     return float(value) if np.isfinite(value) else float("-inf")
 
 
-# ── Portfolio builders (one per experiment, mirroring each notebook cell) ─────
-
-
+# Portfolio builders — one per experiment, mirroring each notebook cell.
 def build_exp1(*, fast: int, slow: int) -> Portfolio:
     """CTA 1.0 — sign of the fast-minus-slow EWM crossover."""
     f = _signal("Experiment1.py")
@@ -129,13 +109,8 @@ def build_exp4(*, fast: int, slow: int, vola: int, clip: float) -> Portfolio:
 
 
 def _day_position(matrix: np.ndarray, expected_mu: np.ndarray, expected_vo: np.ndarray) -> np.ndarray | None:
-    """Risk-scaled position vector for a single day, or ``None`` if the day is unusable.
-
-    Returns ``None`` for the degenerate days the Optuna search deliberately
-    visits: a singular correlation matrix (TinyCTA's ``inv_a_norm`` raises
-    ``ValueError``) or a zero/NaN norm. ``inv_a_norm``/``solve`` are resolved
-    from the module globals so tests can monkeypatch them.
-    """
+    """Risk-scaled position for one day, or ``None`` for a degenerate day (singular / zero norm)."""
+    # inv_a_norm/solve resolve from module globals so tests can monkeypatch them.
     try:
         norm = inv_a_norm(expected_mu, matrix)
     except ValueError:
@@ -149,18 +124,11 @@ def _day_position(matrix: np.ndarray, expected_mu: np.ndarray, expected_vo: np.n
 def _solve_positions(
     cor_3d: np.ndarray, mu: np.ndarray, vo: np.ndarray, prices_np: np.ndarray, *, shrinkage: float
 ) -> np.ndarray:
-    """Per-day risk-parity positions from the shrunk DCC correlation tensor.
-
-    Mirrors Experiment 5's ``positions`` but tolerates the singular/ill-conditioned
-    daily matrices the search visits: :func:`_day_position` returns ``None`` for
-    those days and they are left flat instead of aborting the trial.
-    """
+    """Per-day risk-parity positions from the shrunk DCC tensor; ill-conditioned days go flat."""
     n_rows, n_assets = prices_np.shape
     pos_matrix = np.zeros((n_rows, n_assets))
-    # The search deliberately explores (corr, shrinkage) regions that make the
-    # daily correlation matrix ill-conditioned or singular; _day_position handles
-    # those days, so silence the accompanying numerical noise. (The conditioning
-    # warning is matched by message to avoid importing cvx's internal classes.)
+    # Silence the numerical noise from the ill-conditioned days the search explores
+    # (matched by message to avoid importing cvx's internal warning classes).
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", message="Matrix condition number")
         warnings.filterwarnings("ignore", category=RuntimeWarning, message="invalid value encountered in sqrt")
@@ -176,22 +144,13 @@ def _solve_positions(
 
 
 def build_exp5(*, vola: int, clip: float, corr: int, shrinkage: float) -> Portfolio:
-    """CTA 5.0 — DCC correlation + shrinkage matrix optimization (optimization 2.0).
-
-    ``fast``/``slow`` are held at the notebook's fixed 32/96 — the notebook only
-    exposes vola, clip, corr and shrinkage to the search. The DCC correlation
-    tensor is computed by Experiment 5's own ``dcc_correlation`` (pulled from the
-    notebook namespace) so the notebook and the optimizer share one implementation.
-    """
+    """CTA 5.0 — DCC correlation + shrinkage optimization; fast/slow fixed at 32/96 (optimization 2.0)."""
     prices_only = _prices_only()
-
     dcc_correlation = _notebook("Experiment5.py")["dcc_correlation"]
     cor_3d = dcc_correlation(prices_only, vola=vola, clip=clip, corr=corr)
-
     f = _signal("Experiment5.py")
     mu = prices_only.select(f(pl.all(), fast=32, slow=96, vola=vola, clip=clip)).to_numpy()
     vo = prices_only.select(pl.all().fill_nan(None).pct_change().ewm_std(com=vola, min_samples=int(vola))).to_numpy()
-
     pos_matrix = _solve_positions(cor_3d, mu, vo, prices_only.to_numpy(), shrinkage=shrinkage)
     return _portfolio_from_matrix(pos_matrix)
 
@@ -206,14 +165,8 @@ def _portfolio_from_matrix(pos_np: np.ndarray) -> Portfolio:
     return Portfolio.from_cash_position(prices=prices, cash_position=cash_position, aum=1e8)
 
 
-# ── Optuna search spaces ──────────────────────────────────────────────────────
-#
-# ``fast``/``slow``/``vola`` ranges mirror the marimo sliders (4..192 step 4).
-# ``clip`` is held fixed at ``CLIP`` (4.2) rather than searched. ``slow`` is drawn
-# strictly above ``fast`` so the oscillator stays well-defined (osc requires
-# fast < slow) and the crossover keeps its fast/slow meaning.
-
-
+# Optuna search spaces. Ranges mirror the marimo sliders (4..192 step 4); ``clip`` is
+# fixed at ``CLIP``; ``slow`` is drawn strictly above ``fast`` so the oscillator holds.
 def _suggest_fast_slow(trial: optuna.Trial) -> tuple[int, int]:
     """Sample a (fast, slow) pair with slow strictly above fast."""
     fast = trial.suggest_int("fast", 4, 96, step=4)
@@ -256,9 +209,7 @@ def objective_exp5(trial: optuna.Trial) -> float:
     return _sharpe(build_exp5(vola=vola, clip=CLIP, corr=corr, shrinkage=shrinkage))
 
 
-# ── Experiment registry ───────────────────────────────────────────────────────
-
-
+# Experiment registry.
 class Experiment:
     """Bundles an objective with its baseline (notebook default) for reporting."""
 
@@ -294,14 +245,12 @@ def optimize(key: str, *, n_trials: int, seed: int) -> optuna.Study:
     """Run an Optuna study for a single experiment and print a summary."""
     experiment = EXPERIMENTS[key]
     baseline = experiment.default_sharpe()
-
     study = optuna.create_study(
         direction="maximize",
         study_name=experiment.name,
         sampler=optuna.samplers.TPESampler(seed=seed),
     )
     study.optimize(experiment.objective, n_trials=n_trials, show_progress_bar=False)
-
     print(f"\n{'═' * 60}")
     print(f"{experiment.name}  ({n_trials} trials)")
     print(f"{'─' * 60}")
@@ -338,10 +287,8 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--seed", "-s", type=int, default=42, help="Sampler seed for reproducibility.")
     parser.add_argument("--verbose", action="store_true", help="Show Optuna's per-trial logging.")
     args = parser.parse_args(argv)
-
     if not args.verbose:
         optuna.logging.set_verbosity(optuna.logging.WARNING)
-
     keys = list(EXPERIMENTS.keys()) if args.experiment == "all" else [args.experiment]
     for key in keys:
         n_trials = args.trials if args.trials is not None else DEFAULT_TRIALS[key]

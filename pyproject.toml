@@ -42,10 +42,17 @@ index-strategy = "unsafe-best-match"
 package_module_name_map = { marimo = "marimo", numpy = "numpy", polars = "polars", plotly = "plotly" }
 
 [tool.mypy]
-# The Experiment* notebooks are marimo-generated and are exercised by the Sharpe
-# regression tests instead, so they are excluded from type checking. The
-# hand-written modules (optimize.py, preamble.py) are checked strictly, matching
-# the template's `mypy --strict` typecheck gate.
+# The Experiment*.py notebooks are marimo-generated, not hand-written source.
+# Their structure is scaffolding mypy --strict cannot check without defeating the
+# point: every cell is an untyped ``@app.cell``-decorated ``_()`` function (so
+# --strict reports untyped-decorator + no-untyped-def on generated code), and
+# marimo ships no type stubs (import-not-found). Annotating that generated
+# scaffolding by hand would be wiped the next time marimo rewrites a notebook, so
+# it buys no lasting safety. Their *behaviour* is instead pinned end-to-end by the
+# Sharpe regression tests (tests/test_notebook_sharpe.py), which execute each
+# notebook and assert its numeric output. The hand-written modules that carry the
+# real logic — optimize.py, preamble.py — are fully checked under mypy --strict,
+# matching the template's typecheck gate.
 exclude = '(Experiment.*\.py)$'
 mypy_path = "book/marimo/notebooks"
 strict = true

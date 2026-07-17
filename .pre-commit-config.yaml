@@ -37,6 +37,13 @@ repos:
         pass_filenames: false
         files: '^(book/marimo/notebooks/.*\.py|uv\.lock)$'
 
+      - id: check-test-layout
+        name: Tests mirror the marimo notebooks 1:1
+        entry: python3 scripts/check_test_layout.py
+        language: system
+        pass_filenames: false
+        files: '^(book/marimo/notebooks/.*\.py|tests/.*\.py)$'
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: 'v0.15.21'
     hooks:
