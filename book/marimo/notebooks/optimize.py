@@ -12,7 +12,6 @@ logic thus lives once in the notebooks; only the search space lives here. Run it
 from __future__ import annotations
 
 import argparse
-import sys
 import warnings
 from collections.abc import Callable
 from functools import cache
@@ -23,13 +22,15 @@ import numpy as np
 import optuna
 import polars as pl
 from jquantstats import Portfolio
+
+# ``preamble`` (the notebooks' shared loader) resolves because this script's own
+# directory is already on ``sys.path`` — put there by the interpreter for
+# ``python optimize.py`` and by the test ``conftest`` for the ``runpy`` path.
+from preamble import date_col, load_notebook, load_prices
 from tinycta.linalg import inv_a_norm, solve
 from tinycta.signal import shrink2id
 
 NOTEBOOK_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(NOTEBOOK_DIR))
-
-from preamble import date_col, load_notebook, load_prices  # noqa: E402
 
 # Data/signal accessors are ``@cache``d, so importing this module reads no CSV and
 # runs no notebook. ``clip`` is a fixed winsorizing level, not a search dimension.

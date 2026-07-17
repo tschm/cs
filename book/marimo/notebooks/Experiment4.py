@@ -49,7 +49,7 @@ def _():
 
 
 @app.function
-def f(price: "pl.Expr", fast=32, slow=96, vola=32, clip=4.2) -> "pl.Expr":
+def f(price: "pl.Expr", fast: int = 32, slow: int = 96, vola: int = 32, clip: float = 4.2) -> "pl.Expr":
     """Return the tanh oscillator of vol-adjusted cumulative price."""
     return osc(vol_adj(price, vola=vola, clip=clip, min_samples=300).cum_sum(), fast=fast, slow=slow).tanh()
 

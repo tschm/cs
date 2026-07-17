@@ -43,7 +43,7 @@ def _():
 
 
 @app.function
-def f(price: "pl.Expr", fast=32, slow=96, volatility=32) -> "pl.Expr":
+def f(price: "pl.Expr", fast: int = 32, slow: int = 96, volatility: int = 32) -> "pl.Expr":
     """Return the volatility-scaled EWM crossover signal."""
     return (
         price.ewm_mean(com=fast, min_samples=300) - price.ewm_mean(com=slow, min_samples=300)

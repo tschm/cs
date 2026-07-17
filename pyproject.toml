@@ -42,18 +42,6 @@ index-strategy = "unsafe-best-match"
 package_module_name_map = { marimo = "marimo", numpy = "numpy", polars = "polars", plotly = "plotly" }
 
 [tool.mypy]
-# The Experiment*.py notebooks are marimo-generated, not hand-written source.
-# Their structure is scaffolding mypy --strict cannot check without defeating the
-# point: every cell is an untyped ``@app.cell``-decorated ``_()`` function (so
-# --strict reports untyped-decorator + no-untyped-def on generated code), and
-# marimo ships no type stubs (import-not-found). Annotating that generated
-# scaffolding by hand would be wiped the next time marimo rewrites a notebook, so
-# it buys no lasting safety. Their *behaviour* is instead pinned end-to-end by the
-# Sharpe regression tests (tests/test_notebook_sharpe.py), which execute each
-# notebook and assert its numeric output. The hand-written modules that carry the
-# real logic — optimize.py, preamble.py — are fully checked under mypy --strict,
-# matching the template's typecheck gate.
-exclude = '(Experiment.*\.py)$'
 mypy_path = "book/marimo/notebooks"
 strict = true
 
@@ -61,6 +49,20 @@ strict = true
 # No type stubs published for these.
 module = ["jquantstats.*", "tinycta.*", "plotly.*"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# The Experiment*.py notebooks are marimo-generated. Their hand-written logic — the
+# ``f`` signal functions and the Experiment 5 DCC helpers — is fully checked under
+# --strict. What is deliberately *not* checked is the generated cell scaffolding:
+# marimo emits every cell as a ``@app.cell``-decorated ``_(...)`` function with no
+# annotations, and annotating that generated ``def _()`` boilerplate by hand would
+# be wiped the next time marimo rewrites the notebook, so it buys no lasting safety.
+# ``no-untyped-def`` is the only error code those generated cells raise, so we
+# disable just that code for these modules — rather than excluding the whole files —
+# keeping the real strategy logic under the type checker. Behaviour is additionally
+# pinned end-to-end by the Sharpe regression tests (tests/test_notebook_sharpe.py).
+module = ["Experiment1", "Experiment2", "Experiment3", "Experiment4", "Experiment5"]
+disable_error_code = ["no-untyped-def"]
 
 [tool.coverage.run]
 # Measure branch coverage, not just line coverage, so a conditional that is only
