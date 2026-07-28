@@ -8,9 +8,9 @@ authors = [{ name = "Thomas Schmelzer" }]
 license = "MIT"
 license-files = ["LICENSE"]
 dependencies = [
-    "marimo>=0.23.14",
+    "marimo>=0.23.15",
     "numpy>=2.4.6",
-    "polars>=1.43.0",
+    "polars>=1.43.1",
     "plotly>=6.9.0",
     "jquantstats>=0.9.7",
     "tinycta>=0.14.0",
@@ -105,5 +105,5 @@ test = [
 ]
 lint = [
     "mypy>=2.3.0",
-    "ruff>=0.15.22",
+    "ruff>=0.16.0",
 ]
