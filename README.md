@@ -2,6 +2,7 @@
 
 [![pages-build-deployment](https://github.com/tschm/cs/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/tschm/cs/actions/workflows/pages/pages-build-deployment)
 [![CodeFactor](https://www.codefactor.io/repository/github/tschm/cs/badge)](https://www.codefactor.io/repository/github/tschm/cs)
+[![Coverage](https://tschm.github.io/cs/coverage-badge.svg)](https://tschm.github.io/cs/reports/html-coverage/)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://github.com/renovatebot/renovate)
 
 ## 🚀 About
