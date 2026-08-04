@@ -103,7 +103,3 @@ fail-under = 100
 test = [
     "pytest>=9.1.1",
 ]
-lint = [
-    "mypy>=2.3.0",
-    "ruff>=0.16.0",
-]
