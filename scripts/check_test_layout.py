@@ -14,11 +14,15 @@ layout:
     ``tests/test_<name>.py`` — matched case-insensitively, because the notebooks
     are TitleCased (``Experiment1.py`` <-> ``test_experiment1.py``);
   * every ``tests/test_*.py`` maps back to a notebook module, except the declared
-    cross-cutting integration tests in ``INTEGRATION_TESTS``.
+    cross-cutting integration tests in ``INTEGRATION_TESTS`` and the tests that
+    flow down from the template in ``TEMPLATE_TESTS``.
 
 ``test_notebook_sharpe.py`` is such an integration test: it executes *all* the
 experiment notebooks end-to-end and asserts their Sharpe ratios, so it has no
 single source module and is allow-listed rather than treated as an orphan.
+``test_rhiza_packaging.py`` is a template test: it arrives via the rhiza SYNC
+action and checks the declared-vs-installed package version, so it mirrors no
+notebook of this project either.
 
 Unlike the bundled checker this gate is deliberately file-level only. The project
 exercises its classes (e.g. ``optimize.Experiment``) through plain pytest
@@ -44,6 +48,12 @@ TESTS_DIR = ROOT / "tests"
 # Test files that legitimately have no single source module: cross-cutting
 # integration tests that drive several notebooks at once.
 INTEGRATION_TESTS = {"test_notebook_sharpe.py"}
+
+# Test files that flow down from the rhiza template (SYNC action) and therefore
+# mirror no notebook of this project.
+TEMPLATE_TESTS = {"test_rhiza_packaging.py"}
+
+_EXEMPT = INTEGRATION_TESTS | TEMPLATE_TESTS
 
 # Non-test helper modules under tests/ (imported by the tests, not test files
 # themselves). ``test_*.py`` globbing already excludes these; listed for clarity.
@@ -74,11 +84,11 @@ def _orphan_test_files(notebooks: dict[str, Path]) -> list[str]:
     orphans = []
     for test_file in _test_files():
         stem = test_file.stem[len("test_") :]
-        if test_file.name not in INTEGRATION_TESTS and stem not in notebooks:
+        if test_file.name not in _EXEMPT and stem not in notebooks:
             orphans.append(
                 f"orphan test file {test_file.relative_to(ROOT)} "
                 f"(no notebook {NOTEBOOK_DIR.relative_to(ROOT)}/{stem}.py, "
-                f"and not listed in INTEGRATION_TESTS)"
+                f"and not listed in INTEGRATION_TESTS or TEMPLATE_TESTS)"
             )
     return orphans
 
