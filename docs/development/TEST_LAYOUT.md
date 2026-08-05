@@ -36,7 +36,9 @@ understands the real structure. It verifies that:
 - every notebook module has a mirror `tests/test_<name>.py` (matched
   case-insensitively); and
 - every `tests/test_*.py` maps back to a notebook module, except the declared
-  cross-cutting integration tests (`INTEGRATION_TESTS`).
+  cross-cutting integration tests (`INTEGRATION_TESTS`) and the tests that flow
+  down from the rhiza template (`TEMPLATE_TESTS`, currently
+  `tests/test_rhiza_packaging.py`).
 
 It is deliberately **file-level only**: the project exercises its classes (e.g.
 `optimize.Experiment`) through plain pytest functions rather than mirrored
