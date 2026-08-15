@@ -50,10 +50,18 @@ repos:
       # overrides [tool.mypy] files, so declaring them there would not help either.
       # This hook is what holds the gate scripts to the same --strict bar as the
       # notebooks (issue #516). Settings still come from [tool.mypy].
+      #
+      # `language: python` rather than `system`: the hooks above shell out to
+      # `python3`, which every runner has, but uv is installed into the repo's own
+      # bin/ by the make bootstrap and is not on PATH for a hook subprocess in CI.
+      # Letting prek provision the environment keeps the hook independent of how
+      # the caller was set up. Versions are pinned so a hook run is reproducible;
+      # Renovate bumps them like any other pinned rev in this file.
       - id: mypy-scripts
         name: mypy --strict over scripts/
-        entry: uv run --with mypy mypy --strict scripts
-        language: system
+        entry: mypy --strict scripts
+        language: python
+        additional_dependencies: ["mypy==2.3.1"]
         pass_filenames: false
         files: '^scripts/.*\.py$'
 
@@ -61,14 +69,18 @@ repos:
       # `make test` passes --cov=${SOURCE_FOLDER}, which *replaces* the source
       # list in [tool.coverage.run], so scripts/ cannot be folded into the main
       # coverage gate. This runs their unit tests under their own 100% bar.
+      # pytest-timeout is required because pytest.ini sets `timeout = 60`.
       - id: pytest-scripts-coverage
         name: scripts/ unit tests at 100% coverage
         entry: >-
-          uv run --with pytest --with pytest-cov --with pytest-timeout
           pytest tests/test_check_test_layout.py tests/test_check_inline_pins.py
           --cov=scripts --cov-branch --cov-fail-under=100
           --cov-report=term-missing -q -p no:cacheprovider
-        language: system
+        language: python
+        additional_dependencies:
+          - "pytest==9.1.1"
+          - "pytest-cov==7.1.0"
+          - "pytest-timeout==2.4.0"
         pass_filenames: false
         files: '^(scripts/.*\.py|tests/test_check_.*\.py)$'
 
