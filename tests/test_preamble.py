@@ -12,6 +12,7 @@ NOTEBOOK_FILE = str(NOTEBOOK_DIR / "Experiment1.py")
 preamble = load_notebook("preamble.py")
 load_prices = preamble["load_prices"]
 date_col = preamble["date_col"]
+PRICES_CSV = preamble["PRICES_CSV"]
 
 
 @pytest.fixture(scope="module")
@@ -56,6 +57,18 @@ def test_load_prices_non_date_columns_are_float64(prices_df):
     for col in prices_df.columns:
         if col != date_col:
             assert prices_df[col].dtype == pl.Float64, f"Column {col!r} is not Float64"
+
+
+def test_load_prices_missing_csv_names_the_expected_path(tmp_path):
+    """A missing price CSV raises FileNotFoundError naming the file that was looked for.
+
+    ``tmp_path`` stands in for a caller sitting outside the notebook directory, so
+    the ``public/`` sibling the loader resolves does not exist. The guard must fire
+    before ``pl.read_csv``, whose own error names neither the expected location nor
+    the fact that the file ships with the repository.
+    """
+    with pytest.raises(FileNotFoundError, match=PRICES_CSV):
+        load_prices(str(tmp_path / "Experiment1.py"))
 
 
 def test_load_prices_interpolation_applied(prices_df):

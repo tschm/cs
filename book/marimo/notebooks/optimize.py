@@ -12,6 +12,7 @@ logic thus lives once in the notebooks; only the search space lives here. Run it
 from __future__ import annotations
 
 import argparse
+import sys
 import warnings
 from collections.abc import Callable
 from functools import cache
@@ -292,8 +293,15 @@ def optimize(key: str, *, n_trials: int, seed: int) -> optuna.Study:
     return study
 
 
-def main(argv: list[str] | None = None) -> None:
-    """Parse command-line arguments and run the requested Optuna study/studies."""
+def main(argv: list[str] | None = None) -> int:
+    """Parse command-line arguments and run the requested Optuna study/studies.
+
+    Returns the process exit code: ``0`` on success, ``1`` when the price data the
+    experiments read is missing. That case is caught here rather than allowed to
+    propagate because it is the one failure a user hits through no fault of the
+    search — a setup problem deserving a one-line message naming the file, not a
+    traceback out of the loader.
+    """
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         "--experiment",
@@ -315,10 +323,15 @@ def main(argv: list[str] | None = None) -> None:
     if not args.verbose:
         optuna.logging.set_verbosity(optuna.logging.WARNING)
     keys = list(EXPERIMENTS.keys()) if args.experiment == "all" else [args.experiment]
-    for key in keys:
-        n_trials = args.trials if args.trials is not None else DEFAULT_TRIALS[key]
-        optimize(key, n_trials=n_trials, seed=args.seed)
+    try:
+        for key in keys:
+            n_trials = args.trials if args.trials is not None else DEFAULT_TRIALS[key]
+            optimize(key, n_trials=n_trials, seed=args.seed)
+    except FileNotFoundError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

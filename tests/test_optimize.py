@@ -96,11 +96,35 @@ def test_build_exp5_skips_singular_days(monkeypatch):
 
 
 def test_main_runs_single_experiment(capsys):
-    """The CLI entry point runs one experiment and prints its summary."""
-    optimize["main"](["--experiment", "1", "--trials", "1"])
+    """The CLI entry point runs one experiment, prints its summary and reports success."""
+    assert optimize["main"](["--experiment", "1", "--trials", "1"]) == 0
     out = capsys.readouterr().out
     assert "Experiment 1" in out
     assert "best Sharpe" in out
+
+
+def test_main_reports_missing_price_data_without_a_traceback(capsys, monkeypatch):
+    """Absent price data exits non-zero with a message naming the file, not a traceback.
+
+    ``load_prices`` raises ``FileNotFoundError`` when the CSV is gone; ``main`` is the
+    only entry point a user drives directly, so it must turn that into a one-line
+    diagnostic. Patching the module-global ``optimize`` (the same ``__globals__``
+    technique the singular-matrix and zero-baseline tests use) raises the error from
+    inside the loop without deleting the file the rest of the suite reads.
+    """
+
+    def _raise(*_args, **_kwargs):
+        """Stand in for the study runner, failing the way a missing price CSV does."""
+        msg = "Price data not found: /nowhere/public/Prices_hashed.csv"
+        raise FileNotFoundError(msg)
+
+    main = optimize["main"]
+    monkeypatch.setitem(main.__globals__, "optimize", _raise)
+
+    assert main(["--experiment", "1", "--trials", "1"]) == 1
+    captured = capsys.readouterr()
+    assert "Prices_hashed.csv" in captured.err
+    assert "Traceback" not in captured.err
 
 
 def test_default_trials_cover_every_experiment():
