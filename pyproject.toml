@@ -95,6 +95,13 @@ patch = ["subprocess"]
 # Scope measurement to the notebooks. The spawn start method re-imports the
 # test module in each child to locate the worker function; without this the
 # child would also report the test file itself.
+#
+# scripts/ is deliberately NOT listed here (issue #516). `make test` passes
+# --cov=${SOURCE_FOLDER}, which replaces this list as coverage's measurement
+# scope, so adding scripts/ here does not get it measured — it only gets it
+# *reported*, at 0%, which fails the 100% gate for a purely cosmetic reason.
+# The gate scripts are held to their own 100% bar by the
+# "scripts/ unit tests at 100% coverage" pre-commit hook instead.
 source = ["book/marimo/notebooks"]
 
 [tool.coverage.report]
@@ -127,9 +134,9 @@ fail-under = 100
 # Parity is therefore enforced by the repo-local gate scripts/check_test_layout.py,
 # wired in as the "Tests mirror the marimo notebooks 1:1" pre-commit hook, which
 # understands the actual layout. Per-module coverage is guaranteed independently by
-# the 100% line-and-branch coverage gate in [tool.coverage] / make test.
+# the full line-and-branch coverage gate in [tool.coverage] / make test.
 enforce = false
-reason = "No src/ tree — source is the marimo notebooks under book/marimo/notebooks. Parity is enforced by scripts/check_test_layout.py (pre-commit hook 'Tests mirror the marimo notebooks 1:1'); per-module coverage is guaranteed by the 100% coverage gate."
+reason = "No src/ tree — source is the marimo notebooks under book/marimo/notebooks. Parity is enforced by scripts/check_test_layout.py (pre-commit hook 'Tests mirror the marimo notebooks 1:1'); per-module coverage is guaranteed by the full coverage gate."
 
 [dependency-groups]
 test = [

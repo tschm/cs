@@ -40,7 +40,13 @@ def header_pins(notebook: Path) -> dict[str, str]:
     """Return {package: version} for the ``name==version`` pins in a notebook header."""
     pins: dict[str, str] = {}
     for line in notebook.read_text().splitlines():
-        if line.strip() == HEADER_END and pins:
+        # Stop at the PEP 723 terminator unconditionally. The opening fence is
+        # ``# /// script``, which never equals HEADER_END, so the first bare
+        # ``# ///`` is always the end of the header. Guarding this break on
+        # having already found a pin would let a header that declares none fall
+        # through and scan the whole file body, collecting any later
+        # pin-shaped comment as though it came from the header.
+        if line.strip() == HEADER_END:
             break
         match = PIN_PATTERN.match(line.strip())
         if match:

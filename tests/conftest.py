@@ -20,6 +20,12 @@ NOTEBOOK_DIR = (Path(__file__).resolve().parents[1] / "book" / "marimo" / "noteb
 if str(NOTEBOOK_DIR) not in sys.path:
     sys.path.insert(0, str(NOTEBOOK_DIR))
 
+# The repo-local gate scripts are standalone stdlib modules, not a package, so
+# they need the same treatment to be importable by their unit tests.
+SCRIPTS_DIR = (Path(__file__).resolve().parents[1] / "scripts").resolve()
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+
 N = 600  # satisfies min_samples=300 (the highest requirement across all experiments)
 
 

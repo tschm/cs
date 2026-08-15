@@ -44,6 +44,34 @@ repos:
         pass_filenames: false
         files: '^(book/marimo/notebooks/.*\.py|tests/.*\.py)$'
 
+      # `make typecheck` runs mypy over ${SOURCE_FOLDER} only, and rhiza's recipe
+      # guards that with `[ -d "${SOURCE_FOLDER}" ]` — a single-directory test, so
+      # scripts/ cannot be appended to it. Passing paths on the command line also
+      # overrides [tool.mypy] files, so declaring them there would not help either.
+      # This hook is what holds the gate scripts to the same --strict bar as the
+      # notebooks (issue #516). Settings still come from [tool.mypy].
+      - id: mypy-scripts
+        name: mypy --strict over scripts/
+        entry: uv run --with mypy mypy --strict scripts
+        language: system
+        pass_filenames: false
+        files: '^scripts/.*\.py$'
+
+      # Coverage for the gate scripts, for the same reason as the hook above:
+      # `make test` passes --cov=${SOURCE_FOLDER}, which *replaces* the source
+      # list in [tool.coverage.run], so scripts/ cannot be folded into the main
+      # coverage gate. This runs their unit tests under their own 100% bar.
+      - id: pytest-scripts-coverage
+        name: scripts/ unit tests at 100% coverage
+        entry: >-
+          uv run --with pytest --with pytest-cov --with pytest-timeout
+          pytest tests/test_check_test_layout.py tests/test_check_inline_pins.py
+          --cov=scripts --cov-branch --cov-fail-under=100
+          --cov-report=term-missing -q -p no:cacheprovider
+        language: system
+        pass_filenames: false
+        files: '^(scripts/.*\.py|tests/test_check_.*\.py)$'
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: 'v0.16.2'
     hooks:
