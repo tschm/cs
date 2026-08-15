@@ -30,14 +30,44 @@ HEADER_END = "# ///"
 
 
 def locked_versions() -> dict[str, str]:
-    """Return {package: version} for every package resolved in uv.lock."""
+    """Return {package: version} for every package resolved in uv.lock.
+
+    Names are lowercased so they can be compared directly against the pins
+    :func:`header_pins` extracts:
+
+        >>> locked = locked_versions()
+        >>> "polars" in locked
+        True
+        >>> locked == {name.lower(): version for name, version in locked.items()}
+        True
+    """
     with (ROOT / "uv.lock").open("rb") as handle:
         lock = tomllib.load(handle)
     return {package["name"].lower(): package["version"] for package in lock["package"]}
 
 
 def header_pins(notebook: Path) -> dict[str, str]:
-    """Return {package: version} for the ``name==version`` pins in a notebook header."""
+    r"""Return {package: version} for the ``name==version`` pins in a notebook header.
+
+    Only the PEP 723 header is scanned. A pin-shaped comment *after* the ``# ///``
+    terminator belongs to the notebook body and is deliberately not collected:
+
+        >>> import tempfile
+        >>> lines = [
+        ...     '# /// script',
+        ...     '# dependencies = [',
+        ...     '#   "polars==1.43.2",',
+        ...     '#   "numpy==2.4.6",',
+        ...     '# ]',
+        ...     '# ///',
+        ...     '# "marimo==0.23.16"',
+        ... ]
+        >>> with tempfile.TemporaryDirectory() as tmp:
+        ...     notebook = Path(tmp) / "Demo.py"
+        ...     _ = notebook.write_text("\n".join(lines))
+        ...     header_pins(notebook)
+        {'polars': '1.43.2', 'numpy': '2.4.6'}
+    """
     pins: dict[str, str] = {}
     for line in notebook.read_text().splitlines():
         # Stop at the PEP 723 terminator unconditionally. The opening fence is
