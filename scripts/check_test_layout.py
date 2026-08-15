@@ -55,7 +55,15 @@ INTEGRATION_TESTS = {"test_notebook_sharpe.py", "test_doctests.py"}
 # mirror no notebook of this project.
 TEMPLATE_TESTS = {"test_rhiza_packaging.py"}
 
-_EXEMPT = INTEGRATION_TESTS | TEMPLATE_TESTS
+# Tests for this folder's own gate scripts. They mirror ``scripts/<name>.py``
+# rather than a notebook, so the reverse check below would otherwise report them
+# as orphans — which is what kept these two scripts untested (issue #516): the
+# layout gate structurally forbade its own test. Kept as an explicit named set
+# rather than a blanket "anything matching a scripts/ module" rule, so adding a
+# script still requires a deliberate decision about whether it needs a test.
+SCRIPT_TESTS = {"test_check_test_layout.py", "test_check_inline_pins.py"}
+
+_EXEMPT = INTEGRATION_TESTS | TEMPLATE_TESTS | SCRIPT_TESTS
 
 # Non-test helper modules under tests/ (imported by the tests, not test files
 # themselves). ``test_*.py`` globbing already excludes these; listed for clarity.
