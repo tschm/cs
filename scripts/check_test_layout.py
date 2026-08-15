@@ -90,10 +90,15 @@ def _test_files() -> list[Path]:
 def _missing_mirror_tests(notebooks: dict[str, Path]) -> list[str]:
     """Forward check: every notebook module needs a mirror ``test_<name>.py``.
 
-    Passing a notebook that has no mirror shows the message this gate reports:
+    Passing a notebook that has no mirror shows the name this gate derives for the
+    test it wanted. The trailing notebook path is omitted from the example because
+    ``Path`` renders it with the platform separator, and this suite runs on Windows
+    too — the unit tests in ``tests/test_check_test_layout.py`` match on substrings
+    for the same reason:
 
-        >>> _missing_mirror_tests({"nosuch": NOTEBOOK_DIR / "NoSuch.py"})
-        ['missing test file tests/test_nosuch.py for notebook book/marimo/notebooks/NoSuch.py']
+        >>> errors = _missing_mirror_tests({"nosuch": NOTEBOOK_DIR / "NoSuch.py"})
+        >>> errors[0].startswith("missing test file tests/test_nosuch.py for notebook")
+        True
     """
     return [
         f"missing test file tests/test_{stem}.py for notebook {module.relative_to(ROOT)}"
