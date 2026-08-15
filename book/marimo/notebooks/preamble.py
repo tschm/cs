@@ -23,6 +23,9 @@ date_col = "date"
 #: Directory holding the marimo notebooks (this file's own directory).
 NOTEBOOK_DIR = Path(__file__).resolve().parent
 
+#: Price file every notebook reads, from the ``public/`` directory beside it.
+PRICES_CSV = "Prices_hashed.csv"
+
 
 def load_notebook(name: str) -> dict[str, Any]:
     """Execute sibling notebook ``name`` (e.g. ``"Experiment1.py"``) and return its namespace.
@@ -56,8 +59,21 @@ def load_prices(notebook_file: str) -> pl.DataFrame:
         Datetime(time_unit='ns', time_zone=None)
         >>> set(prices.drop(date_col).dtypes) == {pl.Float64}
         True
+
+    An absent CSV is checked for here rather than left to ``pl.read_csv``, so the
+    error names the file that was looked for — the file ships with the repository,
+    so its absence is a setup problem with an obvious remedy:
+
+        >>> try:
+        ...     load_prices(str(NOTEBOOK_DIR / "elsewhere" / "preamble.py"))
+        ... except FileNotFoundError as error:
+        ...     PRICES_CSV in str(error)
+        True
     """
-    path = Path(notebook_file).parent / "public" / "Prices_hashed.csv"
+    path = Path(notebook_file).parent / "public" / PRICES_CSV
+    if not path.is_file():
+        msg = f"Price data not found: {path} — it ships with the repository; check the checkout is complete."
+        raise FileNotFoundError(msg)
     dframe = pl.read_csv(str(path), try_parse_dates=True)
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))
     dframe = dframe.with_columns([pl.col(col).cast(pl.Float64) for col in dframe.columns if col != date_col])
