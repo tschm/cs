@@ -30,12 +30,33 @@ def load_notebook(name: str) -> dict[str, Any]:
     The returned dict maps top-level names defined by the notebook to their
     values, so callers can pull out the signal function with
     ``load_notebook("Experiment1.py")["f"]``.
+
+    Executing this module itself is the cheapest demonstration of that contract —
+    the shared helpers come back as ordinary entries in the namespace:
+
+        >>> namespace = load_notebook("preamble.py")
+        >>> sorted(name for name in namespace if name in {"date_col", "load_prices"})
+        ['date_col', 'load_prices']
     """
     return runpy.run_path(str(NOTEBOOK_DIR / name))
 
 
 def load_prices(notebook_file: str) -> pl.DataFrame:
-    """Load and preprocess prices from the standard CSV file."""
+    """Load and preprocess prices from the standard CSV file.
+
+    ``notebook_file`` is the *caller's* own path — the notebooks pass ``__file__`` —
+    and the CSV is read from its ``public/`` sibling directory. The frame comes back
+    with the date column first as nanosecond datetimes, every remaining column (one
+    per asset) cast to ``Float64``, and gaps interpolated:
+
+        >>> prices = load_prices(str(NOTEBOOK_DIR / "preamble.py"))
+        >>> prices.columns[0]
+        'date'
+        >>> prices[date_col].dtype
+        Datetime(time_unit='ns', time_zone=None)
+        >>> set(prices.drop(date_col).dtypes) == {pl.Float64}
+        True
+    """
     path = Path(notebook_file).parent / "public" / "Prices_hashed.csv"
     dframe = pl.read_csv(str(path), try_parse_dates=True)
     dframe = dframe.with_columns(pl.col(date_col).cast(pl.Datetime("ns")))

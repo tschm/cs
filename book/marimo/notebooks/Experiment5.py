@@ -8,6 +8,13 @@
 #     "jquantstats==0.10.0",
 #     "tinycta==0.14.0"
 # ]
+#
+# [tool.ty.environment]
+# # ``from preamble import ...`` resolves at runtime via the sys.path.insert in the
+# # setup cell below. ty analyses a PEP 723 script in isolation from the project, so
+# # pyproject.toml's [tool.ty.environment] never reaches this file and the path has
+# # to be declared here. Preserve this table if marimo rewrites the header.
+# extra-paths = ["."]
 # ///
 
 """Experiment 5: Advanced CTA strategy with correlation-based optimization.

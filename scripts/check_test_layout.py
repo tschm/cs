@@ -46,8 +46,10 @@ NOTEBOOK_DIR = ROOT / "book" / "marimo" / "notebooks"
 TESTS_DIR = ROOT / "tests"
 
 # Test files that legitimately have no single source module: cross-cutting
-# integration tests that drive several notebooks at once.
-INTEGRATION_TESTS = {"test_notebook_sharpe.py"}
+# tests that drive several source modules at once. ``test_notebook_sharpe.py``
+# executes every experiment notebook end-to-end; ``test_doctests.py`` runs the
+# doctest examples of every hand-written module.
+INTEGRATION_TESTS = {"test_notebook_sharpe.py", "test_doctests.py"}
 
 # Test files that flow down from the rhiza template (SYNC action) and therefore
 # mirror no notebook of this project.

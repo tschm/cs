@@ -169,7 +169,18 @@ def _portfolio_from_matrix(pos_np: np.ndarray) -> Portfolio:
 # Optuna search spaces. Ranges mirror the marimo sliders (4..192 step 4); ``clip`` is
 # fixed at ``CLIP``; ``slow`` is drawn strictly above ``fast`` so the oscillator holds.
 def _suggest_fast_slow(trial: optuna.Trial) -> tuple[int, int]:
-    """Sample a (fast, slow) pair with slow strictly above fast."""
+    """Sample a (fast, slow) pair with slow strictly above fast.
+
+    ``slow`` is drawn from ``fast + 4`` upwards rather than from a fixed low, so the
+    oscillator can never be handed an inverted pair. Feeding a fixed trial shows the
+    pair coming back in order:
+
+        >>> fast, slow = _suggest_fast_slow(optuna.trial.FixedTrial({"fast": 32, "slow": 96}))
+        >>> (fast, slow)
+        (32, 96)
+        >>> slow > fast
+        True
+    """
     fast = trial.suggest_int("fast", 4, 96, step=4)
     slow = trial.suggest_int("slow", fast + 4, 192, step=4)
     return fast, slow
@@ -212,7 +223,20 @@ def objective_exp5(trial: optuna.Trial) -> float:
 
 # Experiment registry.
 class Experiment:
-    """Bundles an objective with its baseline (notebook default) for reporting."""
+    """Bundles an objective with its baseline (notebook default) for reporting.
+
+    The five experiments are registered in :data:`EXPERIMENTS` under the same keys
+    ``--experiment`` accepts, and each carries the parameters its notebook's sliders
+    default to — the values :meth:`default_sharpe` scores to produce the baseline the
+    search is measured against:
+
+        >>> sorted(EXPERIMENTS)
+        ['1', '2', '3', '4', '5']
+        >>> EXPERIMENTS["1"].name
+        'Experiment 1'
+        >>> EXPERIMENTS["1"].default_params
+        {'fast': 32, 'slow': 96}
+    """
 
     def __init__(
         self, name: str, objective: Callable[..., Any], default_params: dict[str, Any], baseline: Callable[..., Any]

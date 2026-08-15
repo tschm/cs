@@ -37,6 +37,22 @@ Repository = "https://github.com/tschm/cs"
 [tool.uv]
 index-strategy = "unsafe-best-match"
 
+[tool.bumpversion]
+# Without a table in a file bump-my-version actually discovers (.bumpversion.toml,
+# .bumpversion.cfg, setup.cfg, pyproject.toml) the tool does not fail — it falls back
+# to `git describe` and reports the last reachable tag as the current version, so a
+# release can be cut at a version that has already been published.
+#
+# No `current_version` here on purpose: bump-my-version reads and rewrites PEP 621
+# [project].version natively, so the version string stays declared in exactly one
+# place and cannot go stale.
+allow_dirty = false
+# The release flow commits and tags itself, so the generated changelog lands in the
+# same commit as the version bump. A bare `bump-my-version bump` would otherwise add
+# a second commit and a duplicate tag.
+commit = false
+tag = false
+
 [tool.deptry]
 package_module_name_map = { marimo = "marimo", numpy = "numpy", polars = "polars", plotly = "plotly" }
 
@@ -98,6 +114,22 @@ exclude_also = [
 # generated structure, not API, so they are exempt from docstring coverage.
 ignore-regex = ["^_$"]
 fail-under = 100
+
+[tool.check_test_layout]
+# This project has no ``src/`` tree: its source is the marimo notebook set under
+# book/marimo/notebooks, and tests/ mirrors *those*. Pointed at the default src/,
+# the generic parity checker reports every test as an orphan; pointed at the real
+# root it still flags the two deviations this project makes deliberately — the
+# cross-cutting integration test (test_notebook_sharpe.py drives all five notebooks
+# end-to-end, so it mirrors no single module) and the use of plain pytest functions
+# rather than mirrored ``Test*`` classes, which is idiomatic pytest.
+#
+# Parity is therefore enforced by the repo-local gate scripts/check_test_layout.py,
+# wired in as the "Tests mirror the marimo notebooks 1:1" pre-commit hook, which
+# understands the actual layout. Per-module coverage is guaranteed independently by
+# the 100% line-and-branch coverage gate in [tool.coverage] / make test.
+enforce = false
+reason = "No src/ tree — source is the marimo notebooks under book/marimo/notebooks. Parity is enforced by scripts/check_test_layout.py (pre-commit hook 'Tests mirror the marimo notebooks 1:1'); per-module coverage is guaranteed by the 100% coverage gate."
 
 [dependency-groups]
 test = [
