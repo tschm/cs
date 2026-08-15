@@ -71,7 +71,14 @@ _IGNORED = {"__init__.py", "conftest.py"}
 
 
 def _notebook_modules() -> dict[str, Path]:
-    """Return ``{lowercased stem: path}`` for every notebook module (flat layout)."""
+    """Return ``{lowercased stem: path}`` for every notebook module (flat layout).
+
+    Stems are lowercased because the notebooks are TitleCased while their mirror
+    tests are not (``Experiment1.py`` <-> ``test_experiment1.py``):
+
+        >>> sorted(_notebook_modules())
+        ['experiment1', 'experiment2', 'experiment3', 'experiment4', 'experiment5', 'optimize', 'preamble']
+    """
     return {path.stem.lower(): path for path in sorted(NOTEBOOK_DIR.glob("*.py")) if path.name not in _IGNORED}
 
 
@@ -81,7 +88,18 @@ def _test_files() -> list[Path]:
 
 
 def _missing_mirror_tests(notebooks: dict[str, Path]) -> list[str]:
-    """Forward check: every notebook module needs a mirror ``test_<name>.py``."""
+    """Forward check: every notebook module needs a mirror ``test_<name>.py``.
+
+    Passing a notebook that has no mirror shows the name this gate derives for the
+    test it wanted. The trailing notebook path is omitted from the example because
+    ``Path`` renders it with the platform separator, and this suite runs on Windows
+    too — the unit tests in ``tests/test_check_test_layout.py`` match on substrings
+    for the same reason:
+
+        >>> errors = _missing_mirror_tests({"nosuch": NOTEBOOK_DIR / "NoSuch.py"})
+        >>> errors[0].startswith("missing test file tests/test_nosuch.py for notebook")
+        True
+    """
     return [
         f"missing test file tests/test_{stem}.py for notebook {module.relative_to(ROOT)}"
         for stem, module in notebooks.items()
@@ -104,7 +122,14 @@ def _orphan_test_files(notebooks: dict[str, Path]) -> list[str]:
 
 
 def check() -> list[str]:
-    """Return a list of layout violations (empty when the layout is clean)."""
+    """Return a list of layout violations (empty when the layout is clean).
+
+    Run against this repository it is the gate's own passing verdict, so the
+    example below fails the moment the layout stops mirroring:
+
+        >>> check()
+        []
+    """
     notebooks = _notebook_modules()
     return _missing_mirror_tests(notebooks) + _orphan_test_files(notebooks)
 

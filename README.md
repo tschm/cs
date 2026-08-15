@@ -59,6 +59,8 @@ Developer notes live under [`docs/development/`](docs/development/):
   baselines and how to update them.
 - [Test-layout parity](docs/development/TEST_LAYOUT.md) — why tests mirror the
   notebooks (not a `src/` tree) and the repo-local gate that enforces it.
+- [Releasing](docs/development/RELEASING.md) — how a release is cut, and why
+  version bumping and tagging are not `make` targets.
 
 ### 🔬 Running the Experiments
 
