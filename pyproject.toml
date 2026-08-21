@@ -53,6 +53,55 @@ allow_dirty = false
 commit = false
 tag = false
 
+[tool.rhiza-task]
+# Settings recovered from the make layer that rhiza v1.4.0 retired. Each one differs
+# from `rhiza-task`'s own default, so dropping it would silently weaken a gate rather
+# than fail loudly. Everything the make layer set that *matched* the CLI default is
+# listed at the bottom as "not set, on purpose" so it does not get re-added.
+
+# Was: `SOURCE_FOLDER := book/marimo/notebooks` in .rhiza/make.d/custom-env.mk.
+# CLI default: "src". This repo is a marimo book, not a src/ library -- the importable
+# modules live under book/marimo/notebooks and there is no src/ tree at all. Without
+# this, typecheck, bandit, docs-coverage, deptry and the coverage gate all point at a
+# directory that does not exist and pass by scanning nothing.
+source_folder = "book/marimo/notebooks"
+
+# Was: `COVERAGE_FAIL_UNDER ?= 100` in .rhiza/make.d/custom-env.mk.
+# CLI default: 90. [tool.coverage.report] does not stand in for this: the test task
+# passes --cov-fail-under on the command line, which outranks the config file. Marimo's
+# structural cell `return`s and the CLI guard are excluded in [tool.coverage.report],
+# so every remaining executable line really is covered -- hold the gate at 100.
+coverage_fail_under = 100
+
+# Was: `TYPECHECKER ?= both` in .rhiza/make.d/python.mk.
+# CLI default: "ty" alone, which drops `mypy --strict` entirely. Note this is also
+# stricter than the make layer was: the old shell `case` let mypy's exit status win, so
+# a `ty` failure could still pass.
+typechecker = "both"
+
+# Was: `RHIZA_CHECKS_VERSION ?= 0.2.1` in .rhiza/make.d/quality.mk, consumed as
+# `--with 'pytest-rhiza==0.2.1'`. CLI default: the git ref v0.2.0. Keeping the repo on
+# the version its checks were actually green against, rather than silently rolling back.
+pytest_rhiza = "pytest-rhiza==0.2.1"
+
+# Not set, on purpose -- the make layer's value already equals the CLI default, and
+# naming a setting *replaces* the default rather than adding to it:
+#   mkdocs_extra_packages  the old root Makefile said `--with 'mkdocstrings[python]'`,
+#                          which is now the default list. Restating it would make this
+#                          the line someone edits to add a package, dropping
+#                          mkdocstrings from the book build in the process.
+#   rhiza_checks           resolves from `layers = ["python"]` to the same five checks
+#                          the make layer accumulated (test_readme, test_release_tags,
+#                          test_readme_validation, test_pyproject, test_docstrings).
+#   license_ignore_packages  marimo.mk appended `docutils`; rhiza-task appends it itself
+#                          whenever marimo is in the task registry.
+#   deptry_ignore          marimo.mk's `--ignore DEP004` was gated on MARIMO_FOLDER
+#                          existing, and it never did -- so it was never in effect.
+#   ci_os_matrix           ["ubuntu-latest"], marimo_folder "docs/notebooks",
+#   tests_folder "tests", uv_sync_args "--all-extras --all-groups",
+#   zensical_version ">=0.0.36", book_output "_book",
+#   license_fail_on "GPL;LGPL;AGPL", layers ["python"] -- all identical to the default.
+
 [tool.deptry]
 package_module_name_map = { marimo = "marimo", numpy = "numpy", polars = "polars", plotly = "plotly" }
 
