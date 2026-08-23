@@ -506,10 +506,13 @@ and even there its best ($1.3042$) remains below CTA 5.0's untuned default.
 A best-of-$K$ Sharpe ratio is biased upwards, and the size of the bias is the
 question \citet{bailey2014} and \citet{harvey2015} exist to answer. The
 standard correction subtracts the expected maximum of $K$ draws,
-$\mathbb{E}[\max_K] \approx \sigma \left[(1-\gamma)\Phi^{-1}(1 - 1/K) +
-\gamma \Phi^{-1}(1 - 1/(Ke))\right]$ with $\gamma$ the Euler--Mascheroni
-constant, which for $K = 852$ gives a factor of $3.209$ on $\sigma$. Which
-$\sigma$ is the whole difficulty.
+\begin{equation}
+  \mathbb{E}[\max\nolimits_K] \approx \sigma \left[
+    (1-\gamma_e)\Phi^{-1}\!\left(1 - \tfrac{1}{K}\right)
+    + \gamma_e \Phi^{-1}\!\left(1 - \tfrac{1}{Ke}\right) \right],
+\end{equation}
+with $\gamma_e$ the Euler--Mascheroni constant, which for $K = 852$ gives a
+factor of $3.209$ on $\sigma$. Which $\sigma$ is the whole difficulty.
 
 Taking $\sigma$ as the cross-sectional standard deviation of the grid Sharpe
 ratios, as \citet{bailey2014} prescribe, gives haircuts of $0.248$, $0.275$,
@@ -639,9 +642,13 @@ def net_sharpe(bps):
     return x.mean() / x.std(ddof=1) * np.sqrt(ppy)
 \end{verbatim}
 
-Table~\ref{tab:grid} sweeps
-\code{[(f, s) for f in range(4, 100, 4) for s in range(f + 4, 196, 4)]} through
-the same builders with the remaining parameters at their defaults, and
+Table~\ref{tab:grid} sweeps the grid
+
+\begin{verbatim}
+[(f, s) for f in range(4, 100, 4) for s in range(f + 4, 196, 4)]
+\end{verbatim}
+
+through the same builders with the remaining parameters at their defaults, and
 Table~\ref{tab:rank} is \code{scipy.stats.spearmanr} on the resulting value
 vectors. Table~\ref{tab:optuna} is the repository's driver verbatim:
 
