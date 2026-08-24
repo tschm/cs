@@ -16,9 +16,3 @@ nav:
       - Sharpe pins: development/SHARPE_PINS.md
       - Tests: development/TESTS.md
       - Test layout: development/TEST_LAYOUT.md
-  - Notebooks:
-      - Experiment1: notebooks/Experiment1.html
-      - Experiment2: notebooks/Experiment2.html
-      - Experiment3: notebooks/Experiment3.html
-      - Experiment4: notebooks/Experiment4.html
-      - Experiment5: notebooks/Experiment5.html
