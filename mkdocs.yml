@@ -10,9 +10,7 @@ docs_dir: docs
 nav:
   - Home: index.md
   - Development:
-      - Marimo: development/MARIMO.md
       - Optimization: development/OPTIMIZATION.md
       - Releasing: development/RELEASING.md
       - Sharpe pins: development/SHARPE_PINS.md
-      - Tests: development/TESTS.md
       - Test layout: development/TEST_LAYOUT.md
