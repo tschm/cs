@@ -4,7 +4,7 @@
 #     "marimo==0.24.0",
 #     "numpy==2.4.6",
 #     "plotly==6.9.0",
-#     "polars==1.43.2",
+#     "polars==1.44.1",
 #     "jquantstats==0.10.0",
 #     "tinycta==0.14.0"
 # ]
