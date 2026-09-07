@@ -43,7 +43,11 @@ def locked_versions() -> dict[str, str]:
     """
     with (ROOT / "uv.lock").open("rb") as handle:
         lock = tomllib.load(handle)
-    return {package["name"].lower(): package["version"] for package in lock["package"]}
+    # `version` is absent for a package whose version is dynamic -- which is cs itself,
+    # since [project].version is derived from the git tag by hatch-vcs. Skip rather than
+    # KeyError: this maps notebook pins to resolved dependency versions, and cs is never
+    # one of its own notebook pins.
+    return {package["name"].lower(): package["version"] for package in lock["package"] if "version" in package}
 
 
 def header_pins(notebook: Path) -> dict[str, str]:
