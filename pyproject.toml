@@ -67,6 +67,20 @@ bypass-selection = true
 # 0.1.dev1+g<sha>. Every checkout in rhiza_release.yml uses fetch-depth: 0.
 source = "vcs"
 
+[tool.check-wheel-contents]
+# The wheel is intentionally empty. cs has no importable package -- the content is marimo
+# notebooks under book/marimo/notebooks -- and it builds only so hatch-vcs can derive
+# [project].version from the git tag (see [tool.hatch.build.targets.wheel]).
+#
+# W007 "Wheel library is empty" and W008 "Wheel is empty" are therefore the *expected*
+# result, not a defect. This is load-bearing in CI: rhiza_ci.yml's matrix job builds the
+# package with build-and-inspect-python-package, which runs `check-wheel-contents` on the
+# result, and both warnings are errors there -- the job failed on exactly these two.
+#
+# check-wheel-contents reads this table from pyproject.toml in the working directory,
+# which is the repo root when the action invokes it.
+ignore = ["W007", "W008"]
+
 [tool.uv]
 index-strategy = "unsafe-best-match"
 
