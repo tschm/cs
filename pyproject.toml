@@ -1,6 +1,8 @@
 [project]
 name = "cs"
-version = "1.2.3"
+# Derived from the git tag by hatch-vcs (see [tool.hatch.version]) rather than written
+# here, so the tag is the single source of truth and no commit can disagree with it.
+dynamic = ["version"]
 description = "Companion materials for the Computational Statistics project."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -34,6 +36,51 @@ classifiers = [
 Homepage = "https://tschm.github.io/cs"
 Repository = "https://github.com/tschm/cs"
 
+[build-system]
+# cs was a uv *virtual* project: no [build-system] at all, nothing ever built or
+# published. A backend is declared here only because hatch-vcs is a hatchling plugin and
+# there is no other way to resolve [project].dynamic = ["version"] from the git tag.
+#
+# Two consequences of no longer being virtual, both checked:
+#   - `uv sync` now builds and installs cs into the environment instead of skipping it.
+#   - rhiza_release.yml's "Detect buildable Python package" step greps for
+#     ^[build-system], so a release now produces a dist/. It is NOT published: the
+#     "Check if dist contains artifacts and not marked as private" step greps
+#     pyproject.toml for "Private :: Do Not Upload", which this project sets, and
+#     skips the PyPI job.
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+# There is no importable package to ship -- the content is marimo notebooks under
+# book/marimo/notebooks, and cs is not a library. bypass-selection makes a
+# metadata-only wheel rather than failing with "Unable to determine which files to
+# ship", which is the honest shape for a project that builds only to carry a version.
+bypass-selection = true
+
+[tool.hatch.version]
+# Resolves [project].dynamic = ["version"] from `git describe`. Tags are vX.Y.Z and
+# hatch-vcs strips the leading "v" by default, so v1.2.3 builds 1.2.3; a commit off the
+# tag builds a PEP 440 dev version (1.2.4.dev173+g<sha>).
+#
+# A shallow clone that cannot see the tag does not fail, it silently builds
+# 0.1.dev1+g<sha>. Every checkout in rhiza_release.yml uses fetch-depth: 0.
+source = "vcs"
+
+[tool.check-wheel-contents]
+# The wheel is intentionally empty. cs has no importable package -- the content is marimo
+# notebooks under book/marimo/notebooks -- and it builds only so hatch-vcs can derive
+# [project].version from the git tag (see [tool.hatch.build.targets.wheel]).
+#
+# W007 "Wheel library is empty" and W008 "Wheel is empty" are therefore the *expected*
+# result, not a defect. This is load-bearing in CI: rhiza_ci.yml's matrix job builds the
+# package with build-and-inspect-python-package, which runs `check-wheel-contents` on the
+# result, and both warnings are errors there -- the job failed on exactly these two.
+#
+# check-wheel-contents reads this table from pyproject.toml in the working directory,
+# which is the repo root when the action invokes it.
+ignore = ["W007", "W008"]
+
 [tool.uv]
 index-strategy = "unsafe-best-match"
 
@@ -43,9 +90,10 @@ index-strategy = "unsafe-best-match"
 # to `git describe` and reports the last reachable tag as the current version, so a
 # release can be cut at a version that has already been published.
 #
-# No `current_version` here on purpose: bump-my-version reads and rewrites PEP 621
-# [project].version natively, so the version string stays declared in exactly one
-# place and cannot go stale.
+# No `current_version` here on purpose, and no [[tool.bumpversion.files]] entry:
+# [project].version is dynamic (see [tool.hatch.version]), so there is no version
+# written anywhere to read or rewrite. The tag alone decides what gets built and a
+# release is a tag, not an edit.
 allow_dirty = false
 # The release flow commits and tags itself, so the generated changelog lands in the
 # same commit as the version bump. A bare `bump-my-version bump` would otherwise add
@@ -82,7 +130,13 @@ typechecker = "both"
 # Was: `RHIZA_CHECKS_VERSION ?= 0.2.1` in .rhiza/make.d/quality.mk, consumed as
 # `--with 'pytest-rhiza==0.2.1'`. CLI default: the git ref v0.2.0. Keeping the repo on
 # the version its checks were actually green against, rather than silently rolling back.
-pytest_rhiza = "pytest-rhiza==0.2.1"
+#
+# Raised 0.2.1 -> 0.6.0 when [project].version became dynamic. Every release up to and
+# including 0.5.0 reads `project["version"]` unconditionally, so a derived version fails
+# test_version_follows_semver (empty string against the semver regex) and the git-tag
+# comparison (InvalidVersion on ""). 0.6.0 is the first release that asks whether the
+# version is dynamic and skips those two assertions; there is no older version to pin.
+pytest_rhiza = "pytest-rhiza==0.6.0"
 
 # Not set, on purpose -- the make layer's value already equals the CLI default, and
 # naming a setting *replaces* the default rather than adding to it:
