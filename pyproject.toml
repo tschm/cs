@@ -10,7 +10,7 @@ authors = [{ name = "Thomas Schmelzer" }]
 license = "MIT"
 license-files = ["LICENSE"]
 dependencies = [
-    "marimo>=0.24.2",
+    "marimo>=0.25.0",
     "numpy>=2.4.6",
     "polars>=1.44.2",
     "plotly>=6.9.0",
