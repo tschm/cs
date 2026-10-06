@@ -1,11 +1,11 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "marimo==0.25.0",
+#     "marimo==0.25.1",
 #     "numpy==2.4.6",
 #     "plotly==6.9.0",
 #     "polars==1.44.2",
-#     "jquantstats==0.11.0",
+#     "jquantstats==0.12.0",
 #     "tinycta==0.14.0"
 # ]
 #
