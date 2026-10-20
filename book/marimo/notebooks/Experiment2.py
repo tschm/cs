@@ -5,7 +5,7 @@
 #     "numpy==2.4.6",
 #     "plotly==6.9.0",
 #     "polars==1.44.2",
-#     "jquantstats==0.12.0"
+#     "jquantstats==0.13.0"
 # ]
 #
 # [tool.ty.environment]
