@@ -243,5 +243,5 @@ reason = "No src/ tree — source is the marimo notebooks under book/marimo/note
 
 [dependency-groups]
 test = [
-    "pytest>=9.1.1",
+    "pytest>=9.2.0",
 ]
