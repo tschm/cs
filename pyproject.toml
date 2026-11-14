@@ -114,6 +114,11 @@ tag = false
 # directory that does not exist and pass by scanning nothing.
 source_folder = "book/marimo/notebooks"
 
+# CLI default: "docs/notebooks", which does not exist here. Without this, `marimo`
+# opens an editor on a missing folder and `marimo-validate` skips with
+# "marimo_folder 'docs/notebooks' not found" -- validating nothing.
+marimo_folder = "book/marimo/notebooks"
+
 # Was: `COVERAGE_FAIL_UNDER ?= 100` in .rhiza/make.d/custom-env.mk.
 # CLI default: 90. [tool.coverage.report] does not stand in for this: the test task
 # passes --cov-fail-under on the command line, which outranks the config file. Marimo's
@@ -151,8 +156,7 @@ pytest_rhiza = "pytest-rhiza==0.6.0"
 #                          whenever marimo is in the task registry.
 #   deptry_ignore          marimo.mk's `--ignore DEP004` was gated on MARIMO_FOLDER
 #                          existing, and it never did -- so it was never in effect.
-#   ci_os_matrix           ["ubuntu-latest"], marimo_folder "docs/notebooks",
-#   tests_folder "tests", uv_sync_args "--all-extras --all-groups",
+#   ci_os_matrix           ["ubuntu-latest"], tests_folder "tests", uv_sync_args "--all-extras --all-groups",
 #   zensical_version ">=0.0.36", book_output "_book",
 #   license_fail_on "GPL;LGPL;AGPL", layers ["python"] -- all identical to the default.
 
