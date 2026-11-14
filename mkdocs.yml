@@ -9,6 +9,14 @@ docs_dir: docs
 
 nav:
   - Home: index.md
+  # Exported by `make book` (marimo export html) from book/marimo/notebooks; the
+  # HTML is gitignored, so these entries only resolve in a built book.
+  - Notebooks:
+      - "Experiment 1: Moving averages": notebooks/Experiment1.html
+      - "Experiment 2: Volatility scaling": notebooks/Experiment2.html
+      - "Experiment 3: Price filtering": notebooks/Experiment3.html
+      - "Experiment 4: Risk scaling": notebooks/Experiment4.html
+      - "Experiment 5: Correlation-based": notebooks/Experiment5.html
   - Development:
       - Optimization: development/OPTIMIZATION.md
       - Releasing: development/RELEASING.md
