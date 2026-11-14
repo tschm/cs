@@ -165,6 +165,11 @@ pytest_rhiza = "pytest-rhiza==0.6.0"
 
 [tool.deptry]
 package_module_name_map = { marimo = "marimo", numpy = "numpy", polars = "polars", plotly = "plotly" }
+# The helper modules under book/marimo/helpers are imported via a sys.path insert,
+# not as a package. deptry only recognises local modules at the top of the folders
+# it scans (book/marimo, book/marimo/notebooks), so without this it reports
+# `preamble` as an undeclared third-party dependency (DEP001).
+known_first_party = ["preamble", "optimize"]
 
 [tool.mypy]
 mypy_path = "book/marimo/helpers"
