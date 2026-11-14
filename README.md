@@ -45,9 +45,17 @@ make install
 
 ### 📖 Documentation
 
+The companion site is built with [zensical](https://zensical.org) from
+[`mkdocs.yml`](mkdocs.yml) and the [`docs/`](docs/) tree (this README is its home
+page). The build runs the test, benchmark, stress and hypothesis suites and compiles
+the paper first, so their reports are published alongside the docs.
+
 ```bash
-# Build the Jupyter Book
+# Build the companion site into _book/
 make book
+
+# Build it and serve it locally on http://localhost:8000
+make serve
 ```
 
 Developer notes live under [`docs/development/`](docs/development/):
