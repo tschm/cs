@@ -5,11 +5,11 @@ from pathlib import Path
 import plotly.io as pio
 import polars as pl
 import pytest
-from preamble import NOTEBOOK_DIR, load_notebook
+from preamble import NOTEBOOK_DIR, load_script
 
 NOTEBOOK_FILE = str(NOTEBOOK_DIR / "Experiment1.py")
 
-preamble = load_notebook("preamble.py")
+preamble = load_script("preamble.py")
 load_prices = preamble["load_prices"]
 date_col = preamble["date_col"]
 PRICES_CSV = preamble["PRICES_CSV"]

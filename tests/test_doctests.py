@@ -16,7 +16,7 @@ outright rather than checking anything.
 Scope
 -----
 The four hand-written modules: ``preamble.py`` and ``optimize.py`` under
-``book/marimo/notebooks``, plus the two repo-local gate scripts under ``scripts/``.
+``book/marimo/helpers``, plus the two repo-local gate scripts under ``scripts/``.
 All four are ordinary Python whose docstrings are durable.
 
 The ``Experiment*.py`` notebooks are excluded because they are marimo-generated, and

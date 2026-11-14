@@ -10,9 +10,9 @@ from expected_sharpe import (
     SHARPE_RATIO_ABS_TOLERANCE,
     SHARPE_RATIO_REL_TOLERANCE,
 )
-from preamble import load_notebook
+from preamble import load_script
 
-optimize = load_notebook("optimize.py")
+optimize = load_script("optimize.py")
 
 # Keep Optuna quiet during the test run.
 optuna.logging.set_verbosity(optuna.logging.WARNING)

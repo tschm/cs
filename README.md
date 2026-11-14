@@ -23,14 +23,14 @@ opens the door to deeper insights into the strategy.
 ### 📋 Prerequisites
 
 - Python 3.11+
+- [uv](https://docs.astral.sh/uv/) — `make` installs it into `./bin` if it is missing.
 - A POSIX shell. macOS and Linux have one by default.
 
-> **🪟 Windows users:** The `make` targets are written for a POSIX shell and
-> rely on tools like `mkdir -p`, `printf`, `curl`, and `[ … ]`. They will **not**
-> run under `cmd.exe` or PowerShell — you'll see errors such as
-> `process_begin: CreateProcess(NULL, # Ensure the … folder exists, …) failed.`
-> Run the commands below from **WSL** (recommended) or **Git Bash**, both of
-> which provide a POSIX shell.
+> **🪟 Windows users:** The `Makefile` is a thin shim that hands every target to
+> [`rhiza-task`](https://jebel-quant.github.io/rhiza-education/), but the shim
+> itself needs a POSIX shell (`command -v`, and `curl` to bootstrap uv). Run the
+> commands below from **WSL** (recommended) or **Git Bash**, or call the task
+> runner directly: `uvx rhiza-task@1.7.0 run <target>`.
 
 ### 🔧 Installation
 
@@ -43,11 +43,41 @@ cd cs
 make install
 ```
 
+### 🗂️ Project Layout
+
+```text
+book/marimo/
+├── notebooks/            # marimo notebooks only — Experiment1.py … Experiment5.py
+│   └── public/           # the price data the notebooks read
+└── helpers/              # plain Python modules shared by notebooks and tests
+    ├── preamble.py       # price loading, load_notebook() / load_script()
+    └── optimize.py       # Optuna driver for the experiments
+docs/                     # site sources: index.md, development notes, paper
+tests/                    # one test_<name>.py per notebook or helper module
+```
+
+There is no `src/` package. The notebooks are the source, and the two helper
+modules sit next to them rather than inside `notebooks/`: the book build exports
+every `*.py` in that folder with `marimo export`, which fails on a file that is
+not a marimo notebook.
+
 ### 📖 Documentation
 
+The companion site is built with [zensical](https://zensical.org) from
+[`mkdocs.yml`](mkdocs.yml) and the [`docs/`](docs/) tree (this README is its home
+page). `make book` first runs the test suite and compiles the paper, then exports
+each experiment notebook to HTML, so the site carries the test and coverage
+reports, the paper PDF and a **Notebooks** section with all five experiments.
+
 ```bash
-# Build the Jupyter Book
+# Build the companion site into _book/
 make book
+
+# Build it and serve it locally on http://localhost:8000
+make serve
+
+# Check that every nav entry resolves in the built site
+make book-nav
 ```
 
 Developer notes live under [`docs/development/`](docs/development/):
@@ -58,7 +88,8 @@ Developer notes live under [`docs/development/`](docs/development/):
 - [Sharpe-ratio pins](docs/development/SHARPE_PINS.md) — the pinned regression
   baselines and how to update them.
 - [Test-layout parity](docs/development/TEST_LAYOUT.md) — why tests mirror the
-  notebooks (not a `src/` tree) and the repo-local gate that enforces it.
+  notebooks and helper modules (not a `src/` tree) and the repo-local gate that
+  enforces it.
 - [Releasing](docs/development/RELEASING.md) — how a release is cut, and why
   version bumping and tagging are not `make` targets.
 
@@ -66,17 +97,17 @@ Developer notes live under [`docs/development/`](docs/development/):
 
 Each `ExperimentN.py` notebook is a self-contained CTA strategy. To search its
 parameter space for the configuration that maximizes the portfolio Sharpe ratio,
-run the Optuna driver in `book/marimo/notebooks/optimize.py`:
+run the Optuna driver in `book/marimo/helpers/optimize.py`:
 
 ```bash
 # Optimize a single experiment (1–5) with an explicit trial budget
-python book/marimo/notebooks/optimize.py --experiment 3 --trials 200
+uv run python book/marimo/helpers/optimize.py --experiment 3 --trials 200
 
 # Optimize all five, each with its per-experiment default budget
-python book/marimo/notebooks/optimize.py --experiment all
+uv run python book/marimo/helpers/optimize.py --experiment all
 
 # Reproducible run with Optuna's per-trial logging (short flags)
-python book/marimo/notebooks/optimize.py -e 1 -n 50 --seed 7 --verbose
+uv run python book/marimo/helpers/optimize.py -e 1 -n 50 --seed 7 --verbose
 ```
 
 Each run prints the baseline Sharpe (notebook defaults), the best Sharpe found,
@@ -106,9 +137,14 @@ full review checklist (and when *not* to re-pin) is in
 ### 🧪 Interactive Development
 
 ```bash
-# Start Marimo
+# Open the notebooks in book/marimo/notebooks in the marimo editor
 make marimo
+
+# Run every notebook as a script and report which ones fail
+make marimo-validate
 ```
+
+`make help` lists every available target.
 
 ## ⚠️ DISCLAIMER
 

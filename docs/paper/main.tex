@@ -613,7 +613,7 @@ locked environment. The five portfolios are built by the driver's own
 builders, so the strategy code is the notebooks':
 
 \begin{verbatim}
-import sys; sys.path.insert(0, "book/marimo/notebooks")
+import sys; sys.path.insert(0, "book/marimo/helpers")
 import numpy as np, optimize as O
 
 BUILD = {1: lambda: O.build_exp1(fast=32, slow=96),
@@ -653,7 +653,7 @@ Table~\ref{tab:rank} is \code{scipy.stats.spearmanr} on the resulting value
 vectors. Table~\ref{tab:optuna} is the repository's driver verbatim:
 
 \begin{verbatim}
-python book/marimo/notebooks/optimize.py --experiment all --seed 42
+python book/marimo/helpers/optimize.py --experiment all --seed 42
 \end{verbatim}
 
 The searches are seeded, so that table reproduces exactly; the grid and the

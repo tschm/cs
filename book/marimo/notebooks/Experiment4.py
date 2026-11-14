@@ -14,7 +14,7 @@
 # # setup cell below. ty analyses a PEP 723 script in isolation from the project, so
 # # pyproject.toml's [tool.ty.environment] never reaches this file and the path has
 # # to be declared here. Preserve this table if marimo rewrites the header.
-# extra-paths = ["."]
+# extra-paths = ["../helpers"]
 # ///
 
 """Experiment 4: CTA strategy with optimization and risk scaling.
@@ -40,7 +40,7 @@ with app.setup:
     from tinycta.osc import osc
     from tinycta.util import vol_adj
 
-    sys.path.insert(0, str(Path(__file__).parent))
+    sys.path.insert(0, str(Path(__file__).parent.parent / "helpers"))
 
     from preamble import date_col, load_prices
 

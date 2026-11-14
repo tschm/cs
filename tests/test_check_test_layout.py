@@ -27,10 +27,13 @@ def tree(tmp_path, monkeypatch):
     """Point the module at an empty temporary notebook/tests directory pair."""
     notebooks = tmp_path / "book" / "marimo" / "notebooks"
     tests = tmp_path / "tests"
+    helpers = tmp_path / "book" / "marimo" / "helpers"
     notebooks.mkdir(parents=True)
+    helpers.mkdir()
     tests.mkdir()
     monkeypatch.setattr(check_test_layout, "ROOT", tmp_path)
     monkeypatch.setattr(check_test_layout, "NOTEBOOK_DIR", notebooks)
+    monkeypatch.setattr(check_test_layout, "HELPERS_DIR", helpers)
     monkeypatch.setattr(check_test_layout, "TESTS_DIR", tests)
     return notebooks, tests
 
@@ -90,6 +93,19 @@ def test_conftest_is_not_treated_as_a_notebook(tree):
     notebooks, _ = tree
     (notebooks / "conftest.py").write_text("")
 
+    assert check_test_layout.check() == []
+
+
+def test_lib_module_without_mirror_test_is_reported(tree):
+    """A plain module under book/marimo/helpers needs its mirror test too."""
+    notebooks, tests = tree
+    (notebooks.parent / "helpers" / "optimize.py").write_text("")
+
+    errors = check_test_layout.check()
+    assert len(errors) == 1
+    assert "tests/test_optimize.py" in errors[0]
+
+    (tests / "test_optimize.py").write_text("")
     assert check_test_layout.check() == []
 
 
