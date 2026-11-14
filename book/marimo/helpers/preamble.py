@@ -1,11 +1,15 @@
 """Shared data loading for marimo experiment notebooks.
 
-This module also hosts :func:`load_notebook`, the single place that executes a
-sibling notebook (or ``optimize.py``) via :func:`runpy.run_path` and returns its
-namespace. The experiment notebooks are not an importable package, so both
-``optimize.py`` and the test suite need to read symbols (the signal ``f``, the
-``build_exp*`` builders, …) out of a freshly executed notebook namespace;
-centralizing that here keeps the ``runpy`` call in one place.
+It lives in ``book/marimo/helpers`` beside ``optimize.py``, not among the notebooks in
+``book/marimo/notebooks``: everything in the notebook folder is exported to HTML by
+marimo when the book is built, and a plain module there breaks that export.
+
+This module also hosts :func:`load_notebook` and :func:`load_script`, the single
+place that executes a notebook (or one of the modules here) via
+:func:`runpy.run_path` and returns its namespace. The experiment notebooks are not
+an importable package, so both ``optimize.py`` and the test suite need to read
+symbols (the signal ``f``, the ``build_exp*`` builders, …) out of a freshly
+executed namespace; centralizing that here keeps the ``runpy`` call in one place.
 """
 
 import runpy
@@ -20,28 +24,41 @@ pio.renderers.default = "plotly_mimetype"
 
 date_col = "date"
 
-#: Directory holding the marimo notebooks (this file's own directory).
-NOTEBOOK_DIR = Path(__file__).resolve().parent
+#: Directory holding the plain helper modules (this file's own directory).
+HELPERS_DIR = Path(__file__).resolve().parent
+
+#: Directory holding the marimo notebooks, a sibling of :data:`HELPERS_DIR`.
+NOTEBOOK_DIR = HELPERS_DIR.parent / "notebooks"
 
 #: Price file every notebook reads, from the ``public/`` directory beside it.
 PRICES_CSV = "Prices_hashed.csv"
 
 
 def load_notebook(name: str) -> dict[str, Any]:
-    """Execute sibling notebook ``name`` (e.g. ``"Experiment1.py"``) and return its namespace.
+    """Execute notebook ``name`` (e.g. ``"Experiment1.py"``) and return its namespace.
 
     The returned dict maps top-level names defined by the notebook to their
     values, so callers can pull out the signal function with
-    ``load_notebook("Experiment1.py")["f"]``.
+    ``load_notebook("Experiment1.py")["f"]``:
 
-    Executing this module itself is the cheapest demonstration of that contract —
-    the shared helpers come back as ordinary entries in the namespace:
+        >>> callable(load_notebook("Experiment1.py")["f"])
+        True
+    """
+    return runpy.run_path(str(NOTEBOOK_DIR / name))
 
-        >>> namespace = load_notebook("preamble.py")
+
+def load_script(name: str) -> dict[str, Any]:
+    """Execute module ``name`` from :data:`HELPERS_DIR` (e.g. ``"optimize.py"``) and return its namespace.
+
+    The counterpart of :func:`load_notebook` for the plain modules that live here
+    rather than among the notebooks. Executing this module itself is the cheapest
+    demonstration — the shared helpers come back as ordinary entries:
+
+        >>> namespace = load_script("preamble.py")
         >>> sorted(name for name in namespace if name in {"date_col", "load_prices"})
         ['date_col', 'load_prices']
     """
-    return runpy.run_path(str(NOTEBOOK_DIR / name))
+    return runpy.run_path(str(HELPERS_DIR / name))
 
 
 def load_prices(notebook_file: str) -> pl.DataFrame:
@@ -52,7 +69,7 @@ def load_prices(notebook_file: str) -> pl.DataFrame:
     with the date column first as nanosecond datetimes, every remaining column (one
     per asset) cast to ``Float64``, and gaps interpolated:
 
-        >>> prices = load_prices(str(NOTEBOOK_DIR / "preamble.py"))
+        >>> prices = load_prices(str(NOTEBOOK_DIR / "Experiment1.py"))
         >>> prices.columns[0]
         'date'
         >>> prices[date_col].dtype
@@ -65,7 +82,7 @@ def load_prices(notebook_file: str) -> pl.DataFrame:
     so its absence is a setup problem with an obvious remedy:
 
         >>> try:
-        ...     load_prices(str(NOTEBOOK_DIR / "elsewhere" / "preamble.py"))
+        ...     load_prices(str(NOTEBOOK_DIR / "elsewhere" / "Experiment1.py"))
         ... except FileNotFoundError as error:
         ...     PRICES_CSV in str(error)
         True

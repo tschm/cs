@@ -108,15 +108,18 @@ tag = false
 # listed at the bottom as "not set, on purpose" so it does not get re-added.
 
 # Was: `SOURCE_FOLDER := book/marimo/notebooks` in .rhiza/make.d/custom-env.mk.
-# CLI default: "src". This repo is a marimo book, not a src/ library -- the importable
-# modules live under book/marimo/notebooks and there is no src/ tree at all. Without
-# this, typecheck, bandit, docs-coverage, deptry and the coverage gate all point at a
+# CLI default: "src". This repo is a marimo book, not a src/ library -- the source is
+# the notebooks under book/marimo/notebooks plus the plain modules (optimize.py,
+# preamble.py) under book/marimo/helpers, and there is no src/ tree at all. Without this,
+# typecheck, bandit, docs-coverage, deptry and the coverage gate all point at a
 # directory that does not exist and pass by scanning nothing.
-source_folder = "book/marimo/notebooks"
+source_folder = "book/marimo"
 
 # CLI default: "docs/notebooks", which does not exist here. Without this, `marimo`
 # opens an editor on a missing folder and `marimo-validate` skips with
-# "marimo_folder 'docs/notebooks' not found" -- validating nothing.
+# "marimo_folder 'docs/notebooks' not found" -- validating nothing. The folder must
+# hold marimo notebooks only: `book` exports every *.py in it with `marimo export`,
+# which is why optimize.py and preamble.py live in book/marimo/helpers instead.
 marimo_folder = "book/marimo/notebooks"
 
 # Was: `COVERAGE_FAIL_UNDER ?= 100` in .rhiza/make.d/custom-env.mk.
@@ -164,7 +167,7 @@ pytest_rhiza = "pytest-rhiza==0.6.0"
 package_module_name_map = { marimo = "marimo", numpy = "numpy", polars = "polars", plotly = "plotly" }
 
 [tool.mypy]
-mypy_path = "book/marimo/notebooks"
+mypy_path = "book/marimo/helpers"
 strict = true
 
 [[tool.mypy.overrides]]
@@ -209,7 +212,7 @@ patch = ["subprocess"]
 # *reported*, at 0%, which fails the 100% gate for a purely cosmetic reason.
 # The gate scripts are held to their own 100% bar by the
 # "scripts/ unit tests at 100% coverage" pre-commit hook instead.
-source = ["book/marimo/notebooks"]
+source = ["book/marimo"]
 
 [tool.coverage.report]
 exclude_also = [
@@ -231,7 +234,8 @@ fail-under = 100
 
 [tool.check_test_layout]
 # This project has no ``src/`` tree: its source is the marimo notebook set under
-# book/marimo/notebooks, and tests/ mirrors *those*. Pointed at the default src/,
+# book/marimo/notebooks plus the plain modules under book/marimo/helpers, and tests/
+# mirrors *those*. Pointed at the default src/,
 # the generic parity checker reports every test as an orphan; pointed at the real
 # root it still flags the two deviations this project makes deliberately — the
 # cross-cutting integration test (test_notebook_sharpe.py drives all five notebooks
@@ -243,7 +247,7 @@ fail-under = 100
 # understands the actual layout. Per-module coverage is guaranteed independently by
 # the full line-and-branch coverage gate in [tool.coverage] / make test.
 enforce = false
-reason = "No src/ tree — source is the marimo notebooks under book/marimo/notebooks. Parity is enforced by scripts/check_test_layout.py (pre-commit hook 'Tests mirror the marimo notebooks 1:1'); per-module coverage is guaranteed by the full coverage gate."
+reason = "No src/ tree — source is the marimo notebooks under book/marimo/notebooks plus the modules under book/marimo/helpers. Parity is enforced by scripts/check_test_layout.py (pre-commit hook 'Tests mirror the marimo notebooks 1:1'); per-module coverage is guaranteed by the full coverage gate."
 
 [dependency-groups]
 test = [

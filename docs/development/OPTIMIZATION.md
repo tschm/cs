@@ -1,7 +1,7 @@
 # Parameter optimization
 
 The experiment notebooks expose their strategy parameters as marimo sliders so
-you can tune the Sharpe ratio by hand. `book/marimo/notebooks/optimize.py`
+you can tune the Sharpe ratio by hand. `book/marimo/helpers/optimize.py`
 automates that tuning with [Optuna](https://optuna.org): it replays each
 notebook's exact portfolio construction and searches the parameter space for the
 configuration that maximizes the portfolio Sharpe ratio.
@@ -23,7 +23,7 @@ from preamble import load_notebook
 f = load_notebook("Experiment1.py")["f"]
 ```
 
-`load_notebook` (in `book/marimo/notebooks/preamble.py`) is the one place that
+`load_notebook` (in `book/marimo/helpers/preamble.py`) is the one place that
 executes a notebook via `runpy.run_path` and returns its namespace. The same
 helper is used by the test suite, so notebooks, the optimizer, and the tests all
 load strategy code through a single mechanism. This is what keeps the optimizer
@@ -64,13 +64,13 @@ experiments.
 
 ```bash
 # Optimize one experiment
-python book/marimo/notebooks/optimize.py --experiment 3 --trials 200
+python book/marimo/helpers/optimize.py --experiment 3 --trials 200
 
 # Optimize all of them with the per-experiment default budgets
-python book/marimo/notebooks/optimize.py --experiment all
+python book/marimo/helpers/optimize.py --experiment all
 
 # Reproducible runs and Optuna's per-trial logging
-python book/marimo/notebooks/optimize.py -e 1 -n 50 --seed 7 --verbose
+python book/marimo/helpers/optimize.py -e 1 -n 50 --seed 7 --verbose
 ```
 
 Each run prints the baseline Sharpe (notebook defaults), the best Sharpe found,

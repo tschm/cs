@@ -74,17 +74,17 @@ Developer notes live under [`docs/development/`](docs/development/):
 
 Each `ExperimentN.py` notebook is a self-contained CTA strategy. To search its
 parameter space for the configuration that maximizes the portfolio Sharpe ratio,
-run the Optuna driver in `book/marimo/notebooks/optimize.py`:
+run the Optuna driver in `book/marimo/helpers/optimize.py`:
 
 ```bash
 # Optimize a single experiment (1–5) with an explicit trial budget
-python book/marimo/notebooks/optimize.py --experiment 3 --trials 200
+python book/marimo/helpers/optimize.py --experiment 3 --trials 200
 
 # Optimize all five, each with its per-experiment default budget
-python book/marimo/notebooks/optimize.py --experiment all
+python book/marimo/helpers/optimize.py --experiment all
 
 # Reproducible run with Optuna's per-trial logging (short flags)
-python book/marimo/notebooks/optimize.py -e 1 -n 50 --seed 7 --verbose
+python book/marimo/helpers/optimize.py -e 1 -n 50 --seed 7 --verbose
 ```
 
 Each run prints the baseline Sharpe (notebook defaults), the best Sharpe found,

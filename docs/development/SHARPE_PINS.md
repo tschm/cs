@@ -12,7 +12,7 @@ Two test modules read from it:
 - `tests/test_notebook_sharpe.py` executes each notebook end-to-end in a
   subprocess and compares the printed Sharpe ratio against the pin.
 - `tests/test_optimize.py` rebuilds each strategy through the `build_exp*`
-  functions in `book/marimo/notebooks/optimize.py` and checks they reproduce
+  functions in `book/marimo/helpers/optimize.py` and checks they reproduce
   the same numbers, so the optimizer's builders cannot silently diverge from
   the notebooks.
 

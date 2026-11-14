@@ -16,7 +16,6 @@ import sys
 import warnings
 from collections.abc import Callable
 from functools import cache
-from pathlib import Path
 from typing import Any, cast
 
 import numpy as np
@@ -25,13 +24,12 @@ import polars as pl
 from jquantstats import Portfolio
 
 # ``preamble`` (the notebooks' shared loader) resolves because this script's own
-# directory is already on ``sys.path`` — put there by the interpreter for
-# ``python optimize.py`` and by the test ``conftest`` for the ``runpy`` path.
-from preamble import date_col, load_notebook, load_prices
+# directory (``book/marimo/helpers``) is already on ``sys.path`` — put there by the
+# interpreter for ``python optimize.py`` and by the test ``conftest`` for the
+# ``runpy`` path.
+from preamble import NOTEBOOK_DIR, date_col, load_notebook, load_prices
 from tinycta.linalg import inv_a_norm, solve
 from tinycta.signal import shrink2id
-
-NOTEBOOK_DIR = Path(__file__).resolve().parent
 
 # Data/signal accessors are ``@cache``d, so importing this module reads no CSV and
 # runs no notebook. ``clip`` is a fixed winsorizing level, not a search dimension.
@@ -41,7 +39,7 @@ CLIP = 4.2
 @cache
 def _prices() -> pl.DataFrame:
     """Load the price frame once (date column plus one column per asset)."""
-    return load_prices(str(NOTEBOOK_DIR / "optimize.py"))
+    return load_prices(str(NOTEBOOK_DIR / "Experiment1.py"))
 
 
 @cache
@@ -241,7 +239,7 @@ class Experiment:
 
     def __init__(
         self, name: str, objective: Callable[..., Any], default_params: dict[str, Any], baseline: Callable[..., Any]
-    ):
+    ) -> None:
         """Store the experiment's name, Optuna objective, notebook defaults and builder."""
         self.name = name
         self.objective = objective

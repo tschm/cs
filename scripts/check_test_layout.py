@@ -5,12 +5,13 @@ Why this exists (and why it is *not* the bundled Rhiza checker)
 ---------------------------------------------------------------
 Rhiza ships a ``check_test_layout.py`` that assumes a ``src/<pkg>`` source tree.
 This project has no ``src/``: its "source" is the set of marimo notebooks under
-``book/marimo/notebooks``, and ``tests/`` mirrors *those*. Pointed at the default
+``book/marimo/notebooks`` plus the plain helper modules under ``book/marimo/helpers``,
+and ``tests/`` mirrors *those*. Pointed at the default
 ``src/`` the bundled checker reports every test as an orphan even though real 1:1
 parity is intact, so this repo ships its own gate that understands the actual
 layout:
 
-  * every notebook module ``book/marimo/notebooks/<Name>.py`` has a mirror test
+  * every module ``book/marimo/{notebooks,helpers}/<Name>.py`` has a mirror test
     ``tests/test_<name>.py`` — matched case-insensitively, because the notebooks
     are TitleCased (``Experiment1.py`` <-> ``test_experiment1.py``);
   * every ``tests/test_*.py`` maps back to a notebook module, except the declared
@@ -43,6 +44,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_DIR = ROOT / "book" / "marimo" / "notebooks"
+# The plain (non-marimo) modules -- ``optimize.py`` and ``preamble.py``. They live
+# outside NOTEBOOK_DIR because the book build exports everything there with marimo,
+# but they are source all the same and need their mirror tests.
+HELPERS_DIR = ROOT / "book" / "marimo" / "helpers"
 TESTS_DIR = ROOT / "tests"
 
 # Test files that legitimately have no single source module: cross-cutting
@@ -71,7 +76,7 @@ _IGNORED = {"__init__.py", "conftest.py"}
 
 
 def _notebook_modules() -> dict[str, Path]:
-    """Return ``{lowercased stem: path}`` for every notebook module (flat layout).
+    """Return ``{lowercased stem: path}`` for every notebook and helper module (flat layout).
 
     Stems are lowercased because the notebooks are TitleCased while their mirror
     tests are not (``Experiment1.py`` <-> ``test_experiment1.py``):
@@ -79,7 +84,8 @@ def _notebook_modules() -> dict[str, Path]:
         >>> sorted(_notebook_modules())
         ['experiment1', 'experiment2', 'experiment3', 'experiment4', 'experiment5', 'optimize', 'preamble']
     """
-    return {path.stem.lower(): path for path in sorted(NOTEBOOK_DIR.glob("*.py")) if path.name not in _IGNORED}
+    modules = sorted([*NOTEBOOK_DIR.glob("*.py"), *HELPERS_DIR.glob("*.py")])
+    return {path.stem.lower(): path for path in modules if path.name not in _IGNORED}
 
 
 def _test_files() -> list[Path]:
@@ -115,7 +121,7 @@ def _orphan_test_files(notebooks: dict[str, Path]) -> list[str]:
         if test_file.name not in _EXEMPT and stem not in notebooks:
             orphans.append(
                 f"orphan test file {test_file.relative_to(ROOT)} "
-                f"(no notebook {NOTEBOOK_DIR.relative_to(ROOT)}/{stem}.py, "
+                f"(no module {stem}.py in {NOTEBOOK_DIR.relative_to(ROOT)} or {HELPERS_DIR.relative_to(ROOT)}, "
                 f"and not listed in INTEGRATION_TESTS or TEMPLATE_TESTS)"
             )
     return orphans

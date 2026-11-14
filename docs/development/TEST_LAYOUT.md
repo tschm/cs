@@ -8,13 +8,18 @@ always easy to locate from the code it covers. The bundled checker
 ## Why this repo deviates
 
 This project has **no `src/` directory**. Its "source" is the set of marimo
-notebooks under `book/marimo/notebooks/`, and `tests/` mirrors *those*:
+notebooks under `book/marimo/notebooks/` plus the plain helper modules under
+`book/marimo/helpers/`, and `tests/` mirrors *those*:
 
-| Notebook (`book/marimo/notebooks/`) | Mirror test (`tests/`) |
+| Source module | Mirror test (`tests/`) |
 | --- | --- |
-| `Experiment1.py` … `Experiment5.py` | `test_experiment1.py` … `test_experiment5.py` |
-| `optimize.py` | `test_optimize.py` |
-| `preamble.py` | `test_preamble.py` |
+| `notebooks/Experiment1.py` … `notebooks/Experiment5.py` | `test_experiment1.py` … `test_experiment5.py` |
+| `helpers/optimize.py` | `test_optimize.py` |
+| `helpers/preamble.py` | `test_preamble.py` |
+
+The helper modules sit outside `notebooks/` because the book build exports every
+`*.py` in that folder with `marimo export`, which fails on a file that is not a
+marimo notebook.
 
 Pointed at the default `src/`, the bundled checker reports every one of these
 tests as an orphan even though real parity is intact. Two further facts make the

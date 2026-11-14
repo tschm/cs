@@ -10,14 +10,14 @@ from pathlib import Path
 
 import pytest
 
-# Bootstrap the notebook directory onto sys.path once, here, so every test
+# Bootstrap the helper-module directory onto sys.path once, here, so every test
 # module can ``from preamble import load_notebook`` (the shared notebook loader)
-# instead of repeating its own ``sys.path`` + ``runpy`` boilerplate. The
-# notebooks are not an importable package, so this single insert is the price of
-# reaching their shared ``preamble`` helper module.
-NOTEBOOK_DIR = (Path(__file__).resolve().parents[1] / "book" / "marimo" / "notebooks").resolve()
-if str(NOTEBOOK_DIR) not in sys.path:
-    sys.path.insert(0, str(NOTEBOOK_DIR))
+# and ``import optimize`` instead of repeating its own ``sys.path`` + ``runpy``
+# boilerplate. Neither the notebooks nor book/marimo/helpers is an importable
+# package, so this single insert is the price of reaching them.
+HELPERS_DIR = (Path(__file__).resolve().parents[1] / "book" / "marimo" / "helpers").resolve()
+if str(HELPERS_DIR) not in sys.path:
+    sys.path.insert(0, str(HELPERS_DIR))
 
 # The repo-local gate scripts are standalone stdlib modules, not a package, so
 # they need the same treatment to be importable by their unit tests.
